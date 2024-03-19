@@ -161,6 +161,10 @@
   font-size: var(--step--1);
 }
 
+:where(p code) {
+  line-break: anywhere;
+}
+
 :where(pre) {
   padding: var(--space-xs);
   border-radius: var(--radius-2);

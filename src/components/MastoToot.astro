@@ -42,10 +42,11 @@ const title = `"${card.title}" by @${card.author_name}`;
   }
 
   blockquote {
-    margin-inline-end: var(--space-s-m);
+    margin-inline: var(--space-xs-s);
+    padding-inline: 0;
 
     &::before {
-      left: -0.7em;
+      content: unset;
     }
   }
 }
