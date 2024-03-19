@@ -1,0 +1,81 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import FormattedDate from "./FormattedDate.astro";
+
+type Props = {
+  // page: Page<CollectionEntry<"blog">>[];
+  page?: any;
+  limit?: number;
+  includeDrafts?: boolean;
+  cards?: boolean;
+};
+
+const { includeDrafts = false, limit, cards = false, page } = Astro.props;
+const blogPostPages = (page?.data?.map(({props: {entry}}) => entry) ?? (
+  await getCollection("blog", ({ data: { draft } }) => includeDrafts || !draft)
+)).sort((a, b) => (b.data.date < a.data.date ? -1 : 1))
+const blogPosts = !limit ? blogPostPages : blogPostPages.slice(0, limit);
+---
+
+<div class="post-list no-list">
+  {
+    blogPostPages?.length === 0 && (
+      <p>No posts yet. Check back soon!</p>
+    )
+  }
+  {
+    blogPosts.map(({data: {hero, heroDescription, date, updatedDate, description, title, tags = []}, slug}) => (
+      <article class:list={['post-summary', {'card': cards}]}>
+        {cards && hero && (
+          <a href={`/blog/${slug}`}>
+            <img class="card-media" src={hero} alt={heroDescription} />
+          </a>
+        )}
+        <div class="card-copy"><FormattedDate date={updatedDate || date} />
+          <h4 class="post-title">
+            <a href={`/blog/${slug}`}>{title}</a>
+          </h4>
+          <p class="post-description">{description}</p>
+        </div>
+      </article>
+    ))
+  }
+  {blogPostPages.length > limit && <a href="/blog/1">See more &raquo;</a> }
+</div>
+
+<style>
+  article {
+    margin-bottom: var(--space-xl);
+    position: relative;
+
+    &:not(:last-child):before {
+      content: "";
+      position: absolute;
+      bottom: calc(var(--space-m) * -1);
+      left: 0;
+      background: var(--subtle-color);
+      height: 0.2em;
+      width: 4rem;
+    }
+
+    .post-title {
+      margin-top: 0;
+      margin-bottom: var(--space-xs);
+
+      a {
+        text-decoration: none;
+
+        &:hover,
+        &:focus-visible {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    :global(.datetime) {
+      color: var(--text-accent-color);
+      font-family: var(--sans-serif);
+      font-size: var(--step--1);
+    }
+  }
+</style>

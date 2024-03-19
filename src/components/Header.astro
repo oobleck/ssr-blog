@@ -1,0 +1,165 @@
+---
+import { settings } from "../data/settings";
+import { Icon } from "astro-icon/components";
+import MenuMain from "./MenuMain.astro";
+import ToggleColorModeButton from "./ToggleColorModeButton.astro";
+import ToggleMenuButton from "./ToggleMenuButton.astro";
+
+const { unsplashId, heroId } = Astro.props;
+// const headerImage = unsplashUrl(unsplashId) || settings.hero;
+const headerImage = settings.hero;
+const headerClasses = [
+  "header",
+  {
+    "one-time-hero":heroId ||  unsplashId,
+  },
+];
+---
+
+<header
+  class:list={headerClasses}
+  style={`background-image: url("${headerImage}");`}
+>
+  <div class="container">
+    {
+      // H1 on homepage, P on other pages
+      Astro.url.pathname == "/" && (
+        <h1 class="header__title">
+          <a href="/" rel="me">
+            {/* <Icon name="material-symbols-light:rocket-launch-outline-rounded" size={80} /> */}
+            {settings.title}
+          </a>
+        </h1>
+      )
+    }
+    {
+      Astro.url.pathname != "/" && (
+        <p class="header__title">
+          <a href="/" rel="me">{settings.title}</a>
+        </p>
+      )
+    }
+
+    <nav>
+      <MenuMain />
+      <ToggleColorModeButton />
+      <ToggleMenuButton icon="material-symbols-light:menu-rounded" />
+    </nav>
+  </div>
+</header>
+
+<style>
+  @import "open-props/media";
+
+  .header {
+    --text-shadow: 0 0 0.25ch hsl(0 0 0 / 0.75);
+
+    background-color: var(--primary-color);
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding-top: var(--space-m);
+    padding-bottom: var(--space-l);
+    margin-bottom: var(--space-l);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--space-s)), 0 100%);
+
+    &.Xone-time-hero {
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        backdrop-filter: blur(23px);
+      }
+    }
+
+    @media (--md-n-above) {
+      position: relative;
+      background-position: center 95%;
+      background-attachment: fixed;
+      clip-path: polygon(
+        0 0,
+        100% 0,
+        100% calc(100% - var(--space-2xl)),
+        0 100%
+      );
+
+      :global(.level-primary) & {
+        padding-block: var(--space-3xl);
+      }
+
+      :global(.level-secondary) & {
+        padding-block: var(--space-l);
+      }
+    }
+
+    nav {
+      .no-list {
+        display: none;
+      }
+    }
+  }
+
+  :is(.header__title) {
+    margin: 0;
+    font-size: var(--step-0);
+    font-family: var(--sans-serif);
+    font-weight: var(--font-weight-5);
+    text-transform: uppercase;
+    letter-spacing: var(--font-letterspacing-3);
+    text-shadow: var(--text-shadow);
+
+    @media (--md-n-above) {
+      font-size: var(--step-5);
+      font-weight: var(--font-weight-2);
+      padding-bottom: var(--space-xs);
+      line-height: 1;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    a {
+      color: white;
+      text-decoration: none;
+
+      &:hover,
+      &:focus-visible {
+        text-decoration: none;
+        color: var(--white);
+      }
+
+      &:focus-visible {
+        outline-color: currentColor;
+      }
+    }
+  }
+
+  nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-3xs);
+
+    @media (--md-n-above) {
+      gap: var(--space-xs);
+    }
+  }
+
+  .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-2xs);
+
+    @media (--md-n-above) {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

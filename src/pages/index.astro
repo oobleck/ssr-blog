@@ -1,0 +1,11 @@
+---
+import Layout from "../layouts/Layout.astro";
+import PostList from "../components/PostList.astro";
+---
+
+<Layout level="primary">
+  <div class="container">
+    <h2 class="page-title">Latest Posts</h2>
+    <PostList limit={3} cards={true} />
+  </div>
+</Layout>

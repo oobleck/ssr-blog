@@ -1,0 +1,103 @@
+---
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import { ABOUT_ME, ABOUT_ME_EXTENDED } from "../data/about";
+import {settings} from "../data/settings";
+import authorImg from "../assets/images/ssr-sawyer-avatar.png";
+
+interface Props {
+  avatar?: boolean;
+  position?: "start" | "end";
+  label?: boolean;
+  intro?: boolean;
+  extended?: boolean;
+}
+
+const {
+  avatar = true,
+  position = "start",
+  label = true,
+  intro = false,
+  extended = false,
+} = Astro.props;
+---
+
+<div
+  class:list={["about-me vcard h-card", avatar ? "has-avatar" : "no-avatar"]}
+>
+  {
+    label && (
+      <header>
+        <h3 class="p-name p-org">{settings.title}</h3>
+      </header>
+    )
+  }
+  <div class:list={["aboutme-wrapper", `avatar-at-${position}`]}>
+    {
+      avatar && (
+        <div class="avatar u-logo">
+          {/* <Icon name={LOGO_ICON} size={100} aria-hidden="true" />  */}
+          <img
+            src={authorImg.src}
+            width={authorImg.width}
+            alt="Photo of this site's owner sitting in a car with a Goldendoodle dog on his lap looking out the driver's side window"
+          />
+        </div>
+      )
+    }
+    <div class="summary">
+      <p class:list={["lead p-note", {intro}]}>{ABOUT_ME}</p>
+      {extended && <p set:html={ABOUT_ME_EXTENDED.split(/[\r\n]+/gm).join('</p><p>')}></p>}
+    </div>
+  </div>
+</div>
+
+<style>
+  @import "open-props/media";
+  @import "open-props/radius";
+
+  .about-me.h-card {
+    --avatar-diameter: calc(var(--space-2xl) * 2);
+
+    container: aboutme / inline-size;
+
+    svg {
+      aspect-ratio: 1;
+      min-width: 100px;
+    }
+
+    .avatar {
+      margin: var(--vr-spacing-1x) auto var(--vr-spacing-2x);
+
+      img {
+        aspect-ratio: var(--aspect-ratio-square);
+        border-radius: var(--radius-round);
+        width: var(--avatar-diameter);
+        border: 1px solid;
+        padding: 2%;
+      }
+    }
+
+    .aboutme-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: var(--grid-gutter);
+
+      @container aboutme (width > 480px) {
+        --avatar-diameter: calc(var(--space-2xl) * 3);
+
+        flex-direction: row;
+        justify-content: flex-start;
+        align-items: top;
+
+        &.avatar-at-end {
+          flex-direction: row-reverse;
+        }
+
+        .avatar {
+          margin: 0;
+        }
+      }
+    }
+  }
+</style>

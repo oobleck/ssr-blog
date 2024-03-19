@@ -1,0 +1,56 @@
+---
+import Pagination from "@philnash/astro-pagination";
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import FormattedDate from "../../components/FormattedDate.astro";
+import PostList from "../../components/PostList.astro";
+
+export async function getStaticPaths({ paginate }) {
+  const blogEntries = (await getCollection("blog", ({data: {draft}}) => !draft)).map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+
+  // return blogEntries;
+  return paginate(blogEntries, { pageSize: 5 });
+}
+// const { Content } = await entry.render();
+// All paginated data is passed on the "page" prop
+const { page }: any = Astro.props;
+---
+
+<!--Display the current page number. Astro.params.page can also be used!-->
+<Layout level="secondary">
+  <div class="container">
+    <div class="container--lg">
+      <h1>Blog Posts</h1>
+      {page.lastPage > 1 && <p>Page {page.currentPage} of {page.lastPage}</p>}
+      <PostList {page} cards={true} />
+      {
+        /* https://github.com/philnash/astro-components/tree/main/packages/astro-pagination#usage */
+      }
+      {
+        page.lastPage > 1 && (
+          <Pagination {page} urlPattern={"/blog/{}"} firstPageUrl="/" />
+        )
+      }
+    </div>
+  </div>
+</Layout>
+
+<style is:global>
+  nav[aria-label="Pagination"] {
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1rem;
+
+      li {
+      }
+    }
+  }
+</style>

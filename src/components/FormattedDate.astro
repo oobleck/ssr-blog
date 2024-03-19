@@ -1,0 +1,33 @@
+---
+import { Icon } from 'astro-icon/components';
+
+interface Props {
+	date: Date;
+	format?: 'short' | 'long';
+}
+
+const { date, format = 'long' } = Astro.props;
+const day = format === 'short' ? void 0 : 'numeric';
+---
+
+<span class="datetime">
+	<time class="dt-published published dt-updated updated" datetime={date.toISOString()}>
+		{
+			date.toLocaleDateString('en-us', {
+				year: 'numeric',
+				month: 'short',
+				day,
+			})
+		}
+	</time>
+	{/* <Icon name="mdi:calendar" aria-hidden="true" /> */}
+</span>
+
+<style>
+	.datetime {
+		display: inline-flex;
+		align-items: center;
+		justify-content: flex-start;
+		gap: 1ch;
+	}
+</style>

@@ -1,0 +1,66 @@
+---
+const {url} = Astro;
+const accessKey = 'a59b24ed-bb73-4bb6-8cb0-fb57a5f8f3f1';
+// const action = "https://riku.miso.town/submit?user_id=36&label=contact+form";
+const action = 'https://api.web3forms.com/submit';
+---
+
+<form name="contact" method="POST" {action}>
+  <input type="hidden" name="redirect" value={`${url.origin}/thanks`} />
+  <input type="hidden" name="access_key" value={accessKey}>
+  <div class="input-group">
+    <label for="name">Name</label>
+    <input
+      type="text"
+      id="name"
+      name="name"
+      class="width-full"
+      required
+    />
+  </div>
+
+  <div class="input-group">
+    <label for="email">Email Address</label>
+    <input
+      type="email"
+      id="email"
+      name="_replyto"
+      class="width-full"
+      required
+    />
+  </div>
+
+  <div class="form-group">
+    <label for="message">Message</label>
+    <textarea
+      name="message"
+      id="message"
+      cols="30"
+      rows="5"
+      class="width-full"
+      required></textarea>
+  </div>
+  <button type="submit">Send</button>
+</form>
+
+<!-- <form method="post" {action}>
+  <input type="hidden" name="redirect" value={`${url.origin}/thanks`} />
+  <input type="hidden" name="access_key" value={accessKey}>
+  <div class="fields">
+    <div class="field">
+      <label for="name">Name</label>
+      <input type="text" name="name" id="name" required />
+    </div>
+    <div class="field">
+      <label for="email">Email</label>
+      <input type="email" name="email" id="email" required />
+    </div>
+    <div class="field">
+      <label for="message">Message</label>
+      <textarea name="message" id="message" required></textarea>
+    </div>
+  </div>
+  <footer class="actions">
+    <button type="submit" class="button">Send Message</button>
+  </footer>
+</form> -->

@@ -1,0 +1,46 @@
+---
+import { menu, settings } from "../data/settings";
+import Footer from "../components/Footer.astro";
+import NavLink from "../components/NavLink.astro";
+import "../styles/styles.css";
+
+const {seo, title = seo?.title ?? settings.title, description = seo?.description ?? settings.description, level = "secondary"} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{ title } – { settings.title }</title>
+</head>
+
+<body class:list={[`level-${level}`]}>
+  <header id="site-header" style={`--hero-url:url("${settings.hero}")`}>
+    <div class="u-container">
+      <h4 class="site-title">
+          <a href="/" rel="me">{ settings.title }</a>
+        { settings.description && <small>{ settings.description }</small> }
+      </h4>
+      <nav id="primary-nav">
+        <ul>
+          {menu.map(({name, link}) => (
+            <li>
+              {/* <a href={link}>{name}</a> */}
+              <NavLink href={link}>{name}</NavLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
+  </header>
+  <main>
+    <div class="u-container">
+      <slot />
+    </div>
+  </main>
+  <Footer />
+</body>
+
+</html>

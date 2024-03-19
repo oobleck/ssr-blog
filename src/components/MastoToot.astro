@@ -1,0 +1,52 @@
+---
+const { src, label, inline = true } = Astro.props;
+const url = new URL(src);
+const {origin: domain, host} = url;
+const [noop, username, tootId] = url.pathname.split('/');
+
+const request = await fetch(`${domain}/api/v1/statuses/${tootId}`);
+const {card} = await request.json();
+const fullUsername = `@${card.author_name}@${host}`;
+const title = `"${card.title}" by @${card.author_name}`;
+// console.log(card)
+---
+
+{!inline && (
+  <figure class="toot-preview card">
+    <a href={src} target="_blank" rel="noreferrer">
+      {card.image && <img class="card-media" src={card.image} alt={card.image_description} />}
+      <figcaption class="card-copy">
+        <blockquote>
+          <h6>{card.title}</h6>
+          {card.description && <p>{card.description}</p>}
+          <cite>@{card.author_name}</cite>
+        </blockquote>
+      </figcaption>
+    </a>
+  </figure>
+)}
+{inline && <a href={src} target="_blank" rel="noreferrer" set:html={label}></a>}
+
+<style>
+.toot-preview {
+  /* width: 100%; */
+  margin-inline: auto;
+
+  a {
+    color: unset;
+    text-decoration: unset;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  blockquote {
+    margin-inline-end: var(--space-s-m);
+
+    &::before {
+      left: -0.7em;
+    }
+  }
+}
+</style>

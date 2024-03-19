@@ -1,0 +1,128 @@
+---
+title: 'Pure CSS Vertical Rhythm'
+description: 'Attempting a configurable veritcal rhythm in pure CSS'
+date: 2024-02-03
+# layout: ../../layouts/Post.astro
+unsplashId: 'bJhT_8nbUA0'
+draft: true
+tags:
+  - css
+  - vertical-rhythm
+  - typography
+---
+
+For this website, I wanted to work with a vertical rhythm. There are plenty of services, like [Gridlover](https://gridlover.net/) and [Typescale](https://typescale.com/) to automatically generate a vertical rhythm system, and that's all well and good. But I wanted a challenge.
+
+It's pretty straight forward to build or generate a vertical rhythm system using a pre-processor like [SCSS](#scss) or [Stylus](#stylus). But how about with vanilla CSS? CSS has come a really long way in the last 10 years with a raft of functionality like variables (CSS Custom Properties), measurement functions, etc.
+
+The vertical rhythm on this site is a work in progress, so here's how I've done it so far.
+
+### Establishing the parameters
+
+```css
+:root {
+  /* Type scale ratios */
+  /* Found: https://gridlover.net/try */
+  --type-ratio__minor-second: calc(16/15);
+  --type-ratio__major-second: calc(9/8);
+  --type-ratio__minor-third: calc(6/5);
+  --type-ratio__major-third: calc(5/4);
+  --type-ratio__perfect-fourth: calc(4/3);
+  --type-ratio__augmented-fourth: 1.414;
+  --type-ratio__perfect-fifth: calc(3/2);
+  --type-ratio__golden-ratio: calc(1.618/1);
+
+  /* The unitless line-height of the root, or `html` element. */
+  --vr-line-height: 1.618;
+
+  /* The base font size of the root element that establishes our 1rem unit. */
+  --vr-base-font-size: 16px;
+
+  /* For fun, lets also work wiht a configurable type scale. */
+  --vr-type-scale: var(--type-ratio__perfect-fourth);
+
+  /* And finally, the basic fixed height value of 1 unit of the vertical rhythm. */
+  --vr-unit: calc(var(--vr-base-font-size) * var(--vr-line-height));
+
+  /* Vertical rhythm-aware spacing helpers. */
+  --vr-spacing-1x: calc(1rem * var(--vr-line-height));
+  --vr-spacing-2x: calc(2rem * var(--vr-line-height));
+  --vr-spacing-3x: calc(3rem * var(--vr-line-height));
+  --vr-spacing-4x: calc(4rem * var(--vr-line-height));
+  --vr-spacing-5x: calc(5rem * var(--vr-line-height));
+  --vr-spacing-6x: calc(6rem * var(--vr-line-height));
+  --vr-spacing-7x: calc(7rem * var(--vr-line-height));
+  --vr-spacing-8x: calc(8rem * var(--vr-line-height));
+  --vr-spacing-9x: calc(9rem * var(--vr-line-height));
+  --vr-spacing-9x: calc(9rem * var(--vr-line-height));
+  --vr-spacing-10x: calc(10rem * var(--vr-line-height));
+  --vr-spacing-11x: calc(11rem * var(--vr-line-height));
+  --vr-spacing-12x: calc(12rem * var(--vr-line-height));
+
+  font-size: var(--vr-base-font);
+  line-height: var(--vr-unit);
+}
+
+body {
+  font-size: 1rem;
+  line-height: var(--vr-unit);
+}
+```
+
+### Visualizing the system
+
+Before I forget, we need a way to visualize this system, so I created a utility to render the configurable vertical rhythm. Just add this `[debug-vr]` attribute to your body element (or any element, really).
+
+```css
+[debug-vr] {
+  --__vr-debug-fg: color-mix(in hsl, cadetblue, transparent 50%);
+  --__vr-debug-bg:
+    linear-gradient(
+      to bottom,
+      var(--__vr-debug-fg) 1px,
+      transparent 1px
+    );
+
+  position: relative;
+
+  &::after {
+    content: '';
+    background: var(--__vr-debug-bg);
+    background-size: 100% var(--vr-unit);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    position: absolute;
+  }
+}
+```
+
+<form id="vr-playground">
+  <fieldset class="fields">
+    <div class="field">
+      <label for="set-type-scale">Select a type scale</label>
+      <select id="set-type-scale">
+        <option selected>Select a typescale</option>
+        <option value="minor-second">minor-second</option>
+        <option value="major-second">major-second</option>
+        <option value="minor-third">minor-third</option>
+        <option value="major-third">major-third</option>
+        <option value="perfect-fourth">perfect-fourth</option>
+        <option value="augmented-fourth">augmented-fourth</option>
+        <option value="perfect-fifth">perfect-fifth</option>
+        <option value="golden-ratio">golden-ratio</option>
+      </select>
+    </div>
+    <div class="field">
+      <label for="line-height">Custom line-height</label>
+      <input type="number" id="line-height" placeholder="Set a line-height" value="1.618" />
+    </div>
+    <div class="field">
+      <label for="base-font-size">Base font size</label>
+      <input type="number" id="base-font-size" placeholder="Set a base font size (px)" value="16" />
+    </div>
+    <button id="toggle-grid" type="button">Toggle grid</button>
+  </fieldset>
+</form>

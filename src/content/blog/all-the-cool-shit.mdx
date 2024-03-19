@@ -1,0 +1,48 @@
+---
+title: 'Look at all the cool sh!t I get to use!'
+description: 'I get to use modern and next-gen CSS!'
+date: 2024-01-16
+updatedDate: 2024-04-18
+# layout: ../../layouts/Post.astro
+# unsplashId: 'oMpAz-DN-9I'
+# hero: 'https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3'
+hero: https://images.unsplash.com/photo-1611462985358-60d3498e0364?w=800
+heroDescription: 'Fish-eye photo of a person silhouetted against a colorful night sky with the sun just below the horizon'
+tags:
+  - webdev
+  - astro
+  - lightning-css
+draft: false
+---
+
+import MastoToot from "../../components/MastoToot.astro";
+
+<p class="lead">This is so exciting! In rebuilding this website I get to use
+  a bunch of modern CSS and other tech. It makes me giddy!</p>
+
+- [Native CSS nesting](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_nesting)
+- [Native container queries](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_container_queries)
+- [Custom media queries](https://drafts.csswg.org/mediaqueries-5/#custom-mq)
+- [CSS Custom Properties](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties) (variables).
+- [Astro](https://astro.build)
+- [LightningCSS](https://lightningcss.dev)
+
+Lots of things that used to require Sass or Less. Some of this is still only
+possible with a post-processor like LightningCSS or PostCSS, but it is enabling
+next-gen CSS specs now.
+
+This site is built using [Astro](https://astro.build) and LightningCSS which
+I've [written about](/blog/astro-lightningcss) recently.
+
+I still miss the `@for` and `@each` directives in SCSS, though. Those are
+awesome for generating boilerplate styles from a simple list or hash.
+
+But I'm looking forward to this <MastoToot
+src="https://front-end.social/@leaverou/111984086841735705" label={`<q>CSS
+Variable Groups</q> CSS draft spec from @leaverou`} /> maturing and becoming
+a real thing to help with design systems in native CSS.
+
+<MastoToot
+  src="https://front-end.social/@leaverou/111984086841735705"
+  label={`<q>CSS Variable Groups</q> draft spec from @leaverou`}
+  inline={false} />

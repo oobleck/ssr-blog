@@ -1,0 +1,26 @@
+---
+import { settings } from "../data/settings";
+import Layout from "../layouts/Layout.astro";
+import AboutMe from "../components/AboutMe.astro";
+import { Image } from "astro:assets";
+import avatar from "../assets/images/ssr-sawyer-avatar.png"
+
+const seo = {
+  title: `About Me`,
+  description: settings.description,
+};
+---
+
+<Layout seo={seo}>
+  <div>
+    <div class="container container--lg">
+      <h1 class="page-title">About Me</h1>
+    </div>
+    <div class="content-grid flow">
+      <!-- <figure> -->
+      <!--   <Image src={avatar.src} width={400} alt="Alt" /> -->
+      <!-- </figure> -->
+      <AboutMe intro={true} extended={true} avatar={false} label={false} />
+    </div>
+  </div>
+</Layout>

@@ -1,0 +1,29 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import SkipToLink from "../components/SkipToLink.astro";
+import MenuMobile from "../components/MenuMobile.astro";
+import type { Props as BaseHeadProps } from "../components/BaseHead.astro";
+
+export interface Props {
+  seo?: BaseHeadProps;
+  level?: 'primary' | 'secondary';
+  unsplashId?: string;
+}
+
+const { level = 'secondary', seo, unsplashId } = Astro.props;
+---
+
+<html lang="en" color-mode="light">
+  <BaseHead {...seo} />
+  <body class:list={[`level-${level}`]}>
+    <SkipToLink />
+    <Header {...Astro.props} />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <MenuMobile />
+  </body>
+</html>

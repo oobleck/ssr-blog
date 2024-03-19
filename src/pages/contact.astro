@@ -1,0 +1,24 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ContactForm from "../components/ContactForm.astro";
+import AboutMe from "../components/AboutMe.astro";
+
+const seo = {
+  title: "Contact Me",
+  description: "Contact the genius behind the curtain",
+};
+---
+
+<Layout seo={seo}>
+  <h1 class="page-title">Contact Me</h1>
+    <div id="contact" class="u-grid">
+        <AboutMe avatar={false} label={false} intro={true} />
+        <ContactForm />
+  </div>
+</Layout>
+
+<style>
+.u-grid {
+  grid-template-columns: 1fr 1fr;
+}
+</style>

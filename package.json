@@ -1,0 +1,40 @@
+{
+  "name": "oobleck-utopia-long-haul",
+  "description": "A long-form blog built with Astro",
+  "license": "MIT",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@astrojs/rss": "^4.0.5",
+    "@astrojs/sitemap": "^3.0.5",
+    "@iconify-json/material-symbols-light": "^1.1.12",
+    "@philnash/astro-pagination": "^0.4.0",
+    "astro": "^4.5.5",
+    "astro-compress": "^2.2.10",
+    "astro-icon": "^1.1.0",
+    "modern-normalize": "^2.0.0",
+    "open-props": "^1.6.21"
+  },
+  "devDependencies": {
+    "@astrojs/mdx": "^2.1.1",
+    "@iconify-json/simple-icons": "^1.1.91",
+    "@kurone-kito/jsonresume-types": "^0.4.0",
+    "@unpic/astro": "^0.0.44",
+    "@unpic/pixels": "^1.2.2",
+    "@unpic/placeholder": "^0.1.2",
+    "astro-robots-txt": "^1.0.0",
+    "browserslist": "^4.23.0",
+    "extract-colors": "^4.0.2",
+    "get-pixels": "^3.3.3",
+    "lightningcss": "^1.23.0",
+    "sass": "^1.71.0",
+    "sharp": "^0.33.2",
+    "unpic": "^3.17.0"
+  }
+}

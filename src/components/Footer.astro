@@ -1,0 +1,17 @@
+---
+import { settings } from "../data/settings";
+import SocialMenu from "./SocialMenu.astro";
+const date = new Date();
+---
+
+<footer id="site-footer" class="footer">
+  <div class="u-container">
+    <hr>
+    <p class="copyright">
+        &copy; {date.getFullYear()} <a href="/" rel="me">{settings.title}</a>.
+        Powered by <a href="http://astro.build" target="_blank">Astro</a>.
+      </p>
+    <SocialMenu />
+  </div>
+</footer>
+

@@ -1,0 +1,265 @@
+---
+import type { ResumeSchema } from "@kurone-kito/jsonresume-types";
+import FormattedDate from "../components/FormattedDate.astro";
+import SocialLinks from "../components/SocialMenu.astro";
+import Layout from "../layouts/Layout.astro";
+
+const resumeUrl = "https://gitconnected.com/v1/portfolio/oobleck";
+const resumeBlob = await fetch(resumeUrl);
+const resumeJson: ResumeSchema = await resumeBlob.json();
+const {
+  basics,
+  work = [],
+  projects = [],
+  skills = [],
+  education = [],
+} = resumeJson;
+// console.log(skills[0]);
+const seo = {
+  title: 'CV',
+  description: 'My resume'
+};
+
+function calcYearSpan(start: string, end: string = new Date().toString()) {
+  const begin = new Date(start);
+  const close = new Date(end);
+  const delta = close.getFullYear() - begin.getFullYear();
+  return delta;
+}
+---
+
+<Layout {...Astro.props} {seo} className="h-resume" breadcrumbs={false} unsplashId="l-Qc9gcTTUI">
+  <div class="content-grid flow h-resume">
+    <header>
+      <h1 class="page-title p-name">{basics?.name}</h1>
+      <h3 class="description p-summary">{basics?.headline}</h3>
+      <!-- <AboutMe /> -->
+        {basics?.summary && <p>{basics.summary}</p>}
+      <SocialLinks compact={true} list={false} email={true} geo={false} />
+    </header>
+    <section id="skills">
+      <h3>Skills</h3>
+      <section class="skillsets">
+        {
+          skills.map(({keywords = [], name}) => (
+            <div class="skillset">
+              <h5>{name}</h5>
+              <ul>
+                {keywords.map((kw) => {
+                  // const icon = `vscode-icons:file-type-${kw.toLowerCase()}`;
+                  return (
+                    <li class="p-skill">
+                      {/* <Icon name={icon} /> */}
+                      {kw}
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))
+        }
+      </section>
+    </section>
+    <section id="work">
+      <h3>Experience</h3>
+      {
+        work.map((position) => (
+          <article class="position p-experience h-event h-card">
+            <header>
+              <hgroup>
+                <h5 class="p-name p-job-title">{position.position}</h5>
+                <h6>
+                  <a
+                    class="u-url p-org"
+                    href={position.website as string}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    {position.company}
+                  </a>
+                </h6>
+              </hgroup>
+              <div class="metadata">
+                <div class="dates">
+                  <span class="start-date dt-start">
+                    <FormattedDate
+                      format="short"
+                      date={new Date(position.startDate as any)}
+                    />
+                  </span>
+                  –
+                  <span class="end-date dt-end">
+                    {!position.endDate ? (
+                      <span>Present</span>
+                    ) : (
+                      <FormattedDate
+                        format="short"
+                        date={new Date(position.endDate as any)}
+                      />
+                    )}
+                  </span>
+                </div>
+                <div class="h-geo p-location">{position.location}</div>
+              </div>
+            </header>
+            {position.summary && <p class="p-summary">{position.summary}</p>}
+            {position.description && (
+              <p class="p-description e-content">{position.description}</p>
+            )}
+            {position.highlights?.length > 0 && (
+              <ul>
+                {position.highlights?.map((hl) => (<li set:html={hl}></li>))}
+              </ul>
+            )}
+          </article>
+        ))
+      }
+    </section>
+    <section id="education">
+      <h3>Education</h3>
+      {
+        education.map(
+          ({
+            institution,
+            area,
+            studyType,
+            endDate,
+            activities = [],
+            website,
+          }) => (
+            <article class="institution p-experience h-event h-card">
+              <header>
+                <h5>
+                  <a href={website as string} rel="noreferrer" target="_blank" class="p-org u-url">
+                    {institution}
+                  </a>
+                </h5>
+                <div class="metadata">
+                  {/* <div class="h-geo">{institution.location}</div> */}
+                  <div class="dates">
+                    {/* <span class="start-date dt-start">
+                    <FormattedDate
+                      format="short"
+                      date={new Date(institution.startDate as any)}
+                    />
+                  </span>
+                  – */}
+                    <span class="end-date dt-end">
+                      {!endDate ? (
+                        <span>Present</span>
+                      ) : (
+                        <FormattedDate
+                          format="short"
+                          date={new Date(endDate as any)}
+                        />
+                      )}
+                    </span>
+                  </div>
+                </div>
+              </header>
+              {studyType && (
+                <p class="p-summary p-description e-content">
+                  {studyType} – {area}
+                </p>
+              )}
+            </article>
+          )
+        )
+      }
+    </section>
+  </div>
+</Layout>
+
+<style>
+  @import "open-props/media";
+
+  section {
+    margin-block: var(--space-xl);
+    position: relative;
+
+    > section {
+      margin-block: var(--space-s);
+    }
+
+    @media (--md-n-above) {
+      header,
+      hgroup {
+        > * {
+          margin-block: 0;
+        }
+      }
+    }
+
+    header {
+      position: relative;
+      width: auto;
+      margin-block-end: 1.618em;
+
+      @media (--md-n-above) {
+        display: grid;
+        grid-template-areas: "content metadata";
+        grid-template-columns: 3fr 1fr;
+        gap: var(--size-fluid-3);
+
+        .metadata {
+          text-align: end;
+        }
+      }
+
+      > * {
+        grid-area: content;
+      }
+
+      > .metadata {
+        grid-area: metadata;
+        font-size: 0.8em;
+      }
+    }
+  }
+
+  article {
+    margin-block: 1.618em;
+  }
+
+  #skills {
+    .skillsets {
+      @media (--md-n-above) {
+        display: grid;
+        gap: 1.618em;
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      .skillset {}
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 1ch;
+      grid-template-columns: repeat(2, 1fr);
+
+      /* @media (--xl-n-above) { */
+      /* @media (min-width: 1440px) {
+        grid-template-columns: repeat(3, 1fr);
+      } */
+
+      li {
+        /* margin: 0; */
+        padding: 0;
+      }
+    }
+  }
+</style>
+<style is:global>
+  @media print {
+    :root {
+      --grid-width: 100%;
+      zoom: 0.7;
+    }
+
+    :where(#site-header, #site-footer, ul.social) {
+      display: none;
+    }
+  }
+</style>
