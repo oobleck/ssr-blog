@@ -56,6 +56,7 @@ export const menu = [
   // { name: "Home", link: "/" },
   { name: "Blog", link: "/blog/1" },
   { name: "About", link: "/about" },
+  { name: "Résumé", link: "/cv" },
   { name: "Tags", link: "/tags" },
   { name: "Contact", link: "/contact" },
 ];

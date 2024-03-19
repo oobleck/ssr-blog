@@ -86,8 +86,8 @@
   --select-focus: var(--accent);
   --select-arrow: var(--select-border);
 
-  --angle-clip-path: polygon(0 0, 1600px 0, 1600px 83%, 0 100%);
-  --angle-clip-path-top: polygon(0 25%, 1600px 0, 1600px, 0 100%);
+  --angle-clip-path: polygon(0 0, 100% 0, 100% 83%, 0 100%);
+  --angle-clip-path-top: polygon(0 25%, 100% 0, 100%, 0 100%);
   /* --angle-clip-path: polygon(0 0, 1600px 0, 1600px calc(100% - var(--space-2xl)), 0 100%); */
   /* --angle-clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%); */
 
