@@ -25,6 +25,8 @@ const iconConfig = {
       "dark-mode-outline-rounded",
       "menu-rounded",
       "rocket-launch-outline-rounded",
+      "home",
+      "in-home-mode",
     ],
   },
 };

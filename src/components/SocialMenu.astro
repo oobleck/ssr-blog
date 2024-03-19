@@ -64,4 +64,46 @@ import { Icon } from "astro-icon/components";
       fill: var(--white);
     }
   }
+
+  li:has([href*="Xspencerrhodes.dev"]) {
+    display: none;
+  }
+
+  @media print {
+        :where(ul.social) {
+      /* display: block !important; */
+      all: unset !important;
+      list-style: none !important;
+
+      svg {
+        position: relative !important;
+        width: 1.1em !important;
+        /* height: 1em !important; */
+        display: inline-block !important;
+        margin-inline-end: 0.5ch;
+        bottom: -0.2em;
+
+        &[data-icon*="home"] {
+          width: 1.2em !important;
+        }
+      }
+      a {
+        all: unset !important;
+
+        &::before {
+          /* content: attr(title); */
+        }
+        &::after {
+          content: attr(href);
+        }
+      }
+      li {
+        display: inline-block !important;
+        width: 50% !important;
+      }
+      li:has([href*="/contact"]) {
+        display: none !important;
+      }
+    }
+  }
 </style>
