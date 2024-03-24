@@ -61,7 +61,7 @@ export default defineConfig({
 });
 ```
 
-The <q>`targets: browserslistToTargets(browserslist("defaults"))`</q> bit is key to telling Lightning to transpile CSS Custom media queries for browsers that don't support it. You can tell it whatever versions you want to support, or declare them [according to browserslist](https://github.com/browserslist/browserslist?tab=readme-ov-file#config-file).
+The `targets: browserslistToTargets(browserslist("defaults"))` bit is key to telling Lightning to transpile CSS Custom media queries for browsers that don't support it. You can tell it whatever versions you want to support, or declare them [according to browserslist](https://github.com/browserslist/browserslist?tab=readme-ov-file#config-file).
 
 A quick note: If you're using [@open-props](https://open-props.style) and you want to use custom media queries in your component files, you'll need to `@import "open-props/media"` in the `<style>` tag in each component using them. That's because custom media queries like `--md-n-above` require processing and those vars are unknown within components unless @imported.
 

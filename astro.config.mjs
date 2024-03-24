@@ -1,4 +1,4 @@
-import {readFile} from "fs";
+import { readFile } from "fs";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
 import compress from "astro-compress";
@@ -8,9 +8,20 @@ import { defineConfig } from "astro/config";
 import { browserslistToTargets } from "lightningcss";
 import browserslist from "browserslist";
 import { imageService } from "@unpic/astro/service";
+import svelte from "@astrojs/svelte";
 
 const iconConfig = {
   include: {
+    "ri": [
+      "mastodon-line",
+      "linkedin-line",
+      "github-line",
+      "pixelfed-line",
+      "home-office-line",
+      "mail-send-line",
+      "file-pdf-2-line",
+      "codepen-line",
+    ],
     "simple-icons": [
       "codepen",
       "mastodon",
@@ -25,8 +36,9 @@ const iconConfig = {
       "dark-mode-outline-rounded",
       "menu-rounded",
       "rocket-launch-outline-rounded",
-      "home",
-      "in-home-mode",
+      "globe",
+      "stacked-email",
+      "picture-as-pdf",
     ],
   },
 };
@@ -34,11 +46,18 @@ const iconConfig = {
 // https://astro.build/config
 export default defineConfig({
   site: "https://spencerrhodes.dev/",
-  integrations: [sitemap(), compress(), robotsTxt(), mdx(), icon(iconConfig)],
+  integrations: [
+    sitemap(),
+    compress(),
+    robotsTxt(),
+    mdx(),
+    icon(iconConfig),
+    svelte(),
+  ],
   image: {
     service: imageService({
-      placeholder: 'blurhash',
-      layout: 'constrained',
+      placeholder: "blurhash",
+      layout: "constrained",
     }),
   },
   markdown: {
@@ -48,7 +67,7 @@ export default defineConfig({
       // theme: "solarized-dark",
       theme: "nord",
       // Enable word wrap to prevent horizontal scrolling
-      wrap: true,
+      wrap: false,
     },
   },
   vite: {

@@ -7,27 +7,13 @@
   overflow: hidden;
 }
 
-.card {
-  /* border: 1px solid var(--ink-subtle); */
-  border-radius: var(--radius-2);
-  box-shadow: var(--shadow-3);
-  overflow: hidden;
-  background-color: var(--paper);
-
-  .card-copy {
-    padding: var(--space-xs);
-
-    :first-child {
-      margin-block-start: 0 !important;
-    }
-    :last-child {
-      margin-block-end: 0 !important;
-    }
+@media screen {
+  .print-only {
+    display: none !important;
   }
-
-  .card-media {
-    width: 100%;
-    /* object-fit: cover; */
-    /* aspect-ratio: 14/9; */
+}
+@media print {
+  .screen-only {
+    display: none !important;
   }
 }

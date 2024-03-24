@@ -43,13 +43,16 @@ const heros = {
 };
 
 export const settings = {
-  site: "https://spencerrhodes.dev",
+  site: "https://www.spencerrhodes.dev",
+  domain: `www.spencerrhodes.dev`,
   title: "Spencer Rhodes",
+  email: `me@spencerrhodes.dev`,
   description: "User Interface Developer",
   // hero: remoteImageUrl(heroImageIds.ggBridgeFog),
-  hero: heros.blueGoldWaves,
+  hero: heros.redBlueSwirl,
   authorImage: "../assets/images/ssr-sawyer-avatar.png",
 };
+settings.site = `https://${settings.domain}`;
 
 // Main Menu
 export const menu = [
@@ -66,32 +69,50 @@ export const menu = [
 export const social = [
   {
     name: "Website",
-    icon: "material-symbols-light:in-home-mode",
+    icon: "ri:home-office-line",
     url: settings.site,
   },
   {
+    name: settings.email
+      .replace(/@/g, '＠')
+      .replace(/\./g, '․')
+      .replace(/s/g, 'ѕ')
+      .replace(/p/g, 'р')
+      .replace(/o/g, 'о')
+      // .replace(/d/g, 'Ԁ')
+      // .replace(/v/g, 'ѵ')
+      .replace(/e/g, 'е'),
+    icon: "ri:mail-send-line",
+    url: `${settings.site}/contact`,
+  },
+  {
+    name: "PDF Resume",
+    icon: "ri:file-pdf-2-line",
+    url: "/spencer-rhodes-resume.pdf",
+  },
+  {
     name: "Codepen",
-    icon: "simple-icons:codepen",
+    icon: "ri:codepen-line",
     url: "https://codepen.io/oobleck",
   },
   {
     name: "Mastodon",
-    icon: "simple-icons:mastodon",
+    icon: "ri:mastodon-line",
     url: "https://fosstodon.org/@oobleck",
   },
   {
-    name: "linkedin",
-    icon: "simple-icons:linkedin",
+    name: "LinkedIn",
+    icon: "ri:linkedin-line",
     url: "https://www.linkedin.com/in/oobleck",
   },
   {
-    name: "github",
-    icon: "simple-icons:github",
+    name: "Github",
+    icon: "ri:github-line",
     url: "https://github.com/oobleck",
   },
   {
-    name: "email",
-    icon: "simple-icons:minutemailer",
-    url: "/contact",
+    name: "Pixelfed",
+    icon: "ri:pixelfed-line",
+    url: "https://pixelfed.social/@oobleck",
   },
 ];

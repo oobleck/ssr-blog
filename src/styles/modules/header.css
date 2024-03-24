@@ -12,6 +12,7 @@
   background-repeat: no-repeat;
   background-size: cover;
   background-position: 50% 55%;
+  background-attachment: local;
   color: white;
 
   .u-container {
@@ -49,24 +50,37 @@
 }
 
 #primary-nav {
+  --item-padding: var(--space-2xs-xs);
+
   ul {
     list-style: none;
-    margin: 0;
+    /* margin: 0; */
     padding: 0;
     display: flex;
-    gap: 1ch;
-    font-size: var(--step-0);
+    gap: 0;
+    font-size: var(--step--1);
+  }
+
+  li {
+    &:first-child {
+      margin-inline-start: calc(var(--item-padding) * -1);
+    }
   }
 
   a[href] {
     color: white !important;
     text-decoration: none;
     opacity: 0.8;
-    transition: all 0.3s ease-in-out;
+    transition: all 0.2s var(--ease-1);
+    padding: var(--item-padding);
 
     &:where(:hover, .active, .focus) {
       text-decoration: underline;
       opacity: 1;
+
+      &:where(.active, :focus) {
+        font-weight: var(--weight-semibold);
+      }
     }
   }
 }

@@ -1,12 +1,14 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import SiteSearch from "../../components/SiteSearch.svelte";
 import { postTagsList, eachTag } from "../../utils/tags.reducer";
 
 const tags = await postTagsList();
 ---
 
 <Layout title={`Tags List`}>
-  <h3>Post Tags</h3>
+  <h1>Post Tags</h1>
+  {/* <SiteSearch /> */}
   <ul>
     {eachTag(tags, (tag, count) => (
       <li><a href={`/tags/${tag.toLowerCase()}`}>{tag}</a> ({count})</li>

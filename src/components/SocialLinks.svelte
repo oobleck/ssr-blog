@@ -1,27 +1,39 @@
----
-import { settings, social } from "../data/settings";
-import { Icon } from "astro-icon/components";
----
+<script>
+  import Icon from "@iconify/svelte";
+  import { social } from "../data/settings";
+  export let pdf = false;
+  export let homepage = false;
+  export let socialLinks = social.filter(({name, url, icon}) => {
+    switch (true) {
+      case /\.pdf/i.test(url):
+        return pdf;
 
-<ul class="noList social">
-  {
-    social.map((item) => (
-      <li>
-        <a
-          class="social__link"
-          href={item.url}
-          target="_blank"
-          title={item.name}
-          rel="me noreferrer"
-        >
-          <span class="sr-only">
-            {settings.title} on {item.name}
-          </span>
-          <Icon class="social__icon" name={item.icon} title={item.name} />
-        </a>
-      </li>
-    ))
-  }
+      case /home/i.test(icon):
+        return homepage;
+
+      default:
+        return true;
+    }
+  });
+</script>
+
+<ul class="social">
+  {#each socialLinks as { icon, url, name }}
+    <li class="{/pdf/.test(icon) ? 'screen-only' : ''} {/home/.test(icon) ? 'print-only' : ''}">
+      <a
+        href={url}
+        class="social__link"
+        rel="me noreferrer"
+        target="_blank"
+        title={name}
+      >
+        <span class="sr-only">
+          {name}
+        </span>
+        <Icon icon={icon} class="social__icon" />
+      </a>
+    </li>
+  {/each}
 </ul>
 
 <style>
@@ -55,12 +67,12 @@ import { Icon } from "astro-icon/components";
       color: white;
       outline-color: var(--link);
     }
+  }
 
-    svg {
-      display: block;
-      width: 1em;
-      height: 1em;
-    }
+  :global(.social a svg) {
+    display: block;
+    width: 1em;
+    height: 1em;
   }
 
   @media print {
@@ -69,13 +81,12 @@ import { Icon } from "astro-icon/components";
       all: unset !important;
       list-style: none !important;
 
-      svg {
+      :global(svg) {
         position: relative !important;
         font-size: 1.1em !important;
         display: inline-block !important;
         margin-inline-end: 0.5ch;
         bottom: -0.2em;
-        /* opacity: 0.8; */
         color: var(--brand-shade);
 
         &[data-icon*="mail"],

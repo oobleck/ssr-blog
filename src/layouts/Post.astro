@@ -1,8 +1,11 @@
 ---
 import { formatDate } from "../utils/helpers";
 import Layout from "./Layout.astro";
+import AboutMe from "../components/AboutMe.astro";
+import TagsList from "../components/TagsList.astro";
 import { unsplashCredit, unsplashUrl } from "../utils/unsplash.utils";
 import { Image } from "@unpic/astro";
+import { settings } from "../data/settings.ts";
 
 const { frontmatter } = Astro.props;
 const { draft, unsplashId, heroDescription, title, description, tags } = frontmatter;
@@ -14,42 +17,36 @@ let {hero} = frontmatter;
 const heroCredit = unsplashCredit(unsplashId);
 
 const seo = {
-  title: title + " | " + title,
-  description: description,
+  title,
+  description,
   image: hero,
 };
 const featuredImageDims = [1024, 768];
 ---
 
 <Layout seo={seo} {unsplashId} level="secondary">
-  <article class:list={[{'draft-post': draft}]}>
+  <article class:list={['h-entry', {'draft-post': draft}]}>
     <header class="post-header">
-      <h1 class="post-header__title">{frontmatter.title}</h1>
+      <h1 class="p-name post-header__title">{frontmatter.title}</h1>
       <div class="post-header__meta">
-        <time datetime={frontmatter.date} class="post-header__date">
+        <time datetime={frontmatter.date} class="dt-updated dt-published post-header__date">
           {formatDate(frontmatter.date)}
         </time>
-        {
-          tags?.length && (
-            <ul class="tags">
-              <li>Tags:</li>
-              {tags.map((tag: string, tt: number) => (
-                <li>
-                  {/* <Icon name="material-symbols-light:label-outline" size={32} /> */}
-                  <a href={`/tags/${tag}`} title={`Posts with the tag "${tag}"`}>{tag}</a>{tt < tags.length - 1 ? ',' : ''}
-                </li>
-              ))}
-            </ul>
-          )
-        }
+        <TagsList {tags} />
       </div>
     </header>
-    <div class="content">
+    <div class="e-content">
     {
       hero && (
-        <figure class="featured-image card">
+        <figure class="featured-image">
           {/* <img src={hero} alt={heroDescription} /> */}
-          <Image src={hero} alt={heroDescription} width={featuredImageDims[0]} height={featuredImageDims[1]} />
+          <Image
+            src={hero}
+            alt={heroDescription}
+            width={featuredImageDims[0]}
+            height={featuredImageDims[1]}
+            class="u-featured"
+          />
           {heroCredit && (
             <figcaption>
               <a href={heroCredit} target="_blank" rel="noreferrer">
@@ -62,7 +59,12 @@ const featuredImageDims = [1024, 768];
     }
       <slot />
     </div>
+
+    <h5>About the author</h5>
+    <AboutMe label={false} />
   </article>
+  <h5>Webmentions</h5>
+  <web-mentions domain={settings.site} showTitle={false}></web-mentions>
 </Layout>
 
 <style>
@@ -70,14 +72,9 @@ const featuredImageDims = [1024, 768];
     grid-column: 1 / -1;
     position: relative;
     margin-top: var(--space-2xs);
-    /* clip-path: polygon(0 var(--space-s), 100% 0, 100% 100%, 0 100%); */
     clip-path: var(--angle-clip-path-top);
     text-align: center;
     margin-bottom: var(--space-l);
-
-    @media (min-width: 800px) {
-      /* clip-path: polygon(0 var(--space-2xl), 100% 0, 100% 100%, 0 100%); */
-    }
 
     img {
       width: 100%;
@@ -90,14 +87,12 @@ const featuredImageDims = [1024, 768];
   .post-header__title {
     margin: var(--space-s) auto var(--space-2xs);
     text-align: center;
-    /* font-weight: var(--font-weight-4); */
   }
 
   .post-header__meta {
     text-align: center;
     color: lighten(black, 50%);
-    font-family: var(--sans-serif);
-    font-weight: 300;
+    font-weight: var(--weight-3);
     font-size: var(--step--1);
   }
 

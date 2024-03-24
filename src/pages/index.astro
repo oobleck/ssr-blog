@@ -1,11 +1,16 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import PostList from "../components/PostList.astro";
+import AboutMe from "../components/AboutMe.astro";
+import { settings } from "../data/settings";
 ---
 
 <Layout level="primary">
   <div class="container">
-    <h2 class="page-title">Latest Posts</h2>
-    <PostList limit={3} cards={true} />
+    <h1>{ settings.title }</h1>
+    <AboutMe intro={true} label={false} readmore={true} />
+
+    <h2>Recent Posts</h2>
+    <PostList limit={3} cards={false} />
   </div>
 </Layout>

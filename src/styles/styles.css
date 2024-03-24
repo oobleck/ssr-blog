@@ -1,10 +1,13 @@
-@layer third-party, layout, utility, typography, components;
+@layer third-party, layout, typography, utility, components;
 
 @import "open-props/fonts" layer(third-party);
 @import "open-props/colors" layer(third-party);
 @import "open-props/shadows" layer(third-party);
 @import "open-props/borders" layer(third-party);
 @import "open-props/zindex" layer(third-party);
+@import "open-props/media" layer(third-party);
+@import "open-props/easings" layer(third-party);
+@import "modern-normalize" layer(third-party);
 
 @import "./modules/utilities.css" layer(utility);
 @import "./modules/layout.css" layer(layout);
@@ -13,6 +16,7 @@
 @import "./modules/forms.css" layer(components);
 @import "./modules/header.css" layer(components);
 @import "./modules/footer.css" layer(components);
+@import "./modules/site-search.css" layer(components);
 
 /* @link https://utopia.fyi/type/calculator?c=320,18,1.2,1240,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 
@@ -54,6 +58,7 @@
 
   /* Custom pairs */
   --space-s-l: clamp(1.125rem, 0.6467rem + 2.3913vi, 2.5rem);
+  --space-3xs-l: clamp(0.3125rem, -0.4484rem + 3.8043vi, 2.5rem);
 }
 
 :root {
@@ -68,9 +73,9 @@
   --paper: var(--stone-0);
   --paper-2: var(--stone-4);
   --paper-subtle: var(--stone-2);
-  --ink: var(--stone-12);
-  --ink-2: var(--stone-10);
-  --ink-subtle: var(--stone-8);
+  --ink: var(--stone-11);
+  --ink-2: var(--stone-9);
+  --ink-subtle: var(--stone-7);
   --link: var(--brand);
   --link-hover: var(--accent);
 
@@ -94,9 +99,9 @@
   color-scheme: light;
 
   @media screen and (prefers-color-scheme: dark) {
-    --paper: var(--stone-11);
-    --paper-2: var(--stone-8);
-    --paper-subtle: var(--stone-10);
+    --paper: var(--stone-12);
+    --paper-2: var(--stone-9);
+    --paper-subtle: var(--stone-11);
     --ink: var(--stone-1);
     --ink-2: var(--stone-3);
     --ink-subtle: var(--stone-5);
@@ -109,6 +114,7 @@
 
 :where(html, body) {
   font-size: var(--step-0);
+  font-size: 18px;
   line-height: var(--line-height);
   font-family: var(--body-font);
   font-weight: var(--weight-normal);
