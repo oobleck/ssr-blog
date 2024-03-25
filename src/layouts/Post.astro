@@ -8,7 +8,7 @@ import { Image } from "@unpic/astro";
 import { settings } from "../data/settings.ts";
 
 const { frontmatter } = Astro.props;
-const { draft, unsplashId, heroDescription, title, description, tags } = frontmatter;
+const { draft, unsplashId, heroDescription, title, description, tags, date, updatedDate } = frontmatter;
 let {hero} = frontmatter;
 
 // hero = null;
@@ -20,6 +20,14 @@ const seo = {
   title,
   description,
   image: hero,
+  openGraph: {
+    article: {
+      modifiedTime: updatedDate || date,
+      publishedTime: date,
+      authors: [ settings.title ],
+      tags,
+    },
+  },
 };
 const featuredImageDims = [1024, 768];
 ---

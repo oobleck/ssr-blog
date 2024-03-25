@@ -5,7 +5,7 @@ import AboutMe from "../components/AboutMe.astro";
 import { settings } from "../data/settings";
 ---
 
-<Layout level="primary">
+<Layout level="primary" title="Home">
   <div class="container">
     <h1>{ settings.title }</h1>
     <AboutMe intro={true} label={false} readmore={true} />

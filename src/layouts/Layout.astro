@@ -3,6 +3,9 @@ import { menu, settings, social } from "../data/settings";
 import Footer from "../components/Footer.astro";
 import NavLink from "../components/NavLink.astro";
 import { ViewTransitions } from 'astro:transitions';
+import { SEO } from "astro-seo";
+import { getImage } from "astro:assets";
+import avatar from "../assets/images/ssr-sawyer-avatar.png";
 
 // Supports weights 100-900
 import '@fontsource-variable/noto-sans-display';
@@ -21,16 +24,38 @@ const webmentionBaseUrl = `https://webmention.io/${settings.domain}`;
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="generator" content={Astro.generator} />
-  <link rel="webmention" href={`${webmentionBaseUrl}/webmention`} />
-  <link rel="pingback" href={`${webmentionBaseUrl}/xmlrpc`} />
-
-  <!-- Verification links -->
-  {social.map(({url}) => <link rel="me" href={url} />)}
-
-  <title>{ title } – { settings.title }</title>
+  <SEO
+    {title}
+    {description}
+    charset="UTF-8"
+    titleTemplate={title === settings.title ? title : `%s – ${settings.title}`}
+    canonical={settings.site}
+    extend={{
+      meta: [
+        { name: "robots", content: "index, nofollow" },
+        { name: 'generator', content: Astro.generator },
+        { name: 'viewport', content: "width=device-width, initial-scale=1.0" },
+      ],
+      link: [
+        { rel: 'webmention', href: `${webmentionBaseUrl}/webmention` },
+        { rel: 'pingback', href: `${webmentionBaseUrl}/xmlrpc` },
+        ...social.filter(({icon, name, url}) => !/\.pdf|\/contact/i.test(url)).map(({url}) => ({ rel: "me", href: url })),
+      ],
+    }}
+    openGraph={{
+      basic: {
+        title,
+        type: "website",
+        image: (await getImage({src: avatar, format: "png"})).src,
+        url: Astro.request.url,
+      },
+      optional: {
+        description,
+        locale: "en_US",
+      },
+      article: seo?.openGraph?.article,
+    }}
+  />
   <ViewTransitions />
 </head>
 
