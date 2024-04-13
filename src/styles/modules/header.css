@@ -1,9 +1,10 @@
 #site-header {
   --hero-url: url('https://images.unsplash.com/photo-1463134836706-8bcc60f7d78b?q=80&w=2940&auto=format&fit=crop');
 
+  position: relative;
   padding-block: var(--space-m-l) var(--space-l-xl);
   margin-block-end: var(--space-l-xl);
-  clip-path: var(--angle-clip-path);
+  /* clip-path: var(--angle-clip-path); */
   display: flex;
   /* justify-content: flex-start; */
   align-items: center;
@@ -15,12 +16,27 @@
   background-attachment: local;
   color: white;
 
+  &::after {
+    position: absolute;
+    content: '';
+    height: 0;
+    bottom: -1px;
+    right: 0;
+    left: 0;
+    border: 0 solid transparent;
+
+    /* 100vw here is slightly larger than the actual viewport (about 2px 🤷) */
+    border-inline-start: 99vw solid transparent;
+    border-block-end: var(--space-m-l) solid var(--paper);
+    z-index: var(--layer-1);
+  }
+
   .u-container {
     width: 100%;
   }
 
   .site-title {
-    font-size: var(--step-3);
+  font-size: var(--step-3);
     font-weight: var(--weight-semibold);
     color: unset;
     text-shadow: 0 0 0.5ch hsl(0 0 0 / 0.55);
@@ -67,7 +83,16 @@
     }
   }
 
-  a[href] {
+  sl-icon-button {
+    color: white;
+    font-size: var(--step-2);
+
+    &:hover {
+      color: white;
+    }
+  }
+
+  ul a[href] {
     color: white !important;
     text-decoration: none;
     opacity: 0.8;

@@ -1,0 +1,90 @@
+---
+import {blogroll, BlogrollItem} from "../data/blogroll.ts";
+import { Icon } from "astro-icon/components";
+import Layout from "../layouts/Layout.astro";
+
+const seo = {
+  title: 'Links',
+};
+
+const categorySortFn = ([_a, aItems], [_b, bItems]) => bItems.length - aItems.length;
+// const itemSortFn = (a, b) => (b.label > a.label ? -1 : 1);
+// const itemSortFn = () => 0;
+const itemSortFn = (a: BlogrollItem, b: BlogrollItem) => {
+  const aDate = new Date(a.dateUpdated ?? a.dateAdded);
+  const bDate = new Date(b.dateUpdated ?? b.dateAdded);
+
+  return bDate - aDate;
+};
+
+const roll = blogroll.reduce((agg, item) => {
+  const {category} = item;
+  [].concat(category).forEach((category) => {
+    agg[category] = agg[category] ?? [];
+    agg[category].push(item);
+  });
+  return agg;
+}, {});
+---
+
+<Layout {...seo} level="secondary">
+  <h1>{seo.title}</h1>
+  <p>
+    This is a list of websites, blogs, etc. that I visit with some regularity,
+    or recommend sorted in reverse chronological order. You can also download this as an <a href="/blogroll.opml">OPML file</a>.
+  </p>
+  <h3>Quick links</h3>
+  <ul class="nav-list">
+    {Object.keys(roll).map((category) => (<li><a href={`#category-${category}`}>{category}</a></li>))}
+  </ul>
+  {Object.entries(roll).sort(categorySortFn).map(([category, items]) => {
+    return (
+      <h4 id={`category-${category}`}>{category}</h4>
+      <ul>
+      {items.sort(itemSortFn).map(({webpage, label, syndicationLink, description, dateAdded, dateUpdated, tags = []}) => {
+        const iconName = /rss/i.test(syndicationLink) ? "ri:rss-fill" : "ri:rss-fill";
+        return (<li class="h-card">
+          <input type="hidden" class="p-category" value={[...tags, category].join(", ")} />
+          <a href={webpage[0]} target="_blank" class="p-name u-url">{label}</a>
+          {syndicationLink && (
+            <a href={syndicationLink} target="_blank" class="u-url"><Icon name={iconName} size="18" /></a>
+          )}
+          {description && <span class="p-note" set:html={description} />}
+          <div>
+            {/* {[...tags, category].map((tag) => { */}
+            {/*   return (<small class="p-category">#{tag} </small>); */}
+            {/* })} */}
+            <small>Updated <sl-relative-time date={dateUpdated || dateAdded}></sl-relative-time></small>
+          </div>
+        </li>);
+      })}
+      </ul>);
+  })}
+</Layout>
+
+<style>
+h4 {
+  text-transform: capitalize;
+}
+
+.nav-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5ch;
+
+  li {
+    margin: 0;
+    padding: 0;
+    text-transform: capitalize;
+
+    &:not(:first-child)::before {
+      content: "|";
+      display: inline-block;
+      margin-inline-end: 0.5ch;
+    }
+  }
+}
+</style>

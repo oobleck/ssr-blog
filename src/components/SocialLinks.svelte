@@ -1,8 +1,10 @@
 <script>
   import Icon from "@iconify/svelte";
-  import { social } from "../data/settings";
+  import { social, settings } from "../data/settings";
   export let pdf = false;
   export let homepage = false;
+  export let rss = true;
+  export let pixelfed = true;
   export let socialLinks = social.filter(({name, url, icon}) => {
     switch (true) {
       case /\.pdf/i.test(url):
@@ -11,13 +13,19 @@
       case /home/i.test(icon):
         return homepage;
 
+      case /rss/i.test(icon):
+        return rss;
+
+      case /pixelfed/i.test(icon):
+        return pixelfed;
+
       default:
         return true;
     }
   });
 </script>
 
-<ul class="social">
+<ul class="social" style={`--socials-count: ${socialLinks.length}`}>
   {#each socialLinks as { icon, url, name }}
     <li class="{/pdf/.test(icon) ? 'screen-only' : ''} {/home/.test(icon) ? 'print-only' : ''}">
       <a
@@ -28,7 +36,7 @@
         title={name}
       >
         <span class="sr-only">
-          {name}
+          {settings.owner} on {name}
         </span>
         <Icon icon={icon} class="social__icon" />
       </a>
@@ -38,13 +46,16 @@
 
 <style>
   .social {
+    --target-gap: clamp(0.2rem, var(--space-2xs), 1rem);
+    --target-gap: var(--space-2xs);
+
     padding: 0;
   }
 
   ul {
     list-style: none;
     display: flex;
-    gap: 1rem;
+    gap: var(--target-gap, 1rem);
   }
 
   a {

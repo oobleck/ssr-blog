@@ -251,3 +251,18 @@ label {
 .input-group {
   margin-block: var(--space-s);
 }
+
+:where(sl-button) {
+  display: inline-block;
+
+  + sl-button {
+    margin-block-start: var(--space-s-m);
+  }
+}
+
+:where(sl-input, sl-textarea, sl-button) {
+  &:not(:first-child) {
+    margin-block-start: var(--space-s-m);
+  }
+}
+

@@ -42,7 +42,7 @@ const main = async () => {
   const outputFilename = join(
     process.cwd(),
     "public",
-    `${settings.title.replace(/[\s]+/g, "-").toLowerCase()}-resume.pdf`
+    `${settings.owner.replace(/[\s]+/g, "-").toLowerCase()}-resume.pdf`
   );
 
   await pdfPage(page, {

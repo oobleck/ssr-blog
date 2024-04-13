@@ -1,6 +1,5 @@
 ---
 import { settings } from "../data/settings";
-import SocialMenu from "./SocialMenu.astro";
 import SocialLinks from "./SocialLinks.svelte";
 const date = new Date();
 ---
@@ -10,7 +9,7 @@ const date = new Date();
     <hr>
     <SocialLinks client:visible />
     <p class="copyright">
-        &copy; {date.getFullYear()} <a href="/" rel="me">{settings.title}</a>.
+        &copy; {date.getFullYear()} <a href="/" rel="me">{settings.owner}</a>.
         Powered by <a href="http://astro.build" target="_blank">Astro</a>.
       </p>
   </div>

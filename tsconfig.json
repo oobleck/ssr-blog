@@ -37,7 +37,7 @@
       "@data/*": ["src/data/*"]
     }
   },
-  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.astro"],
+  "include": ["**/*.ts", "**/*.tsx", "**/*.cjs", "**/*.astro", "src/assets/scripts/scripts.js"],
   "exclude": ["node_modules"],
   "ts-node": {
     "esm": true,

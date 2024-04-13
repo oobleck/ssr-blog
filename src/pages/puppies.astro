@@ -1,0 +1,91 @@
+---
+import Layout from "../layouts/Layout.astro";
+import {Image} from "astro:assets";
+import {puppies, IPuppies} from "../data/puppies";
+import {settings} from "../data/settings";
+
+const seo = {
+  title: "Our Animals",
+};
+---
+
+<Layout {seo} {...seo}>
+  <h1>
+    Our <span class="strike">Puppies</span> Animals
+  </h1>
+  <div class="u-grid puppies-list">
+  {puppies.map(({name, born, breed, weight, images, nicknames, gender, chipId, chipUrl, favorites: {activity} = {}}: IPuppies) => {
+    const slug = name.toLowerCase().replace(/[\W]+/g, '-');
+    const link = `${Astro.url}/#${slug}`;
+    const qrSize = 128;
+    const pagination = images?.length > 0 ? 'pagination' : null 
+    return (
+      <sl-card id={slug}>
+        <header slot="header">
+          <a id={slug} />
+          <h6>{name} ({gender})</h6>
+        </header>
+          <sl-carousel { pagination } slot="image" loop>
+          {Array.isArray(images) && images.map((img) => {
+            const Element = img?.startsWith('/') ? 'Image' : 'img';
+            return (
+            <sl-carousel-item>
+              <Element src={img} size={640} alt={`Photo of ${name}, a ${breed}`} />
+            </sl-carousel-item>
+          )})}
+          <sl-carousel-item>
+            <a href={link}>
+              <sl-qr-code value={link} error-correction="H" size={400}></sl-qr-code>
+            </a>
+          </sl-carousel-item>
+        </sl-carousel>
+        <dl class="u-grid attributes">
+          <dt>Born</dt>
+          <dd>
+            <sl-format-date date={born} month="short" day="numeric" year="numeric"></sl-format-date><br>
+            <small>(~<sl-relative-time date={born} format="short" numeric="always"></sl-relative-time>)</small>
+          </dd>
+          <dt>Breed</dt>
+          <dd set:html={breed} />
+          <dt>Weight</dt>
+          <dd>~{weight} lb</dd>
+          <dt>Aliases</dt>
+          <dd><q set:html={nicknames?.join("</q>, <q>")}></q></dd>
+          {activity && (<dt>Favorite activity</dt>
+          <dd set:html={activity} />)}
+          <dt>Chipped</dt>
+          <dd>{chipId ? 'Yes' : 'No'}</dd>
+        </dl>
+        {/* <a href={link}> */}
+        {/*   <sl-qr-code value={link} error-correction="H" size={qrSize}></sl-qr-code> */}
+        {/* </a> */}
+      </sl-card>
+    )
+  })}
+  </div>
+</Layout>
+
+<style>
+.u-grid {
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: var(--space-m-l);
+}
+img {
+  object-fit: cover;
+  max-width: 100%;
+}
+dl.attributes {
+  grid-template-columns: 20% 1fr;
+  gap: 1ch;
+}
+header > * {
+  margin: 0;
+}
+[href][slot="image"] {
+  width: 100%;
+}
+
+sl-carousel {
+  --aspect-ratio: 1;
+}
+</style>

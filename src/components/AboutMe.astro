@@ -29,7 +29,7 @@ const {
   {
     label && (
       <header>
-        <h4 class="p-name p-org">{settings.title}</h4>
+        <h4 class="p-name p-org">{settings.owner}</h4>
       </header>
     )
   }
@@ -47,7 +47,7 @@ const {
       )
     }
     <div class="summary">
-      <p class:list={["p-note", {"intro lead": intro}]}>{ABOUT_ME}</p>
+      <p class:list={["p-note", {"intro lead": intro}]} set:html={ABOUT_ME}></p>
       {!extended && readmore && <p><a href="/about">Read more&hellip;</a></p>}
       {extended && <p set:html={ABOUT_ME_EXTENDED.split(/[\r\n]+/gm).join('</p><p>')}></p>}
     </div>

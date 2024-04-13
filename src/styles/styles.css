@@ -91,10 +91,20 @@
   --select-focus: var(--accent);
   --select-arrow: var(--select-border);
 
-  --angle-clip-path: polygon(0 0, 100% 0, 100% 83%, 0 100%);
+  --clip-angle-adjacent: 83%;
+  --angle-clip-path: polygon(0 0, 100% 0, 100% var(--clip-angle-adjacent), 0 100%);
   --angle-clip-path-top: polygon(0 25%, 100% 0, 100%, 0 100%);
+
+  /* top right, bottom right, bottom left, top left */
+  --angle-clip-path-top: polygon(
+    0 100%,
+    100% var(--clip-angle-adjacent),
+    100% 100%,
+    0 100%,
+  );
   /* --angle-clip-path: polygon(0 0, 1600px 0, 1600px calc(100% - var(--space-2xl)), 0 100%); */
   /* --angle-clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%); */
+  --sl-panel-background-color: var(--paper-subtle);
 
   color-scheme: light;
 

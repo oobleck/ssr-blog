@@ -22,7 +22,7 @@ const title = `"${card.title}" by @${card.author_name}`;
     </Card>
   </div>
 )}
-{inline && <a href={src} target="_blank" rel="noreferrer" set:html={label}></a>}
+{inline && <a href={src} target="_blank" rel="noreferrer" set:html={label ?? title}></a>}
 
 <style is:global>
 .toot-preview {

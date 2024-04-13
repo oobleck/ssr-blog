@@ -1,0 +1,75 @@
+---
+import NavLink from "../components/NavLink.astro";
+import Share from "../components/Share.astro";
+import {menu, settings} from "../data/settings.ts";
+---
+
+<section>
+  <nav id="primary-nav">
+    <ul class="expanded-menu">
+      {menu.map(({name, link}) => (
+        <li>
+          <NavLink href={link}>{name}</NavLink>
+        </li>
+      ))}
+    </ul>
+    <sl-icon-button id="menu-trigger" name="list" label="Menu"></sl-icon-button>
+  </nav>
+</section>
+
+<sl-drawer class="compact-menu" transition:persist-props>
+  <h4>
+    {settings.title}
+    <small>{settings.description}</small>
+  </h4>
+  <ul>
+  {menu.map(({name, link}) => (
+    <li>
+      <NavLink href={link}>{name}</NavLink>
+    </li>
+  ))}
+    <li>
+      <Share text="test" slot="header-actions" />
+    </li>
+  </ul>
+</sl-drawer>
+
+<style>
+  @import "open-props/media";
+
+  section {
+    container: primarynav / inline-size;
+  }
+
+  #primary-nav {
+    display: grid;
+    /* grid-template-columns: [the-rest] auto [menu] 2rem; */
+    grid-template-columns: 7fr 1fr;
+    grid-template-areas: the-rest menu;
+
+    .expanded-menu {
+      display: none;
+    }
+
+    #menu-trigger {
+      grid-area: menu;
+    }
+
+    @container primarynav (width > 480) {
+      .expanded-menu {
+        display: inline-flex;
+      }
+
+      #menu-trigger {
+        display: none;
+      }
+    }
+  }
+
+  sl-drawer {
+    :is(&, & :not(a)) {
+      color: var(--ink);
+    }
+  }
+</style>
+

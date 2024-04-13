@@ -43,24 +43,36 @@ const heros = {
 };
 
 export const settings = {
+  owner: "Spencer Rhodes",
   site: "https://www.spencerrhodes.dev",
   domain: `www.spencerrhodes.dev`,
   title: "Spencer Rhodes",
   email: `me@spencerrhodes.dev`,
+  obfuscatedEmail: '',
   description: "User Interface Developer",
   // hero: remoteImageUrl(heroImageIds.ggBridgeFog),
   hero: heros.redBlueSwirl,
   authorImage: "../assets/images/ssr-sawyer-avatar.png",
 };
 settings.site = `https://${settings.domain}`;
+settings.obfuscatedEmail = settings.email
+  .replace(/@/g, '＠')
+  .replace(/\./g, '․')
+  .replace(/s/g, 'ѕ')
+  .replace(/p/g, 'р')
+  .replace(/o/g, 'о')
+  // .replace(/d/g, 'Ԁ')
+  // .replace(/v/g, 'ѵ')
+  .replace(/e/g, 'е');
 
 // Main Menu
 export const menu = [
   // { name: "Home", link: "/" },
   { name: "Blog", link: "/blog/1" },
+  { name: "Tags", link: "/tags" },
+  { name: "Links", link: "/links" },
   { name: "About", link: "/about" },
   { name: "Résumé", link: "/cv" },
-  { name: "Tags", link: "/tags" },
   { name: "Contact", link: "/contact" },
 ];
 
@@ -73,15 +85,7 @@ export const social = [
     url: settings.site,
   },
   {
-    name: settings.email
-      .replace(/@/g, '＠')
-      .replace(/\./g, '․')
-      .replace(/s/g, 'ѕ')
-      .replace(/p/g, 'р')
-      .replace(/o/g, 'о')
-      // .replace(/d/g, 'Ԁ')
-      // .replace(/v/g, 'ѵ')
-      .replace(/e/g, 'е'),
+    name: settings.obfuscatedEmail,
     icon: "ri:mail-send-line",
     url: `${settings.site}/contact`,
   },
@@ -114,5 +118,10 @@ export const social = [
     name: "Pixelfed",
     icon: "ri:pixelfed-line",
     url: "https://pixelfed.social/@oobleck",
+  },
+  {
+    name: "RSS",
+    icon: "ri:rss-fill",
+    url: `/rss.xml`,
   },
 ];

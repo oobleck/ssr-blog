@@ -1,0 +1,12 @@
+---
+import {settings} from "../data/settings";
+
+interface Props {
+  text: string;
+}
+
+const {text} = Astro.props;
+const shareUrl = `https://shareopenly.org/share/?url=${settings.site}${Astro.url.pathname}&text=${encodeURIComponent(text)}`;
+---
+
+<a href={shareUrl} rel="share-url" target="_blank">Share <sl-icon name="share"></sl-icon></a>

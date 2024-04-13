@@ -4,8 +4,11 @@ import Layout from "./Layout.astro";
 import AboutMe from "../components/AboutMe.astro";
 import TagsList from "../components/TagsList.astro";
 import { unsplashCredit, unsplashUrl } from "../utils/unsplash.utils";
-import { Image } from "@unpic/astro";
+// import { Image } from "@unpic/astro";
+import { Image } from "astro:assets";
 import { settings } from "../data/settings.ts";
+import FormattedDate from "../components/FormattedDate.astro";
+import Share from "../components/Share.astro";
 
 const { frontmatter } = Astro.props;
 const { draft, unsplashId, heroDescription, title, description, tags, date, updatedDate } = frontmatter;
@@ -24,7 +27,7 @@ const seo = {
     article: {
       modifiedTime: updatedDate || date,
       publishedTime: date,
-      authors: [ settings.title ],
+      authors: [ settings.owner ],
       tags,
     },
   },
@@ -34,13 +37,13 @@ const featuredImageDims = [1024, 768];
 
 <Layout seo={seo} {unsplashId} level="secondary">
   <article class:list={['h-entry', {'draft-post': draft}]}>
+    <a class="u-bridgy-fed" href="https://fed.brid.gy/" hidden="from-humans"></a>
     <header class="post-header">
       <h1 class="p-name post-header__title">{frontmatter.title}</h1>
       <div class="post-header__meta">
-        <time datetime={frontmatter.date} class="dt-updated dt-published post-header__date">
-          {formatDate(frontmatter.date)}
-        </time>
+        <FormattedDate date={frontmatter.date} relative={false} format="long" />
         <TagsList {tags} />
+        <Share text={frontmatter.title} />
       </div>
     </header>
     <div class="e-content">
@@ -76,6 +79,10 @@ const featuredImageDims = [1024, 768];
 </Layout>
 
 <style>
+  .h-entry {
+    position: relative;
+  }
+
   .featured-image {
     grid-column: 1 / -1;
     position: relative;
@@ -119,5 +126,19 @@ const featuredImageDims = [1024, 768];
     align-items: center;
     justify-content: center;
     /* font-size: 1rem; */
+  }
+
+  .draft-post {
+    &::before {
+      content: 'DRAFT';
+      position: asbolute;
+      transform-origin: 50% 50%;
+      font-size: 10vw;
+      font-weight: var(--font-weight-8);
+      color: red;
+      opacity: 0.5;
+      top: 50vh;
+      left: 50vw;
+    }
   }
 </style>

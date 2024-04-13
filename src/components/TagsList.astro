@@ -4,9 +4,11 @@ const {tags = []} = Astro.props;
 
 {tags.length && (
   <div class="tags">
-    Tags: <ul>{tags.map((tag) => (
+    <ul>
+      {/* <li>Tags:</li> */}
+      {tags.map((tag) => (
       <li>
-        <a class="p-category tag" href={`/tags/${tag}`}>{tag}</a>
+        <a class="p-category tag" href={`/tags/${tag}`}>#{tag}</a>
       </li>
     ))}</ul>
   </div>
@@ -16,16 +18,23 @@ const {tags = []} = Astro.props;
 ul {
   padding: 0;
   list-style: none;
-  display: inline;
   font-size: inherit;
+  display: flex;
+  gap: 0.6ch;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+
+
+  &::before {
+    content: 'Tags:';
+    /* margin-inline-end: 0.5ch; */
+  }
 
   li {
-    display: inline-block;
     font-size: inherit;
 
     &:not(:last-child)::after {
       content: ',';
-      margin-inline-end: 0.3ch;
     }
   }
 }

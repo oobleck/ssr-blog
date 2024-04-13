@@ -16,7 +16,9 @@
   --family-handwritten: 'Segoe Print', 'Bradley Hand', Chilanka, TSCu_Comic, casual, cursive;
 
   /* --body-font: var(--family-system-ui); */
-  --body-font: 'Noto Sans Display Variable', var(--family-system-ui);
+  /* --heading-font: 'Noto Sans Display Variable', var(--family-system-ui); */
+  --body-font: var(--family-system-ui);
+  --body-font: var(--family-neo-grotesque);
   --code-font: var(--family-monospace);
 
   --body-color: var(--ink);
@@ -25,7 +27,7 @@
   --weight-light: var(--font-weight-2);
   --weight-normal: var(--font-weight-3);
   --weight-semibold: var(--font-weight-4);
-  --weight-bold: var(--font-weight-6);
+  --weight-bold: var(--font-weight-5);
 }
 
 :where(body) {
@@ -125,6 +127,21 @@
     &::before {
       --_rotation: 1deg;
     }
+  }
+}
+
+:where(s, .strike) {
+  text-decoration: none;
+  position: relative;
+  
+  &:after {
+    position: absolute;
+    top: 55%;
+    left: -0.3ch;
+    content: '';
+    border-block-start: 0.2ch solid var(--accent);
+    width: calc(100% + 0.6ch);
+    transform: rotate(-4deg);
   }
 }
 

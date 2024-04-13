@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "astro dev --port 8056",
     "start": "astro dev",
-    "build": "pnpm build:pdf && astro build",
+    "build": "astro build",
     "preview": "astro preview",
     "build:pdf": "tsx ./scripts/generate-pdf.ts",
     "astro": "astro"
@@ -19,6 +19,7 @@
     "@fontsource-variable/noto-sans-display": "^5.0.20",
     "@iconify-json/material-symbols-light": "^1.1.12",
     "@philnash/astro-pagination": "^0.4.0",
+    "@shoelace-style/shoelace": "^2.15.0",
     "astro": "^4.5.5",
     "astro-compress": "^2.2.10",
     "astro-icon": "^1.1.0",
@@ -51,6 +52,7 @@
     "sharp": "^0.33.2",
     "svelte-typeahead": "^4.4.1",
     "tsx": "^4.7.1",
-    "unpic": "^3.17.0"
+    "unpic": "^3.17.0",
+    "vite-plugin-static-copy": "^1.0.2"
   }
 }

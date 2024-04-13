@@ -4,15 +4,27 @@
 
   export const getData = async () => {
     const resumeUrl = "https://gitconnected.com/v1/portfolio/oobleck";
-    // const resumeUrl = "/resume.json";
-    const response = await fetch(resumeUrl);
-    return await response.json();
+    const backupResumeUrl = "/resume.json";
+    let data;
+
+    // First try the remote API for up-to-date data.
+    let response = await fetch(resumeUrl);
+    if (response.status < 400) {
+      data = await response.json();
+      return data;
+    }
+
+    // If that failed, use the local copy of the JSON Resume generated in the
+    // most recent build.
+    response = await fetch(backupResumeUrl);
+    data = await response.json();
+    return data;
   };
 
   export const resume = getData();
 
   export const formatDate = (date) => {
-    return new Date(date).toLocaleString("en-us", {
+    return new Date(`${date} PDT`).toLocaleString("en-us", {
       day: void 0,
       year: "numeric",
       month: "short",
@@ -20,15 +32,17 @@
   };
 </script>
 
-<article class="h-resume">
+<article class="h-resume" id="top">
   {#await resume}
     <h5>Loading resume...</h5>
-    <p class="screen-only"><a href="/spencer-rhodes-resume.pdf">Download PDF Resume</a></p>
+    <p class="screen-only">
+      <a href="/spencer-rhodes-resume.pdf">Download PDF Resume</a>
+    </p>
   {:then data}
     <header>
       <h1 class="page-title p-name">
         {data.basics?.name}
-        <small>{settings.description}</small>
+        <small>{data.basics?.label}</small>
       </h1>
       <h4 class="description p-summary">
         {data.basics?.headline}
@@ -37,17 +51,40 @@
       {#if data.basics?.summary}
         <p>{data.basics.summary}</p>
       {/if}
-      <p class="screen-only"><a href="/spencer-rhodes-resume.pdf">Download PDF Resume</a></p>
-      <SocialLinks compact={true} list={false} homepage={true} geo={false} pdf={true} />
+      <p class="screen-only">
+        <a href="/spencer-rhodes-resume.pdf">Download PDF Resume</a>
+      </p>
+      <SocialLinks
+        compact={true}
+        list={false}
+        homepage={true}
+        geo={false}
+        pdf={true}
+        rss={false}
+        pixelfed={false}
+      />
+
+  <nav class="section-nav screen-only">
+    Jump to a section
+    <ul>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#work">Experience</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#references">References</a></li>
+    </ul>
+  </nav>
     </header>
 
     {#if data.skills?.length}
       <section id="skills">
         <h3>Skills</h3>
         <section class="skillsets">
-          {#each data.skills as { keywords, name }}
+          {#each data.skills as { keywords, name, yearsOfExperience: years }}
             <div class="skillset">
-              <h5>{name}</h5>
+              <h5>
+                {name}
+              </h5>
+              <!-- {years} Years -->
               <ul>
                 {#each keywords as kw}
                   <li class="p-skill">{kw}</li>
@@ -68,14 +105,18 @@
               <hgroup>
                 <h5 class="p-name p-job-title">{position.position}</h5>
                 <h6>
-                  <a
-                    class="u-url p-org"
-                    href={position.website}
-                    rel="noreferrer"
-                    target="_blank"
-                  >
-                    {position.company}
-                  </a>
+                  {#if position.website}
+                    <a
+                      class="u-url p-org"
+                      href={position.website}
+                      rel="noreferrer"
+                      target="_blank"
+                    >
+                      {position.company}
+                    </a>
+                  {:else}
+                    <span class="p-org">{position.company}</span>
+                  {/if}
                 </h6>
               </hgroup>
               <div class="metadata">
@@ -87,7 +128,7 @@
                   >
                   –
                   <span class="end-date">
-                    {#if !position.endDate}
+                    {#if position.isCurrentRole}
                       <span class="dt-end">Present</span>
                     {:else}
                       <time datetime={position.endDate} class="dt-end"
@@ -152,20 +193,73 @@
                 {studyType} – {area}
               </p>
             {/if}
+            {#if activities}
+              <dl>
+                <dt>Activities</dt>
+                <dd>
+                  <ul>
+                    {#each activities.split(/[\r\n]/gm) as line}
+                      <li>{line}</li>
+                    {/each}
+                  </ul>
+                </dd>
+              </dl>
+            {/if}
           </article>
         {/each}
       </section>
     {/if}
 
-    {#if data.references}
+    {#if data.certificates?.length}
+      <section id="certificates">
+        <h3>Certifications</h3>
+        {#each data.certificates as { name, issuer, date, url, summary }}
+          <article class="certification h-event h-entry">
+            <header>
+              <hgroup>
+                <h5 class="p-name">{name}</h5>
+                <h6>
+                  {#if url}
+                    <a
+                      href={url}
+                      class="issuer p-organizer u-url"
+                      target="_blank">{issuer}</a
+                    >
+                  {:else}
+                    <span class="issuer p-organizer">{issuer}</span>
+                  {/if}
+                </h6>
+              </hgroup>
+              <div class="metadata">
+                <div class="dates">
+                  <span class="start-date">
+                    {#if date}
+                      <time datetime={date} class="dt-start dt-updated"
+                        >{formatDate(date)}</time
+                      >
+                    {/if}
+                  </span>
+                </div>
+              </div>
+            </header>
+
+            {#if summary}
+              <p class="p-summary">{summary}</p>
+            {/if}
+          </article>
+        {/each}
+      </section>
+    {/if}
+
+    {#if data.references?.length}
       <section id="references">
         <h3>
-          <span class="print-only">Recent<br></span>
+          <span class="print-only">Recent<br /></span>
           References
         </h3>
         {#each data.references as { reference, name }}
           <blockquote class="reference h-review">
-            <input type="hidden" name={settings.title} class="h-item p-item" />
+            <input type="hidden" name={settings.owner} class="h-item p-item" />
             <q class="e-content">{reference}</q>
             <cite class="p-author h-card">{name}</cite>
           </blockquote>
@@ -180,6 +274,26 @@
 
   :root {
     --grid-max-width: 60rem !important;
+  }
+
+  /* .p-summary.description { */
+  /*   font-weight: var(--weight-normal) */
+  /* } */
+
+  .section-nav {
+    ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1ch;
+      justify-content: flex-start;
+      margin: 0;
+      padding: 0;
+    }
+    li {
+      padding: 0;
+      margin: 0;
+    }
   }
 
   q:first-letter {
@@ -274,7 +388,7 @@
       margin-block-start: var(--space-s-m);
 
       &::before {
-        content: '–';
+        content: "–";
         display: inline-block;
         padding-inline-end: 0.5ch;
       }
@@ -305,6 +419,11 @@
   }
 
   @media print {
+    :root {
+      /* --body-font: var(--family-humanist); */
+      /* --heading-font: var(--family-humanist); */
+    }
+
     :global(#site-header, #site-footer, astro-dev-toolbar) {
       display: none !important;
     }
@@ -429,7 +548,7 @@
         display: none;
         padding-block: 0 !important;
 
-        &:nth-child(-n+4) {
+        &:nth-child(-n + 4) {
           display: block;
         }
       }

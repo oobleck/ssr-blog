@@ -9,6 +9,7 @@ import { browserslistToTargets } from "lightningcss";
 import browserslist from "browserslist";
 import { imageService } from "@unpic/astro/service";
 import svelte from "@astrojs/svelte";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 const iconConfig = {
   include: {
@@ -51,7 +52,8 @@ export default defineConfig({
     compress(),
     robotsTxt(),
     mdx(),
-    icon(iconConfig),
+    icon(),
+    // icon(iconConfig),
     svelte(),
   ],
   image: {
@@ -86,5 +88,13 @@ export default defineConfig({
         },
       },
     },
+    plugins: [
+      viteStaticCopy({
+        targets: [{
+          src: "node_modules/@shoelace-style/shoelace/dist/",
+          dest: 'shoelace',
+        }],
+      }),
+    ],
   },
 });
