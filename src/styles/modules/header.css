@@ -36,7 +36,7 @@
   }
 
   .site-title {
-  font-size: var(--step-3);
+    font-size: var(--step-3);
     font-weight: var(--weight-semibold);
     color: unset;
     text-shadow: 0 0 0.5ch hsl(0 0 0 / 0.55);

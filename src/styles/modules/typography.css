@@ -19,6 +19,7 @@
   /* --heading-font: 'Noto Sans Display Variable', var(--family-system-ui); */
   --body-font: var(--family-system-ui);
   --body-font: var(--family-neo-grotesque);
+  --heading-font: var(--family-slab-serif);
   --code-font: var(--family-monospace);
 
   --body-color: var(--ink);
@@ -81,6 +82,18 @@
     font-weight: var(--weight-normal);
     /* opacity: 0.65; */
     color: var(--ink-subtle);
+  }
+
+  &.Xanchor-added {
+    position: relative;
+
+    &:hover::before {
+      position: absolute;
+      content: '#';
+      left: -1em;
+      top: 0;
+      /* font-size: var(--step-2); */
+    }
   }
 }
 

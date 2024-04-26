@@ -11,6 +11,8 @@ const blogCollection = defineCollection({
     heroDescription: z.string().optional(),
     tags: z.string().array().optional(),
     draft: z.boolean().optional(),
+    minutesRead: z.string().optional(),
+    words: z.number().optional(),
   }),
 });
 // 3. Export a single `collections` object to register your collection(s)

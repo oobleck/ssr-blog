@@ -55,7 +55,7 @@ export const puppies: IPuppy[] = [
       "/images/luna-wren3.jpg",
       "/images/luna-day1.jpg",
     ],
-    nicknames: ['Wrennie', 'Beans', 'Lunatic'],
+    nicknames: ['Wrennie', "Renny Rockets", 'Beans', 'Lunatic'],
     favorites: {
       activity: "Playing fetch",
     },

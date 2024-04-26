@@ -1,0 +1,32 @@
+---
+title: "Learning about web accessibility"
+description: ""
+hero: https://images.unsplash.com/photo-1600202751116-3e0226e1e7a0?w=800
+heroDescription: "A photo of a brick wall covered in graffiti with a sign on it reading 'Accessible Entry'"
+date: 2024-04-13
+draft: false
+tags:
+  - a11y
+  - webdev
+---
+
+At work recently, I've been auditing our large and old code base to make accessibility updates to meet [<abbr title="Web Content Accessibility Guidelines">WCAG</abbr> 2 guidelines](https://www.w3.org/WAI/standards-guidelines/wcag/) (<q>guidelines</q> is redundant, I know) for our [<abbr title="Voluntary Product Accessibility Template">VPAT</abbr> document](https://www.section508.gov/sell/vpatet). For the rest of this post I'll be referring to accessibility as <q><abbr title="accessibility">a11y</abbr></q> because it's an industry convention.
+
+Before I continue, let me take a moment and be clear about something: *I am in no way an expert in web accessibility.* I'm just interested in making the work I produce accessible to the widest audience I can.
+
+So lets get back to it.
+
+I've always been interested in a11y on the web in some capacity, but never read up on what that really means for Users of assistive technology. I just picked up tips and <q>best practices</q> along the way, like <q>always add `alt` attributes to images</q> and <q>use `aria-*` and `role` attributes to give semantic meaning to your documents.</q>
+
+And now that I'm tasked with actually making our web app more accessible and after being on Mastodon for a while where there's a lot of discussion and expectation to make things accessible to more Users, I'm learning a lot more about the topc.
+
+I'm taking this to heart and using this website as a sandbox for learning and applying WCAG guidelines. My goal is to incorporate accessible coding practices in everything I write.
+
+On this site I've tried to make click/tap targets large enough to be more easily hit by Users with limited mobility or motor skills. I've used a larger default font size for easier readability. I've added 2 skip links, one for jumping to the main content of this site, and another for returning to the top of the page if you're scrolled farther down a page. These are all simple enough enhancements that make a difference to more Users. It just takes a shift in thinking on my part as the developer.
+
+Some resources I've found invaluable in my a11y education, in no particular order:
+
+- [https://www.a11yproject.com](https://www.a11yproject.com)
+- [https://www.a11y-101.com](https://www.a11y-101.com)
+- [https://www.w3.org/WAI/standards-guidelines/wcag/](https://www.w3.org/WAI/standards-guidelines/wcag/)
+

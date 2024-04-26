@@ -1,12 +1,13 @@
 ---
 import Pagination from "@philnash/astro-pagination";
-import { getCollection } from "astro:content";
+import { getBlogPosts, chronoSort } from "../../utils/get-posts";
 import Layout from "../../layouts/Layout.astro";
 import FormattedDate from "../../components/FormattedDate.astro";
 import PostList from "../../components/PostList.astro";
 
+const isDevMode = Astro.url.hostname.includes('localhost');
 export async function getStaticPaths({ paginate }) {
-  const blogEntries = (await getCollection("blog", ({data: {draft}}) => !draft)).map((entry) => ({
+  const blogEntries = (await getBlogPosts(false)).sort(chronoSort).map((entry) => ({
     params: { slug: entry.slug },
     props: { entry },
   }));
@@ -20,12 +21,12 @@ const { page }: any = Astro.props;
 ---
 
 <!--Display the current page number. Astro.params.page can also be used!-->
-<Layout level="secondary">
+<Layout level="secondary" showSearch={true}>
   <div class="container">
     <div class="container--lg">
       <h1>Blog Posts</h1>
       {page.lastPage > 1 && <p>Page {page.currentPage} of {page.lastPage}</p>}
-      <PostList {page} cards={true} />
+      <PostList {page} cards={true} includeDrafts={Astro.url.hostname.includes('localhost')} />
       {
         /* https://github.com/philnash/astro-components/tree/main/packages/astro-pagination#usage */
       }

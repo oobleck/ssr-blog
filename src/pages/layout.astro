@@ -1,0 +1,14 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Search from "../components/SiteSearch.astro";
+---
+
+<Layout title="Layout sandbox" showSearch={false}>
+  <h1>Layout testing</h1>
+  <p>Layout testing</p>
+
+  <aside slot="sidebar">
+    <h4>Sidebar</h4>
+    <Search />
+  </aside>
+</Layout>

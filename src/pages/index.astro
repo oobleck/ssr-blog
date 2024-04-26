@@ -5,12 +5,12 @@ import AboutMe from "../components/AboutMe.astro";
 import { settings } from "../data/settings";
 ---
 
-<Layout level="primary" title="Home">
+<Layout level="primary" title="Home" searchable={false}>
   <div class="container">
     <h1>{ settings.title }</h1>
     <AboutMe intro={true} label={false} readmore={true} />
 
     <h2>Recent Posts</h2>
-    <PostList limit={3} cards={false} />
+    <PostList limit={3} cards={false} includeDrafts={Astro.url.hostname.includes('localhost')} />
   </div>
 </Layout>

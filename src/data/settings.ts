@@ -72,7 +72,7 @@ export const menu = [
   { name: "Tags", link: "/tags" },
   { name: "Links", link: "/links" },
   { name: "About", link: "/about" },
-  { name: "Résumé", link: "/cv" },
+  { name: "CV", link: "/cv" },
   { name: "Contact", link: "/contact" },
 ];
 

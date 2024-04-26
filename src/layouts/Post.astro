@@ -9,6 +9,7 @@ import { Image } from "astro:assets";
 import { settings } from "../data/settings.ts";
 import FormattedDate from "../components/FormattedDate.astro";
 import Share from "../components/Share.astro";
+import Search from "../components/SiteSearch.astro";
 
 const { frontmatter } = Astro.props;
 const { draft, unsplashId, heroDescription, title, description, tags, date, updatedDate } = frontmatter;
@@ -35,15 +36,21 @@ const seo = {
 const featuredImageDims = [1024, 768];
 ---
 
-<Layout seo={seo} {unsplashId} level="secondary">
+<Layout seo={seo} {unsplashId} level="secondary" searchable={!draft}>
   <article class:list={['h-entry', {'draft-post': draft}]}>
     <a class="u-bridgy-fed" href="https://fed.brid.gy/" hidden="from-humans"></a>
     <header class="post-header">
-      <h1 class="p-name post-header__title">{frontmatter.title}</h1>
+      <h1 class="p-name post-header__title">{title}</h1>
       <div class="post-header__meta">
-        <FormattedDate date={frontmatter.date} relative={false} format="long" />
+        <div>Published <FormattedDate date={date} relative={false} format="long" /></div>
+        {updatedDate && (
+          <div>
+            Updated <FormattedDate date={updatedDate} relative={false} format="long" />
+          </div>
+        )}
         <TagsList {tags} />
-        <Share text={frontmatter.title} />
+        <div class="read-time">Read time: ~{frontmatter.minutesRead ?? '1 min'}</div>
+        <Share text={title} />
       </div>
     </header>
     <div class="e-content">
@@ -76,6 +83,9 @@ const featuredImageDims = [1024, 768];
   </article>
   <h5>Webmentions</h5>
   <web-mentions domain={settings.site} showTitle={false}></web-mentions>
+
+  <!-- <aside slot="sidebar"> -->
+  <!-- </aside> -->
 </Layout>
 
 <style>
@@ -113,7 +123,10 @@ const featuredImageDims = [1024, 768];
 
   .post-header {
     margin-bottom: var(--space-m);
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-items: center;
   }
 
   .tags {
@@ -129,16 +142,21 @@ const featuredImageDims = [1024, 768];
   }
 
   .draft-post {
+    outline: 3px dotted crimson;
     &::before {
-      content: 'DRAFT';
-      position: asbolute;
+      /* content: 'DRAFT'; */
+      position: absolute;
+      position: fixed;
       transform-origin: 50% 50%;
-      font-size: 10vw;
-      font-weight: var(--font-weight-8);
-      color: red;
-      opacity: 0.5;
-      top: 50vh;
-      left: 50vw;
+      font-size: 15vw;
+      font-weight: var(--weight-bold);
+      color: crimson;
+      opacity: 0.4;
+      top: 30vh;
+      left: 20vw;
+      transform: rotate(-30deg);
+      /* z-index: var(--layer-1); */
+      z-index: 0;
     }
   }
 </style>

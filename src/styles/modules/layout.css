@@ -19,17 +19,22 @@
   gap: var(--grid-gutter);
 }
 
-.with-sidebar {
+.with-sidebar main {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-lg, 2rem);
+
+  &:has(aside) > .u-container {
+    flex-shrink: 2;
+  }
 }
 
-.with-sidebar > aside {
+.with-sidebar main > aside {
   flex-grow: 1;
+  max-width: 30%;
 }
 
-.with-sidebar > :not(aside) {
+.with-sidebar main > :not(aside) {
   flex-basis: 0;
   flex-grow: 999;
   min-inline-size: 50%;

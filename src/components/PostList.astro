@@ -1,5 +1,6 @@
 ---
 import { getCollection, type CollectionEntry } from "astro:content";
+import {Image} from "astro:assets";
 import Card from "./Card.astro";
 import FormattedDate from "./FormattedDate.astro";
 import TagsList from "./TagsList.astro"
@@ -17,22 +18,39 @@ const blogPostPages = (page?.data?.map(({props: {entry}}) => entry) ?? (
   await getCollection("blog", ({ data: { draft } }) => includeDrafts || !draft)
 )).sort((a, b) => (b.data.date < a.data.date ? -1 : 1))
 const blogPosts = !limit ? blogPostPages : blogPostPages.slice(0, limit);
+
+const HeadingTag = 'h6';
 ---
 
 <div class:list={[`post-list`, {"card-layout": cards}]}>
   {
-    blogPostPages?.length === 0 && (
+    blogPostPages?.length < 1 && (
       <p>No posts yet. Check back soon!</p>
     )
   }
   <!-- {blogPostPages.length > limit && (<h6>Showing x of {blogPostPages.length}</h6>)} -->
   {blogPosts?.length && (<ul>
-    {blogPosts.map(({data: {hero, heroDescription, date, updatedDate, description, title, tags = []}, slug}) => {
+    {blogPosts.map(({data: {hero, heroDescription = "", date, updatedDate, description, title, tags = [], draft = false}, slug}) => {
       const url = `/blog/${slug}`;
       return !cards
-        ? (<li><a href={url}>{title}</a> <FormattedDate date={updatedDate || date} /></li>)
+        ? (<li><a href={url}>{title}</a> <FormattedDate aria-label="Post updated date" date={updatedDate || date} /></li>)
         : (<li>
-          <Card url={url} media={hero} mediaDescription={heroDescription}>
+          <sl-card class:list={[{'draft-post': draft}]}>
+            {hero && (<a href={`/blog/${slug}`} slot="image">
+              <img src={hero} alt={heroDescription} />
+            </a>)}
+            <HeadingTag class="card-title">
+              <a href={`/blog/${slug}`} set:html={title}></a>
+            </HeadingTa>
+            <aside class="metadata">
+              <FormattedDate date={updatedDate || date} />
+              <TagsList {tags} />
+            </aside>
+            {description && <p set:html={description}></p>}
+            <a href={`/blog/${slug}`}>Read more...</a>
+          </sl-card>
+{/*
+<Card url={url} media={hero} mediaDescription={heroDescription}>
             <h5 slot="card_title">{title}</h5>
             <div class="metadata">
               <FormattedDate date={updatedDate || date} />
@@ -40,6 +58,7 @@ const blogPosts = !limit ? blogPostPages : blogPostPages.slice(0, limit);
             </div>
             <p class="post-description">{description}</p>
           </Card>
+*/}
         </li>)
     })}
   </ul>)}
@@ -60,5 +79,19 @@ const blogPosts = !limit ? blogPostPages : blogPostPages.slice(0, limit);
       padding: 0;
       margin: 0;
     }
+  }
+
+  sl-card {
+    &.draft-post * {
+      color: crimson;
+    }
+  }
+
+  img {
+    aspect-ratio: 4/3;
+    width: 100%;
+  }
+  .card-title {
+    margin-block-start: 0;
   }
 </style>

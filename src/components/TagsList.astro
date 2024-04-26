@@ -5,7 +5,7 @@ const {tags = []} = Astro.props;
 {tags.length && (
   <div class="tags">
     <ul>
-      {/* <li>Tags:</li> */}
+      <li>Tags:</li>
       {tags.map((tag) => (
       <li>
         <a class="p-category tag" href={`/tags/${tag}`}>#{tag}</a>
@@ -24,16 +24,10 @@ ul {
   justify-content: flex-start;
   flex-wrap: wrap;
 
-
-  &::before {
-    content: 'Tags:';
-    /* margin-inline-end: 0.5ch; */
-  }
-
   li {
     font-size: inherit;
 
-    &:not(:last-child)::after {
+    &:not(:last-child):not(:first-child)::after {
       content: ',';
     }
   }

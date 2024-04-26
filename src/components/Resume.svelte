@@ -30,6 +30,8 @@
       month: "short",
     });
   };
+
+  export const numPrintReferences = 3;
 </script>
 
 <article class="h-resume" id="top">
@@ -257,8 +259,8 @@
           <span class="print-only">Recent<br /></span>
           References
         </h3>
-        {#each data.references as { reference, name }}
-          <blockquote class="reference h-review">
+        {#each data.references as { reference, name }, rr}
+          <blockquote class="reference h-review" class:screen-only={rr > numPrintReferences - 1}>
             <input type="hidden" name={settings.owner} class="h-item p-item" />
             <q class="e-content">{reference}</q>
             <cite class="p-author h-card">{name}</cite>
@@ -276,152 +278,150 @@
     --grid-max-width: 60rem !important;
   }
 
-  /* .p-summary.description { */
-  /*   font-weight: var(--weight-normal) */
-  /* } */
-
-  .section-nav {
-    ul {
-      list-style: none;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1ch;
-      justify-content: flex-start;
-      margin: 0;
-      padding: 0;
-    }
-    li {
-      padding: 0;
-      margin: 0;
-    }
-  }
-
-  q:first-letter {
-    display: inline-block;
-    margin-inline: -1ch 0.4ch;
-  }
-
-  section {
-    margin-block: var(--space-xl);
-    position: relative;
-
-    > section {
-      margin-block: var(--space-s);
-    }
-
-    header,
-    hgroup {
-      > * {
-        margin-block: 1rem;
-
-        @media (--md-n-above) {
-          margin-block: 0;
-        }
-      }
-    }
-
-    header {
-      position: relative;
-      width: auto;
-      margin-block-end: 1.618em;
-
-      @media (--md-n-above) {
-        display: grid;
-        grid-template-areas: "content metadata";
-        grid-template-columns: 3fr 1fr;
-        gap: var(--grid-gutter);
-
-        .metadata {
-          text-align: end;
-        }
-      }
-
-      > * {
-        grid-area: content;
-      }
-
-      > .metadata {
-        grid-area: metadata;
-        font-size: var(--step--1);
-        /* font-weight: var(--weight-semibold); */
-        color: unset;
-      }
-    }
-  }
-
-  article {
-    margin-block: 1.618em;
-  }
-
-  #skills {
-    .skillsets {
-      @media (--md-n-above) {
-        display: grid;
-        gap: var(--grid-gutter);
-        grid-template-columns: 1fr 1fr 1fr;
-      }
-      .skillset {
-      }
-    }
-
-    ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: grid;
-      gap: 1ch;
-      grid-template-columns: repeat(2, 1fr);
-
-      li {
+  @media all {
+    .section-nav {
+      ul {
+        list-style: none;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1ch;
+        justify-content: flex-start;
+        margin: 0;
         padding: 0;
       }
+      li {
+        padding: 0;
+        margin: 0;
+      }
+    }
+
+    q:first-letter {
+      display: inline-block;
+      margin-inline: -1ch 0.4ch;
+    }
+
+    section {
+      margin-block: var(--space-xl);
+      position: relative;
+
+      > section {
+        margin-block: var(--space-s);
+      }
+
+      header,
+      hgroup {
+        > * {
+          margin-block: 1rem;
+
+          @media (--md-n-above) {
+            margin-block: 0;
+          }
+        }
+      }
+
+      header {
+        position: relative;
+        width: auto;
+        margin-block-end: 1.618em;
+
+        @media (--md-n-above) {
+          display: grid;
+          grid-template-areas: "content metadata";
+          grid-template-columns: 3fr 1fr;
+          gap: var(--grid-gutter);
+
+          .metadata {
+            text-align: end;
+          }
+        }
+
+        > * {
+          grid-area: content;
+        }
+
+        > .metadata {
+          grid-area: metadata;
+          font-size: var(--step--1);
+          /* font-weight: var(--weight-semibold); */
+          color: unset;
+        }
+      }
+    }
+
+    article {
+      margin-block: 1.618em;
+    }
+
+    #skills {
+      .skillsets {
+        /* @media (--md-n-above) { */
+          display: grid;
+          gap: var(--grid-gutter);
+          /* grid-template-columns: 1fr 1fr 1fr; */
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        /* } */
+        .skillset {
+        }
+      }
+
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: grid;
+        gap: 1ch;
+        grid-template-columns: repeat(2, 1fr);
+
+        li {
+          padding: 0;
+        }
+      }
+    }
+
+    .reference {
+      padding: var(--space-xs-s) var(--space-s-m);
+      background-color: var(--paper);
+      margin: 0;
+      border-inline-start: 0.5ch solid var(--brand-subtle);
+
+      cite {
+        margin-block-start: var(--space-s-m);
+
+        &::before {
+          content: "–";
+          display: inline-block;
+          padding-inline-end: 0.5ch;
+        }
+      }
+
+      :where(q, cite) {
+        display: block;
+      }
+
+      p {
+        margin-block-start: 0;
+      }
+
+      ~ .reference {
+        margin-block-start: var(--grid-gutter);
+      }
+
+      @media (--md-n-above) {
+        --offset: var(--space-l-xl);
+
+        &:nth-child(even) {
+          margin-inline-end: var(--offset);
+        }
+        &:nth-child(odd) {
+          margin-inline-start: var(--offset);
+        }
+      }
     }
   }
 
-  .reference {
-    padding: var(--space-xs-s) var(--space-s-m);
-    background-color: var(--paper);
-    margin: 0;
-    border-inline-start: 0.5ch solid var(--brand-subtle);
-
-    cite {
-      margin-block-start: var(--space-s-m);
-
-      &::before {
-        content: "–";
-        display: inline-block;
-        padding-inline-end: 0.5ch;
-      }
-    }
-
-    :where(q, cite) {
-      display: block;
-    }
-
-    p {
-      margin-block-start: 0;
-    }
-
-    ~ .reference {
-      margin-block-start: var(--grid-gutter);
-    }
-
-    @media (--md-n-above) {
-      --offset: var(--space-l-xl);
-
-      &:nth-child(even) {
-        margin-inline-end: var(--offset);
-      }
-      &:nth-child(odd) {
-        margin-inline-start: var(--offset);
-      }
-    }
-  }
-
-  @media print {
-    :root {
-      /* --body-font: var(--family-humanist); */
-      /* --heading-font: var(--family-humanist); */
+  @media only print {
+    .h-resume {
+      --heading-font: var(--body-font);
     }
 
     :global(#site-header, #site-footer, astro-dev-toolbar) {
@@ -536,7 +536,7 @@
       }
       /* :where(.p-experience, .institution) { */
       :where(article) {
-        page-break-inside: avoid;
+        /* page-break-inside: avoid; */
       }
     }
 

@@ -31,7 +31,7 @@ const roll = blogroll.reduce((agg, item) => {
   <h1>{seo.title}</h1>
   <p>
     This is a list of websites, blogs, etc. that I visit with some regularity,
-    or recommend sorted in reverse chronological order. You can also download this as an <a href="/blogroll.opml">OPML file</a>.
+    or recommend. You can also download this as an <a href="/blogroll.opml">OPML file</a>.
   </p>
   <h3>Quick links</h3>
   <ul class="nav-list">
@@ -49,13 +49,10 @@ const roll = blogroll.reduce((agg, item) => {
           {syndicationLink && (
             <a href={syndicationLink} target="_blank" class="u-url"><Icon name={iconName} size="18" /></a>
           )}
-          {description && <span class="p-note" set:html={description} />}
-          <div>
-            {/* {[...tags, category].map((tag) => { */}
-            {/*   return (<small class="p-category">#{tag} </small>); */}
-            {/* })} */}
+          {description && <Fragment>&ndash; <span class="p-note" set:html={description} /></Fragment>}
+          {/* <div>
             <small>Updated <sl-relative-time date={dateUpdated || dateAdded}></sl-relative-time></small>
-          </div>
+          </div> */}
         </li>);
       })}
       </ul>);
