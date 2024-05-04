@@ -2,6 +2,7 @@
 import FormattedDate from "../../components/FormattedDate.astro"
 import { postTagsList, eachTag } from "../../utils/tags.reducer";
 import { getBlogPosts } from "../../utils/get-posts";
+import { getBlogParams } from "../../utils/post-params";
 import Layout from "../../layouts/Layout.astro"
 import PostList from "../../components/PostList.astro";
 
@@ -27,11 +28,12 @@ const { posts = [] } = Astro.props;
 <Layout title={`Posts tagged with "${tag}"`}>
   <h3>Posts tagged with "{tag}"</h3>
   <ul>
-    {posts.map((post) => (
-      <li>
-        <a href={`/blog/${post.slug}`}>{post.data.title}</a>
+    {posts.map((post) => { 
+      const {path} = getBlogParams(post);
+      return (<li>
+        <a href={`/blog/${path}`}>{post.data.title}</a>
         <span class="meta-data"><FormattedDate date={post.data.udatedDate ?? post.data.date}></span>
-      </li>
-    ))}
+      </li>);
+    })}
   </ul>
 </Layout>

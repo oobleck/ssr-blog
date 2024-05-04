@@ -67,6 +67,7 @@ const XfnHead = pathname.startsWith('/links') ? "http://gmpg.org/xfn/11" : null;
     }}
   />
   <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
+  <slot name="docHead" />
   <ViewTransitions />
   <script>
     import "@shoelace-style/shoelace/dist/shoelace.js";
@@ -78,7 +79,7 @@ const XfnHead = pathname.startsWith('/links') ? "http://gmpg.org/xfn/11" : null;
 
 <body class:list={[`level-${level}`, {'with-sidebar': Astro.slots.has('sidebar')}]} id="top">
   <div class="progress screen-only" role="presentation"></div>
-  <sl-tooltip content="Jump directly to main content" class="screen-only">
+  <sl-tooltip content="Jump directly to main content" class="focus-only">
     <sl-icon-button
       href="#content"
       name="arrow-down"
@@ -88,13 +89,19 @@ const XfnHead = pathname.startsWith('/links') ? "http://gmpg.org/xfn/11" : null;
     ></sl-icon-button>
   </sl-tooltip
   <sl-tooltip content="Back to Top" class="screen-only">
-    <sl-icon-button label="Back to top" name="arrow-up screen-only" href="#top" id="back-to-top"></sl-icon-button>
+    <sl-icon-button label="Back to top" name="arrow-up" class="screen-only" href="#top" id="back-to-top"></sl-icon-button>
   </sl-tooltip>
+
+  {Astro.slots.has('banner') && (
+    <section id="banner">
+      <div class="u-container"><slot name="banner" /></div>
+    </section>
+  )}
 
   <header id="site-header" style={`--hero-url:url("${settings.hero}")`}>
     <div class="u-container">
       <h4 class="site-title">
-        <a href="/" rel="me">{ settings.title }</a>
+        <a href="/" rel="me" tabindex="0">{ settings.title }</a>
         { settings.description && <small>{ settings.description }</small> }
       </h4>
       <PrimaryNav />

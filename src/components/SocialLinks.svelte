@@ -34,6 +34,7 @@
         rel="me noreferrer"
         target="_blank"
         title={name}
+        tabindex="0"
       >
         <span class="sr-only">
           {settings.owner} on {name}

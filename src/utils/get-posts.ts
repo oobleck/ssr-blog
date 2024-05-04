@@ -1,11 +1,13 @@
-import { getCollection } from "astro:content";
+import { getCollection, type CollectionEntry } from "astro:content";
 
-export function chronoSort(a, b) {
+export type BlogPost = CollectionEntry<'blog'>;
+
+export function chronoSort(a: BlogPost, b: BlogPost): number {
   const aDate = a.data?.updatedDate ?? a.data?.date;
   const bDate = b.data?.updatedDate ?? b.data?.date;
   return bDate < aDate ? -1 : 1;
 }
 
-export async function getBlogPosts(includeDrafts = false) {
+export async function getBlogPosts(includeDrafts = false): Promise<BlogPost[]> {
   return getCollection('blog', ({ data: { draft = false } }) => includeDrafts || !draft);
 }

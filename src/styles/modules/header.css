@@ -95,13 +95,11 @@
   ul a[href] {
     color: white !important;
     text-decoration: none;
-    opacity: 0.8;
     transition: all 0.2s var(--ease-1);
     padding: var(--item-padding);
 
     &:where(:hover, .active, .focus) {
       text-decoration: underline;
-      opacity: 1;
 
       &:where(.active, :focus) {
         font-weight: var(--weight-semibold);

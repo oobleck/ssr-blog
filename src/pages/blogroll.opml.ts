@@ -6,8 +6,8 @@ const utcDate = (date?: string) => new Date(date).toUTCString();
 export async function GET() {
   const outlines = blogroll
     // Only render items with a syndicationLink
-    .filter(({syndicationLink}: BlogrollItem) => !!syndicationLink)
-    .sort((a, b) => new Date(b.dateAdded) - new Date(a.dateAdded))
+    .filter(({ syndicationLink }: BlogrollItem) => !!syndicationLink)
+    .sort((a, b) => new Date(a.dateAdded) - new Date(b.dateAdded))
     .map((item) => {
       const type = item.syndicationLink?.includes('rss') ? 'rss' : 'atom';
       return `<outline

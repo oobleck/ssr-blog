@@ -13,8 +13,9 @@ const categorySortFn = ([_a, aItems], [_b, bItems]) => bItems.length - aItems.le
 const itemSortFn = (a: BlogrollItem, b: BlogrollItem) => {
   const aDate = new Date(a.dateUpdated ?? a.dateAdded);
   const bDate = new Date(b.dateUpdated ?? b.dateAdded);
+  const dateSort = bDate - aDate;
 
-  return bDate - aDate;
+  return dateSort || (a.syndicationLink ? -1 : 1)
 };
 
 const roll = blogroll.reduce((agg, item) => {
@@ -25,6 +26,27 @@ const roll = blogroll.reduce((agg, item) => {
   });
   return agg;
 }, {});
+
+const iconSize = 20;
+
+function detectIcon(url: string): string {
+  switch (true) {
+    case /github/i.test(url):
+      return 'ri:github-line';
+
+    case /git|forge|svn/i.test(url):
+      return 'ri:git-branch-line';
+
+    case /feed|rss/i.test(url):
+      return 'ri:rss-fill';
+
+    case /\.[a-z]{2,}\/@[a-z]{2,}/i.test(url):
+      return 'ri:mastodon-line'
+
+    default:
+      return 'ri:planet-line';
+  }
+}
 ---
 
 <Layout {...seo} level="secondary">
@@ -42,14 +64,27 @@ const roll = blogroll.reduce((agg, item) => {
       <h4 id={`category-${category}`}>{category}</h4>
       <ul>
       {items.sort(itemSortFn).map(({webpage, label, syndicationLink, description, dateAdded, dateUpdated, tags = []}) => {
+        const [homepage, ...altUrls] = webpage;
         const iconName = /rss/i.test(syndicationLink) ? "ri:rss-fill" : "ri:rss-fill";
         return (<li class="h-card">
           <input type="hidden" class="p-category" value={[...tags, category].join(", ")} />
-          <a href={webpage[0]} target="_blank" class="p-name u-url">{label}</a>
+          <a href={homepage} target="_blank" rel="nofollow noreferrer" class="p-name u-url">{label}</a>
           {syndicationLink && (
-            <a href={syndicationLink} target="_blank" class="u-url"><Icon name={iconName} size="18" /></a>
+            <a href={syndicationLink} target="_blank" rel="nofollow noreferrer" class="u-url" aria-label="RSS Feed">
+              <Icon name={iconName} size={iconSize} role="presentation" title="RSS Feed" /></a>
           )}
-          {description && <Fragment>&ndash; <span class="p-note" set:html={description} /></Fragment>}
+          {altUrls.length > 0 && (<span class="additional-urls">
+            {altUrls.map((altUrl) => {
+              return (
+                <Fragment>
+                  <a href={altUrl} target="_blank" rel="nofollow noreferrer" class="u-url" aria-label={label} title={altUrl}>
+                    <Icon name={detectIcon(altUrl)} role="presentation" size={iconSize} /></a>
+                </Fragment>
+              )
+            }
+          )}
+          </span>)}
+          {description && <Fragment>&ndash; <span class="p-note" set:html={description.replace(/[\.]?$/i, '.')} /></Fragment>}
           {/* <div>
             <small>Updated <sl-relative-time date={dateUpdated || dateAdded}></sl-relative-time></small>
           </div> */}
@@ -62,6 +97,10 @@ const roll = blogroll.reduce((agg, item) => {
 <style>
 h4 {
   text-transform: capitalize;
+}
+
+.additional-urls {
+  /* font-size: var(--step--1); */
 }
 
 .nav-list {

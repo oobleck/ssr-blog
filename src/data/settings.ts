@@ -40,6 +40,16 @@ const heros = {
   // https://unsplash.com/photos/calm-water-QtIXL7C4bB0
   blueGoldWaves:
     "https://images.unsplash.com/photo-1463134836706-8bcc60f7d78b?w=2000",
+
+  // https://unsplash.com/photos/a-blurry-image-of-a-bright-orange-and-blue-light-sDd9hIAS_IU
+  darkAmberSparks: "https://images.unsplash.com/photo-1567919914972-4281c4e0e7ae?w=2000",
+
+  // https://unsplash.com/photos/a-blurry-image-of-a-person-walking-down-a-street-cdZF9FO-tlo
+  darkAquaRain: "https://images.unsplash.com/photo-1567919915310-0ec7b49bfb12?iw=2000",
+
+  sfFog: "https://images.unsplash.com/photo-1466446198467-e45c851bbd5a?w=2000",
+
+  skullFire: "https://images.unsplash.com/photo-1654859869130-fd0a2aa5539b?w=2000",
 };
 
 export const settings = {
@@ -51,7 +61,7 @@ export const settings = {
   obfuscatedEmail: '',
   description: "User Interface Developer",
   // hero: remoteImageUrl(heroImageIds.ggBridgeFog),
-  hero: heros.redBlueSwirl,
+  hero: heros.blueRedStreaks,
   authorImage: "../assets/images/ssr-sawyer-avatar.png",
 };
 settings.site = `https://${settings.domain}`;

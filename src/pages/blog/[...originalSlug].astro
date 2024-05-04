@@ -1,0 +1,29 @@
+---
+import { getCollection } from "astro:content";
+import { getBlogParams } from "../../utils/post-params";
+import { getBlogPosts }  from "../../utils/get-posts";
+import Layout from "../../layouts/Layout.astro";
+
+export async function getStaticPaths() {
+  const blogEntries = await getBlogPosts(false);
+  return blogEntries.filter(({data: {date}}) => date < new Date("2024-05-03")).map((entry) => ({
+    params: getBlogParams(entry),
+    props: { entry, params: getBlogParams(entry) },
+  }));
+}
+
+const redirectPath = `/blog/${Astro.props.params.path}`;
+const redirectDelay = 10;
+const { entry } = Astro.props;
+const seo = {
+  title: entry.data.title,
+  description: entry.data.description,
+};
+---
+
+<Layout frontmatter={entry.data} searchable="false" showSearch={false} {seo} {...seo}>
+  <meta slot="docHead" http-equiv="refresh" content={ `${redirectDelay}; url=${ redirectPath }` } />
+  <h1 set:html={seo.title}></h1>
+  <p>The post <q><a href={redirectPath}>{seo.title}</a></q> has moved. You will be automatically redirected in a moment, or click <a href={redirectPath}>here</a> to go now.</p>
+</Layout>
+

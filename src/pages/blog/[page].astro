@@ -1,14 +1,16 @@
 ---
 import Pagination from "@philnash/astro-pagination";
 import { getBlogPosts, chronoSort } from "../../utils/get-posts";
+import { getBlogParams } from "../../utils/post-params";
 import Layout from "../../layouts/Layout.astro";
 import FormattedDate from "../../components/FormattedDate.astro";
 import PostList from "../../components/PostList.astro";
+import TagCloud from "../../components/TagCloud.astro"
 
 const isDevMode = Astro.url.hostname.includes('localhost');
 export async function getStaticPaths({ paginate }) {
   const blogEntries = (await getBlogPosts(false)).sort(chronoSort).map((entry) => ({
-    params: { slug: entry.slug },
+    params: getBlogParams(entry),
     props: { entry },
   }));
 

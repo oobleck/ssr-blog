@@ -49,7 +49,6 @@
       <h4 class="description p-summary">
         {data.basics?.headline}
       </h4>
-      <!-- <AboutMe /> -->
       {#if data.basics?.summary}
         <p>{data.basics.summary}</p>
       {/if}

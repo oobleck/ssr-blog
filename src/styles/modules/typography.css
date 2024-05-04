@@ -13,13 +13,10 @@
   --family-slab-serif: Rockwell, 'Rockwell Nova', 'Roboto Slab', 'DejaVu Serif', 'Sitka Small', serif;
   --family-antique: Superclarendon, 'Bookman Old Style', 'URW Bookman', 'URW Bookman L', 'Georgia Pro', Georgia, serif;
   --family-didone: Didot, 'Bodoni MT', 'Noto Serif Display', 'URW Palladio L', P052, Sylfaen, serif;
-  --family-handwritten: 'Segoe Print', 'Bradley Hand', Chilanka, TSCu_Comic, casual, cursive;
+  --family-handwritten: 'Segoe Print', 'Bradley Hand', Chilanka, TSCu_Comic, casual, var(--family-system-ui);
 
-  /* --body-font: var(--family-system-ui); */
-  /* --heading-font: 'Noto Sans Display Variable', var(--family-system-ui); */
   --body-font: var(--family-system-ui);
   --body-font: var(--family-neo-grotesque);
-  --heading-font: var(--family-slab-serif);
   --code-font: var(--family-monospace);
 
   --body-color: var(--ink);

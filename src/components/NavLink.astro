@@ -4,4 +4,4 @@ const {pathname} = Astro.url;
 const isActive = pathname === '/' ? href === pathname : ( pathname !== '/' && pathname.includes(href) );
 ---
 
-<a class:list={[className, {active: isActive}]} {href} {...props}><slot /></a>
+<a class:list={[className, {active: isActive}]} {href} {...props} tabindex="0"><slot /></a>

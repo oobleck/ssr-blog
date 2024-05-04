@@ -18,7 +18,7 @@ export const puppies: IPuppy[] = [
   {
     species: 'feline',
     name: "Jackson Wyatt",
-    born: "2009-01-19",
+    born: "2009-01-20",
     breed: "American short-hair",
     weight: 10,
     gender: 'male',
@@ -44,7 +44,7 @@ export const puppies: IPuppy[] = [
   {
     species: 'canine',
     name: "Luna Wren",
-    born: "2021-07-05",
+    born: "2021-07-06",
     breed: "Goldendoodle",
     weight: 72,
     gender: 'female',
@@ -63,7 +63,7 @@ export const puppies: IPuppy[] = [
   {
     species: 'canine',
     name: "Millie Maxwell",
-    born: "2021-09-27",
+    born: "2021-09-28",
     breed: "Chocolate Labrador Retriever",
     weight: 80,
     chipId: -1,
@@ -82,7 +82,7 @@ export const puppies: IPuppy[] = [
   {
     species: 'canine',
     name: "Sawyer Branch",
-    born: "2022-03-10",
+    born: "2022-03-11",
     breed: "Goldendoodle",
     weight: 70,
     chipId: -1,
@@ -101,7 +101,7 @@ export const puppies: IPuppy[] = [
   {
     species: 'canine',
     name: "Ada Everest",
-    born: "2023-06-22",
+    born: "2023-06-23",
     breed: "Chocolate Labrador Retriever",
     weight: 60,
     chipId: 0,

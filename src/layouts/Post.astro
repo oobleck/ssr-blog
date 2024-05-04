@@ -37,6 +37,8 @@ const featuredImageDims = [1024, 768];
 ---
 
 <Layout seo={seo} {unsplashId} level="secondary" searchable={!draft}>
+  <slot name="docHead" slot="docHead" />
+  <slot name="banner" slot="banner" />
   <article class:list={['h-entry', {'draft-post': draft}]}>
     <a class="u-bridgy-fed" href="https://fed.brid.gy/" hidden="from-humans"></a>
     <header class="post-header">
