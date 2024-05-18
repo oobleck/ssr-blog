@@ -26,7 +26,7 @@
     border: 0 solid transparent;
 
     /* 100vw here is slightly larger than the actual viewport (about 2px 🤷) */
-    border-inline-start: 99vw solid transparent;
+    border-inline-start: 99.999vw solid transparent;
     border-block-end: var(--space-m-l) solid var(--paper);
     z-index: var(--layer-1);
   }

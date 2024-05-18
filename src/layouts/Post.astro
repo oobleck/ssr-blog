@@ -4,7 +4,6 @@ import Layout from "./Layout.astro";
 import AboutMe from "../components/AboutMe.astro";
 import TagsList from "../components/TagsList.astro";
 import { unsplashCredit, unsplashUrl } from "../utils/unsplash.utils";
-// import { Image } from "@unpic/astro";
 import { Image } from "astro:assets";
 import { settings } from "../data/settings.ts";
 import FormattedDate from "../components/FormattedDate.astro";
@@ -56,6 +55,7 @@ const featuredImageDims = [1024, 768];
       </div>
     </header>
     <div class="e-content">
+      {frontmatter.description && <p class="lead" set:html={frontmatter.description} />}
     {
       hero && (
         <figure class="featured-image">
@@ -80,7 +80,7 @@ const featuredImageDims = [1024, 768];
       <slot />
     </div>
 
-    <h5>About the author</h5>
+    <h5>About me</h5>
     <AboutMe label={false} />
   </article>
   <h5>Webmentions</h5>

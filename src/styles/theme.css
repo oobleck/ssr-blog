@@ -1,0 +1,90 @@
+@import "open-props/colors" layer(third-party);
+
+:root {
+  /* Theming */
+  --brand: var(--cyan-9);
+  --brand-subtle: var(--cyan-5);
+  --brand-shade: var(--cyan-9);
+  --accent: var(--orange-9);
+  --accent-subtle: var(--orange-5);
+  --accent-shade: var(--orange-10);
+  --paper: var(--stone-0);
+  --ink: var(--gray-9);
+
+  color-scheme: light;
+
+  @media screen and (prefers-color-scheme: dark) {
+    --brand: var(--cyan-7);
+    --paper: var(--gray-10);
+    --ink: var(--gray-0);
+
+    color-scheme: dark;
+  }
+
+  /* If RCS is supported, use the generated palette instead. According to
+* caniuse, this will be 83% of global users. */
+  @supports (color: oklch(from red l c h)) {
+    --l-threshold: 0.7;
+    --c-threshold: 0.7;
+
+    --__l-subtle: calc(l * clamp(0.888, (var(--l-threshold) / l - 1) * infinity, 1.5));
+    --__c-subtle: calc(c * clamp(0.1, (var(--c-threshold) / c - 0.5) * infinity, 0.75));
+
+    --__l-shade: calc(l * clamp(0.75, (var(--l-threshold) / l - 1) * infinity, 2));
+
+    /* Complementary color of the --brand */
+    /* --accent-1: oklch(from var(--brand) l c calc(h - 180)); */
+    --accent-1: var(--red-12);
+    --accent-2: oklch(from var(--brand) l c calc(h - 180));
+    /* --accent-2: var(--accent-1); */
+
+    /* Subtle variants */
+    --brand-subtle: oklch(from var(--brand) var(--__l-subtle) var(--__c-subtle) h);
+    --accent-1-subtle: oklch(from var(--accent-1) var(--__l-subtle) var(--__c-subtle) h);
+    --accent-2-subtle: oklch(from var(--accent-2) var(--__l-subtle) var(--__c-subtle) h);
+    --paper-subtle: oklch(from var(--paper) var(--__l-subtle) c h);
+    --ink-subtle: oklch(from var(--ink) var(--__l-subtle) c h);
+
+    /* Shaded variants */
+    --brand-shade: oklch(from var(--brand) calc(l * var(--l-threshold)) c h);
+    --accent-1-shade: oklch(from var(--accent-1) calc(l * var(--l-threshold)) c h);
+    --accent-2-shade: oklch(from var(--accent-2) calc(l * var(--l-threshold)) c h);
+    --paper-shade: oklch(from var(--paper) var(--__l-shade) c h);
+    --ink-shade: oklch(from var(--ink) var(--__l-shade) c h);
+
+    /* Palette aliases */
+    --accent: var(--accent-1);
+    --accent-subtle: var(--accent-1-subtle);
+    --accent-shade: var(--accent-1-shade);
+    --paper-2: var(--paper-shade);
+    --ink-2: var(--ink-shade);
+  }
+}
+
+:root {
+  --link: var(--brand);
+  --link-hover: var(--accent);
+  --form-control-color: var(--brand);
+  --form-control-disabled: var(--ink-subtle);
+  --form-control-focus: var(--accent);
+  --form-background: var(--paper);
+  --input-border: var(--ink-subtle);
+  --input-focus-h: 245;
+  --input-focus-s: 100%;
+  --input-focus-l: 42%;
+  --select-border: var(--ink-subtle);
+  --select-focus: var(--accent);
+  --select-arrow: var(--select-border);
+
+  --clip-angle-adjacent: 83%;
+
+  /* top right, bottom right, bottom left, top left */
+  --angle-clip-path-top: polygon(
+    0 100%,
+    100% var(--clip-angle-adjacent),
+    100% 100%,
+    0 100%,
+  );
+  --sl-panel-background-color: var(--paper);
+}
+

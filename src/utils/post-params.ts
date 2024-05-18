@@ -5,7 +5,7 @@ export function getBlogParams(post: PostEntry) {
   // Grab the `pubDate` from the blog post's frontmatter.
   // This will be of type `Date`, since the `CollectionEntry` of type 'blog'
   // defines the `pubDate` field as type 'Date'.
-  const pubDate = post.data.date;
+  const pubDate = new Date(post.data.date);
 
   // Parse out the year, month and day from the `pubDate`.
   const pubYear = String(pubDate.getFullYear()).padStart(4, '0');

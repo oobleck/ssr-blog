@@ -10,9 +10,7 @@ import SiteSearch from "../components/SiteSearch.astro";
 import avatar from "../assets/images/ssr-sawyer-avatar.png";
 
 // Supports weights 100-900
-import '@fontsource-variable/noto-sans-display';
-import '@shoelace-style/shoelace/dist/themes/light.css';
-import '@shoelace-style/shoelace/dist/themes/dark.css';
+// import '@fontsource-variable/noto-sans-display';
 import "../styles/styles.css";
 
 const {
@@ -49,7 +47,23 @@ const XfnHead = pathname.startsWith('/links') ? "http://gmpg.org/xfn/11" : null;
         shareable ? { rel: "share-url", href: `https://shareopenly.org/share/?url=${settings.site}${pathname}&text=${title}` } : {},
         { rel: 'webmention', href: `${webmentionBaseUrl}/webmention` },
         { rel: 'pingback', href: `${webmentionBaseUrl}/xmlrpc` },
+
+        // Social links
         ...social.filter(({icon, name, url}) => !/\.pdf|\/contact|rss/i.test(url)).map(({url}) => ({ rel: "me", href: url })),
+
+        // Shoelace theme styles
+        ...['light', 'dark'].map((theme) => ({
+          href: `/shoelace/dist/themes/${theme}.css`,
+          rel: "stylesheet",
+          media: `(prefers-color-scheme: ${theme})`,
+          onLoad: `document.documentElement.classList.add('sl-theme-${theme}');`,
+          layer: "third-party",
+        })),
+        {
+          rel: "stylesheet",
+          href: "/pagefind/pagefind-ui.css",
+          layer: "third-party",
+        }
       ],
     }}
     openGraph={{
@@ -66,7 +80,6 @@ const XfnHead = pathname.startsWith('/links') ? "http://gmpg.org/xfn/11" : null;
       article: seo?.openGraph?.article,
     }}
   />
-  <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
   <slot name="docHead" />
   <ViewTransitions />
   <script>
@@ -77,7 +90,7 @@ const XfnHead = pathname.startsWith('/links') ? "http://gmpg.org/xfn/11" : null;
   </script>
 </head>
 
-<body class:list={[`level-${level}`, {'with-sidebar': Astro.slots.has('sidebar')}]} id="top">
+<body class:list={[`level-${level} sl-theme-dark`, {'with-sidebar': Astro.slots.has('sidebar')}]} id="top">
   <div class="progress screen-only" role="presentation"></div>
   <sl-tooltip content="Jump directly to main content" class="focus-only">
     <sl-icon-button

@@ -1,7 +1,7 @@
 ---
 title: "Markdown Style Guide"
 description: "Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro."
-date: 2022-05-01
+date: "2022-05-01"
 draft: true
 # layout: "../../layouts/Post.astro"
 ---

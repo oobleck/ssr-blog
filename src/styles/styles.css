@@ -18,109 +18,8 @@
 @import "./modules/footer.css" layer(components);
 @import "./modules/site-search.css" layer(components);
 
-/* @link https://utopia.fyi/type/calculator?c=320,18,1.2,1240,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
-
-:root {
-  --line-height: clamp(1.125, 1.0815em + 0.2174vi, 1.333);
-  --line-height: 1.5;
-  --step--2: clamp(0.7813rem, 0.7747rem + 0.0326vi, 0.8rem);
-  --step--1: clamp(0.9375rem, 0.9158rem + 0.1087vi, 1rem);
-  --step-0: clamp(1.125rem, 1.0815rem + 0.2174vi, 1.25rem);
-  --step-1: clamp(1.35rem, 1.2761rem + 0.3696vi, 1.5625rem);
-  --step-2: clamp(1.62rem, 1.5041rem + 0.5793vi, 1.9531rem);
-  --step-3: clamp(1.944rem, 1.771rem + 0.8651vi, 2.4414rem);
-  --step-4: clamp(2.3328rem, 2.0827rem + 1.2504vi, 3.0518rem);
-  --step-5: clamp(2.7994rem, 2.4462rem + 1.7658vi, 3.8147rem);
-}
-
-/* @link https://utopia.fyi/space/calculator?c=320,18,1.2,1240,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
-
-:root {
-  --space-3xs: clamp(0.3125rem, 0.3125rem + 0vi, 0.3125rem);
-  --space-2xs: clamp(0.5625rem, 0.5408rem + 0.1087vi, 0.625rem);
-  --space-xs: clamp(0.875rem, 0.8533rem + 0.1087vi, 0.9375rem);
-  --space-s: clamp(1.125rem, 1.0815rem + 0.2174vi, 1.25rem);
-  --space-m: clamp(1.6875rem, 1.6223rem + 0.3261vi, 1.875rem);
-  --space-l: clamp(2.25rem, 2.163rem + 0.4348vi, 2.5rem);
-  --space-xl: clamp(3.375rem, 3.2446rem + 0.6522vi, 3.75rem);
-  --space-2xl: clamp(4.5rem, 4.3261rem + 0.8696vi, 5rem);
-  --space-3xl: clamp(6.75rem, 6.4891rem + 1.3043vi, 7.5rem);
-
-  /* One-up pairs */
-  --space-3xs-2xs: clamp(0.3125rem, 0.2038rem + 0.5435vi, 0.625rem);
-  --space-2xs-xs: clamp(0.5625rem, 0.4321rem + 0.6522vi, 0.9375rem);
-  --space-xs-s: clamp(0.875rem, 0.7446rem + 0.6522vi, 1.25rem);
-  --space-s-m: clamp(1.125rem, 0.8641rem + 1.3043vi, 1.875rem);
-  --space-m-l: clamp(1.6875rem, 1.4049rem + 1.413vi, 2.5rem);
-  --space-l-xl: clamp(2.25rem, 1.7283rem + 2.6087vi, 3.75rem);
-  --space-xl-2xl: clamp(3.375rem, 2.8098rem + 2.8261vi, 5rem);
-  --space-2xl-3xl: clamp(4.5rem, 3.4565rem + 5.2174vi, 7.5rem);
-
-  /* Custom pairs */
-  --space-s-l: clamp(1.125rem, 0.6467rem + 2.3913vi, 2.5rem);
-  --space-3xs-l: clamp(0.3125rem, -0.4484rem + 3.8043vi, 2.5rem);
-}
-
-:root {
-  /* Theming */
-  --brand: var(--cyan-8);
-  --brand-subtle: var(--cyan-5);
-  --brand-shade: var(--cyan-9);
-  --accent: var(--orange-9);
-  --accent-subtle: var(--orange-5);
-  --accent-shade: var(--orange-10);
-
-  --paper: var(--stone-0);
-  --paper-2: var(--stone-4);
-  --paper-subtle: var(--stone-2);
-  --ink: var(--stone-11);
-  --ink-2: var(--stone-9);
-  --ink-subtle: var(--stone-7);
-  --link: var(--brand);
-  --link-hover: var(--accent);
-
-  --form-control-color: var(--brand);
-  --form-control-disabled: var(--ink-subtle);
-  --form-control-focus: var(--accent);
-  --form-background: var(--paper);
-  --input-border: var(--ink-subtle);
-  --input-focus-h: 245;
-  --input-focus-s: 100%;
-  --input-focus-l: 42%;
-  --select-border: var(--ink-subtle);
-  --select-focus: var(--accent);
-  --select-arrow: var(--select-border);
-
-  --clip-angle-adjacent: 83%;
-  --angle-clip-path: polygon(0 0, 100% 0, 100% var(--clip-angle-adjacent), 0 100%);
-  --angle-clip-path-top: polygon(0 25%, 100% 0, 100%, 0 100%);
-
-  /* top right, bottom right, bottom left, top left */
-  --angle-clip-path-top: polygon(
-    0 100%,
-    100% var(--clip-angle-adjacent),
-    100% 100%,
-    0 100%,
-  );
-  /* --angle-clip-path: polygon(0 0, 1600px 0, 1600px calc(100% - var(--space-2xl)), 0 100%); */
-  /* --angle-clip-path: polygon(0 0, 100% 0, 100% 75%, 0 100%); */
-  --sl-panel-background-color: var(--paper-subtle);
-
-  color-scheme: light;
-
-  @media screen and (prefers-color-scheme: dark) {
-    --paper: var(--stone-12);
-    --paper-2: var(--stone-9);
-    --paper-subtle: var(--stone-11);
-    --ink: var(--stone-1);
-    --ink-2: var(--stone-3);
-    --ink-subtle: var(--stone-5);
-    --brand-subtle: var(--cyan-10);
-    --accent-subtle: var(--orange-11);
-    color-scheme: dark;
-    filter: brightness(0.90);
-  }
-}
+@import "./sizes.css";
+@import "./theme.css";
 
 :where(html, body) {
   font-size: var(--step-0);
@@ -130,7 +29,7 @@
   font-weight: var(--weight-normal);
   margin: 0;
   background-color: var(--paper);
-  background-image: linear-gradient(var(--paper), var(--paper-subtle));
+  /* background-image: linear-gradient(var(--paper) 40%, var(--paper-subtle)); */
   color: var(--body-color, var(--ink));
   accent-color: var(--brand);
   letter-spacing: var(--font-letterspacing-1);
@@ -153,7 +52,7 @@
 :where(hr) {
   position: relative;
   border: 0;
-  border-block-start: 0.2ch solid var(--brand);
+  border-block-start: 0.2ch solid var(--paper-shade);
   margin: var(--space-l-xl) var(--space-m);
   opacity: 0.75;
 }

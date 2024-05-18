@@ -1,16 +1,14 @@
 ---
-import Layout from "../layouts/Layout.astro";
-import Search from "../components/SiteSearch.astro";
-
+const {harmony, title} = Astro.props;
 const palette = [
-  'brand-subtle', 
   'brand', 
+  'brand-subtle', 
   'brand-shade', 
-  'accent-1-subtle', 
   'accent-1', 
+  'accent-1-subtle', 
   'accent-1-shade', 
-  'accent-2-subtle', 
   'accent-2', 
+  'accent-2-subtle', 
   'accent-2-shade',
 ];
 const basics = [
@@ -45,41 +43,39 @@ const css = `
     --accent-subtle: var(--accent-1-subtle);
     --accent-shade: var(--accent-1-shade);
 `;
+const isKnownHarmony = harmonies.includes(harmony);
 ---
 
-<Layout title="Layout sandbox" showSearch={false} searchable={false}>
-  <h1>Layout testing</h1>
-  <p>Layout testing</p>
-
-  <aside slot="sidebar">
-    <h4>Sidebar</h4>
-    <Search />
-  </aside>
-
+{!isKnownHarmony && (
   <section>
-    <h3>This site's palette</h3>
-    <div class="palette-samples">
-      {palette.map((token) => (<div class="palette-chip" style={`--palette-color: var(--${token})`} data-token={token}></div>))}
-      {basics.map((token) => (<div class="palette-chip" style={`--palette-color: var(--${token})`} data-token={token}></div>))}
+    <!-- <h3>This site's palette</h3> -->
+    <div class="palette-samples over-margin">
+      {palette
+        .filter((token) => !token.includes(2))
+        .map((token) => (<div class="palette-chip" style={`--palette-color: var(--${token})`} data-token={token} 
+          aria-label={`Palette sample of the color assigned to the design token '${token}'`}></div>))}
+      {basics.map((token) => (<div class="palette-chip" style={`--palette-color: var(--${token})`} data-token={token}
+        aria-label={`Palette sample of the color assigned to the design token '${token}'`}></div>))}
     </div>
   </section>
+)}
 
-  {harmonies.map((name) => (
-    <section class={`h-${name}`}>
-      <h3>{name.replace('-', ' ')}</h3>
-      <div class="palette-samples" style={css}>
-        {palette.map((token) => (<div class="palette-chip" style={`--palette-color: var(--${token})`} data-token={token}></div>))}
-      </div>
-    </section>
-  ))}
-</Layout>
+{isKnownHarmony && (
+  <section class={`h-${harmony}`}>
+    <h3>{title ?? harmony.replace('-', ' ')}</h3>
+    <div class="palette-samples over-margin" style={css}>
+      {palette.map((token) => (<div class="palette-chip" style={`--palette-color: var(--${token})`} data-token={token}
+        aria-label={`Palette sample of the color assigned to the design token '${token}'`}></div>))}
+    </div>
+  </section>
+)}
 
 <style>
   .palette-samples {
     position: relative;
     display: grid;
     grid-template-columns: var(--auto-2-cols);
-    gap: 1ch;
+    gap: var(--space-3xs-2xs);
 
     .palette-chip {
       position: relative;
@@ -95,6 +91,7 @@ const css = `
       &:hover {
         box-shadow: var(--shadow-5);
         z-index: var(--layer-2);
+        transform: scale(1.1);
       }
 
       @supports (color: oklch(from red l c h)) {
@@ -105,7 +102,7 @@ const css = `
       }
 
       &::before {
-        content: attr(data-token);
+        content: "--" attr(data-token);
         position: absolute;
         bottom: 0;
         right: 0;
@@ -142,3 +139,4 @@ const css = `
   section.h-tetradic {}
   section.h-square {}
 </style>
+

@@ -2,8 +2,8 @@ import { z, defineCollection } from "astro:content";
 // 2. Define your collection(s)
 const blogCollection = defineCollection({
   schema: z.object({
-    date: z.date(),
-    updatedDate: z.date().optional(),
+    date: z.string(),
+    updatedDate: z.string().optional(),
     title: z.string(),
     description: z.string(),
     unsplashId: z.string().optional(),

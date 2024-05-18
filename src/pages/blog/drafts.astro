@@ -1,0 +1,14 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import PostsList from "../../components/PostList.astro";
+
+const isDevMode = Astro.url.hostname.includes('localhost');
+const seo = {
+  title: "Alll posts (+ drafts)"
+};
+---
+
+<Layout {seo} {...seo} searchable={false} showSearch={true}>
+  <h1 set:html={seo.title} />
+  <PostsList includeDrafts={isDevMode} cards={false} orderBy="-updatedDate" />
+</Layout>

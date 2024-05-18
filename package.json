@@ -11,7 +11,9 @@
     "preview": "astro preview --port 8056",
     "build:cv": "tsx ./scripts/generate-resume-pdf.ts",
     "build:index": "pagefind --site dist && cp -r dist/pagefind public/",
-    "astro": "astro"
+    "astro": "astro",
+    "new:post": "scaffdog generate blog",
+    "new:component": "scaffdog generate component"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.5",
@@ -63,6 +65,7 @@
     "rehype-toc": "^3.0.2",
     "remark-toc": "^9.0.0",
     "sass": "^1.71.0",
+    "scaffdog": "^4.0.0",
     "sharp": "^0.33.2",
     "svelte-typeahead": "^4.4.1",
     "tsx": "^4.7.1",

@@ -1,0 +1,279 @@
+---
+title: 'Dynamic CSS color palettes'
+description: 'Experiments in generating color palettes with native CSS capabillities only'
+# https://unsplash.com/photos/assorted-color-paints-and-paintbrushes-on-white-tarp-pfSNx3Z12K8
+hero: "https://images.unsplash.com/photo-1535673774336-ef95d2851cf3?w=1024&h=768&auto=format&fit=crop"
+heroDescription: 'Buckets of colorful paint on a white painters cloth'
+date: "2024-05-18"
+# layout: ../../layouts/Post.astro
+# unsplashId: 'E-Zuyev2XWo'
+# hero: https://images.unsplash.com/photo-1500674425229-f692875b0ab7
+# hero: https://images.unsplash.com/photo-1585074245728-eedb0cc44a66?q=80&w=900
+tags:
+  - webdev
+  - css
+  - color
+  - design-systems
+---
+
+import Palettes from "./components/palettes.astro";
+
+I've dabbled with CSS-only color palettes before, but the outcome was limited
+because of incomplete browser support for Relative Color Syntax, or
+<abbr title="Relative Color Syntax">RCS</abbr>. But it seems we're almost at [full
+support](https://caniuse.com/css-relative-colors) now, with 82% of global users
+using browsers that support this newer syntax. Only Firefox is the modern
+outlier and apparently there's some movement on their [feature
+ticket](https://bugzilla.mozilla.org/show_bug.cgi?id=1701488) suggesting it may
+be implemented soon.
+
+Lea Verou recently [blogged about this
+topic](https://lea.verou.me/blog/2024/contrast-color/#fallback-for-browsers-that-don%E2%80%99t-support-rcs) 
+in great depth which inspired me to have another go at it.
+
+My first iteration resulted in the palette used on this site. My palette uses
+a simple set of tokens reminiscent of a larger design system, but scaled down
+for use on a personal website. You can see it change if you flip your browser's
+color mode between light and dark.
+
+This palette can be 100% derived from 3 color tokens losely based on the header
+image of this site, and follows the
+"[Complementary](https://www.colorsexplained.com/color-harmony/#:~:text=color%20harmony%20examples%3A-,Complementary,-Complementary%20colors)"
+harmony scheme. In this case, the colors are sourced from "close enough" color
+tokens provided by [Open Props](https://open-props.style/#colors).
+
+Ok, I said "can be 100% derived" above. But in my case `--accent-1` is actually
+<code style="background-color: var(--red-12); color: oklch(100%
+0 0 / 75%)">red-12</code> because the <code
+style="background-color:var(--accent-2);color: oklch(100% 0 0 / 75%)">calculated
+complement</code> is too desaturated and boring for my taste. However, the rest
+of the palettes displayed on this page are 100% derived from the one `--brand`
+token.
+
+  - brand (light: cyan-9 / dark: cyan-7)
+  - paper (stone-0 / gray-10)
+  - ink (gray-9 / gray-0)
+  - accent (red-12)
+
+<Palettes title="false" small="true"></Palettes>
+
+I should also add, that the contrasting text on each of these chips is also
+derived from the given background token of each chip. I didn't have to fuss with
+that or use other tricks to make the text stand out. I did, however, define
+a fallback for Firefox and other browsers that don't support RCS.
+
+```css
+--palette-color: whatever-color-you-need-the-contrasting-color-of;
+
+@supports (color: oklch(from red l c h)) {
+  --l: clamp(0, (var(--l-threshold) / l - 1) * infinity, 1);
+  --contrast-color: oklch(from var(--palette-color) var(--l) 0 h);
+  --contrast-background: oklch(from var(--contrast-color) var(--l) 0 h);
+  text-shadow: unset;
+}
+```
+
+## Setup
+
+We will be populating a suite of color tokens based on three to four base
+tokens. Each base token will have accompanying `*-subtle` and `*-shade`
+variants. We will also add a second accent token, `--accent-2*` because many
+harmony schemes have 3+ colors. variants, ie.
+
+  - `--brand`
+  - `--brand-subtle`
+  - `--brand-shade`
+
+Create a theme partial file and setup your base theme
+
+```css
+/* theme.css */
+:root {
+  --brand: cadetblue;
+  /* --accent: crimson */
+  --paper: white;
+  --ink: #222;
+}
+```
+
+## Palette foundation
+
+If you need to support browsers that don't yet support RCS you may want to wrap
+this in an `@supports ...` feature check.
+
+Anyway, for simplicity lets assume we're making the same color adjustments for
+each color variant and define some constants.
+
+
+```css
+/* theme.css */
+:root {
+  /* Base setup ... */
+
+  @supports (color: oklch(from red l c h)) {
+    /*
+      ALPC Contrast threshold: 70% lightness
+      https://apcacontrast.com/
+    */
+    --l-threshold: 0.7;
+
+    /*
+      WCAG 2.1 Contrast threshold: 62.3%
+      which produces less readable results than ALPC. https://www.w3.org/TR/WCAG21/#contrast-minimum
+      --l-threshold: 0.623
+    */
+
+    /*
+      This creates a dynamic adjustment factor for the "subtle" variants. Explanation:
+      if the "L" component of an oklch(...) expression is below the threshold, the
+      adjustmwent is 80% of the original lightness, the adjustmwent will be 150% of
+      the original lightness.
+    */
+    --__l-subtle: calc(l * clamp(0.888, (var(--l-threshold) / l - 1) * infinity, 1.5));
+
+    /*
+      For the "(c)hroma" adjustment, because we may not want the color to be the
+      same saturation, create an adjustment similar to the L component.
+    */
+    --__c-subtle: calc(c * clamp(0.1, (var(--l-threshold) / c - 0.5) * infinity, 0.75));
+
+    /* 
+      We do the same type of adjustment for the shade. Can you figure out how this one
+      works? Follow the same algorithm we used for `--__l-subtle` 
+    */
+    --__l-shade: calc(l * clamp(0.75, (var(--l-threshold) / l - 1) * infinity, 2));
+
+    /* Take the curated accent colors if defined, and calculate them if they're not. */
+    --accent-1: var(--accent, oklch(from var(--brand) l c calc(h - 180)));
+    --accent-2: var(--accent-2, oklch(from var(--brand) l c calc(h - 180)));
+
+    /* Subtle variants */
+    --brand-subtle: oklch(from var(--brand) var(--__l-subtle) var(--__c-subtle) h);
+    --accent-1-subtle: oklch(from var(--accent-1) var(--__l-subtle) var(--__c-subtle) h);
+    --accent-2-subtle: oklch(from var(--accent-2) var(--__l-subtle) var(--__c-subtle) h);
+    --paper-subtle: oklch(from var(--paper) var(--__l-subtle) c h);
+    --ink-subtle: oklch(from var(--ink) var(--__l-subtle) c h);
+
+    /* Shaded variants */
+    --brand-shade: oklch(from var(--brand) calc(l * var(--l-threshold)) c h);
+    --accent-1-shade: oklch(from var(--accent-1) calc(l * var(--l-threshold)) c h);
+    --accent-2-shade: oklch(from var(--accent-2) calc(l * var(--l-threshold)) c h);
+    --paper-shade: oklch(from var(--paper) var(--__l-shade) c h);
+    --ink-shade: oklch(from var(--ink) var(--__l-shade) c h);
+  }
+
+  color-scheme: light;
+}
+```
+
+## Dark mode!
+
+Now it's simple to alter the theme for dark mode with as few as 2 changes, or
+more if you need to shift the brightness of any base colors. You can even change
+the entire palette with a whole new `--brand` color!
+
+```css
+/* theme.css */
+:root {
+  /* rules from previous section ... */
+
+  @media screen and (prefers-color-scheme: dark) {
+    /* Darken the "brand" color a little for dark mode. Or don't. */
+    --brand: oklch(from cadetblue calc(l * 0.8) c h);
+    --paper: #222;
+    --ink: white;
+
+    color-scheme: dark;
+  }
+}
+
+```
+
+## Full code result
+
+```css
+/* theme.css */
+:root {
+  --brand: cadetblue;
+  /* --accent: crimson */
+  --paper: white;
+  --ink: #222;
+
+  @media screen and (prefers-color-scheme: dark) {
+    /* Darken the "brand" color a little for dark mode. Or don't. */
+    --brand: oklch(from cadetblue calc(l * 0.8) c h);
+    --paper: #222;
+    --ink: white;
+
+    color-scheme: dark;
+  }
+
+  @supports (color: oklch(from red l c h)) {
+    /*
+      ALPC Contrast threshold: 70% lightness
+      https://apcacontrast.com/
+    */
+    --l-threshold: 0.7;
+
+    /*
+      WCAG 2.1 Contrast threshold: 62.3%
+      which produces less readable results than ALPC. https://www.w3.org/TR/WCAG21/#contrast-minimum
+      --l-threshold: 0.623
+    */
+
+    /*
+      This creates a dynamic adjustment factor for the "subtle" variants. Explanation:
+      if the "L" component of an oklch(...) expression is below the threshold, the
+      adjustmwent is 80% of the original lightness, the adjustmwent will be 150% of
+      the original lightness.
+    */
+    --__l-subtle: calc(l * clamp(0.888, (var(--l-threshold) / l - 1) * infinity, 1.5));
+
+    /*
+      For the "(c)hroma" adjustment, because we may not want the color to be the
+      same saturation, create an adjustment similar to the L component.
+    */
+    --__c-subtle: calc(c * clamp(0.1, (var(--l-threshold) / c - 0.5) * infinity, 0.75));
+
+    /* 
+      We do the same type of adjustment for the shade. Can you figure out how this one
+      works? Follow the same algorithm we used for `--__l-subtle` 
+    */
+    --__l-shade: calc(l * clamp(0.75, (var(--l-threshold) / l - 1) * infinity, 2));
+
+    /* Take the curated accent colors if defined, and calculate them if they're not. */
+    --accent-1: var(--accent, oklch(from var(--brand) l c calc(h - 180)));
+    --accent-2: var(--accent-2, oklch(from var(--brand) l c calc(h - 180)));
+
+    /* Subtle variants */
+    --brand-subtle: oklch(from var(--brand) var(--__l-subtle) var(--__c-subtle) h);
+    --accent-1-subtle: oklch(from var(--accent-1) var(--__l-subtle) var(--__c-subtle) h);
+    --accent-2-subtle: oklch(from var(--accent-2) var(--__l-subtle) var(--__c-subtle) h);
+    --paper-subtle: oklch(from var(--paper) var(--__l-subtle) c h);
+    --ink-subtle: oklch(from var(--ink) var(--__l-subtle) c h);
+
+    /* Shaded variants */
+    --brand-shade: oklch(from var(--brand) calc(l * var(--l-threshold)) c h);
+    --accent-1-shade: oklch(from var(--accent-1) calc(l * var(--l-threshold)) c h);
+    --accent-2-shade: oklch(from var(--accent-2) calc(l * var(--l-threshold)) c h);
+    --paper-shade: oklch(from var(--paper) var(--__l-shade) c h);
+    --ink-shade: oklch(from var(--ink) var(--__l-shade) c h);
+  }
+
+  color-scheme: light;
+}
+
+```
+
+## Examples of other color schemes
+
+Here are several other classic color schemes produced in the same fashion, but
+with different adjustments. You can see the code for them by inspecting each
+palette. Each one has wrapper class like `.h-analogous`. You can find more
+information about the various classic harmony schemes at
+https://www.colorsexplained.com/color-harmony/
+
+<Palettes harmony="split-complementary"></Palettes>
+<Palettes harmony="analogous"></Palettes>
+<Palettes harmony="triadic"></Palettes>
+<Palettes harmony="monochromatic"></Palettes>

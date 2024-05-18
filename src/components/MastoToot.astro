@@ -1,33 +1,157 @@
 ---
-import Card from './Card.astro';
+// import Card from './Card.astro';
 const { src, label, inline = true } = Astro.props;
 const url = new URL(src);
 const {origin: domain, host} = url;
 const [noop, username, tootId] = url.pathname.split('/');
 
 const request = await fetch(`${domain}/api/v1/statuses/${tootId}`);
-const {card} = await request.json();
+const {card, ...toot} = await request.json();
 const fullUsername = `@${card.author_name}@${host}`;
 const title = `"${card.title}" by @${card.author_name}`;
-// console.log(card)
+const postDate = toot.edited_at ?? toot.created_at;
+// console.log({card, toot})
 ---
 {!inline && (
-  <div class="toot-preview">
-    <Card
-      url={src}
-      media={card.image}
-    >
-      <h6 slot="card_title">{ card.title }</h6>
-      {card.description}
-    </Card>
-  </div>
+  <sl-card
+    class="toot-preview"
+    url={src}
+    media={card.image}
+  >
+    <header slot="header">
+      <sl-avatar image={toot.account.avatar_static}></sl-avatar>
+      <h6 class="username">
+        {toot.account.display_name}
+        <small>
+          <a href={toot.account.url} target="_blank" rel="nofollow" tabindex="0">@{toot.account.username}</a>
+        </small>
+      </h6>
+    </header>
+
+    <section class="card__content">
+      <Fragment set:html={toot.content}></Fragment>
+
+      {card && (
+        <sl-card class="sub-card">
+          <a href={card.url} target="_blank" tabindex="0" rel="nofollow" class="card__content">
+            <small>{card.provider_name}</small>
+            <strong set:html={card.title} />
+            <small>by {card.author_name}</small>
+          </a>
+          <!-- <Fragment set:html={card.description} /> -->
+        </sl-card>
+      )}
+
+      <p><a href={toot.url} tabindex="0" target="_blank" rel="nofollow">Join the conversation...</a></p>
+    </section>
+
+    <footer slot="footer">
+      <sl-format-date
+        date={toot.created_at}
+        month="short"
+        day="numeric"
+        year="numeric"
+        hour="numeric"
+        minute="numeric"
+      ></sl-format-date>
+      {/* toot.edited_at && (<Fragment>
+        Edited <sl-format-date
+        date={toot.edited_at}
+        month="short"
+        day="numeric"
+        year="numeric"
+        hour="numeric"
+        minute="numeric"
+      ></sl-format-date>
+      </Fragment>) */}
+      {toot.replies_count && ( <sl-tooltip content={`${toot.replies_count} Replies`}>
+        <sl-icon name="reply"></sl-icon>
+        <sl-format-number value={toot.replies_count}></sl-format-number>
+      </sl-tooltip> )}
+      {toot.reblogs_count && ( <sl-tooltip content={`${toot.reblogs_count} Boosts`}>
+        <sl-icon name="repeat"></sl-icon>
+        <sl-format-number value={toot.reblogs_count}></sl-format-number>
+      </sl-tooltip> )}
+      {toot.favourites_count && ( <sl-tooltip content={`${toot.favourites_count} Favorites`}>
+        <sl-icon name="heart"></sl-icon>
+        <sl-format-number value={toot.favourites_count}></sl-format-number>
+      </sl-tooltip> )}
+      <!-- <sl-relative-time date={postDate}></sl-relative-time> -->
+    </footer>
+  </sl-card>
 )}
 {inline && <a href={src} target="_blank" rel="noreferrer" set:html={label ?? title}></a>}
 
 <style is:global>
 .toot-preview {
+  display: block;
+  max-width: calc(var(--grid-max-width) * 0.6);
+  box-shadow: var(--shadow-2);
+
   .card__media img {
     aspect-ratio: unset !important;
+  }
+}
+
+[slot="header"] {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1em;
+
+  .username {
+    margin: 0;
+  }
+}
+
+[slot="footer"] {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1ch;
+
+  > * {
+    font-size: var(--step--2);
+    flex: 1;
+  }
+}
+
+.card__content {
+  p {
+    font-size: var(--step--1);
+  }
+
+  :first-child {
+    margin-block-start: 0;
+  }
+
+  :last-child {
+    margin-block-end: 0;
+  }
+}
+
+sl-format-date {
+  flex: 0 0 100%;
+}
+
+.sub-card {
+  .card__content {
+    > * {
+      display: block;
+    }
+  }
+}
+
+sl-icon {
+  &[name*="reply"] {
+    color: cadetblue;
+  }
+  &[name*="repeat"] {
+    color: green;
+  }
+  &[name*="heart"] {
+    color: indianred;
   }
 }
 </style>

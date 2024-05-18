@@ -7,19 +7,17 @@ import FormattedDate from "../../components/FormattedDate.astro";
 import PostList from "../../components/PostList.astro";
 import TagCloud from "../../components/TagCloud.astro"
 
-const isDevMode = Astro.url.hostname.includes('localhost');
 export async function getStaticPaths({ paginate }) {
   const blogEntries = (await getBlogPosts(false)).sort(chronoSort).map((entry) => ({
     params: getBlogParams(entry),
     props: { entry },
   }));
 
-  // return blogEntries;
-  return paginate(blogEntries, { pageSize: 5 });
+  return paginate(blogEntries, { pageSize: 6 });
 }
-// const { Content } = await entry.render();
 // All paginated data is passed on the "page" prop
 const { page }: any = Astro.props;
+const isDevMode = false && Astro.url.hostname.includes('localhost');
 ---
 
 <!--Display the current page number. Astro.params.page can also be used!-->
@@ -28,7 +26,7 @@ const { page }: any = Astro.props;
     <div class="container--lg">
       <h1>Blog Posts</h1>
       {page.lastPage > 1 && <p>Page {page.currentPage} of {page.lastPage}</p>}
-      <PostList {page} cards={true} includeDrafts={Astro.url.hostname.includes('localhost')} />
+      <PostList {page} cards={true} includeDrafts={isDevMode} />
       {
         /* https://github.com/philnash/astro-components/tree/main/packages/astro-pagination#usage */
       }

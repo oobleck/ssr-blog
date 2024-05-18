@@ -5,11 +5,21 @@ const action = 'https://api.web3forms.com/submit';
 ---
 
 <form name="contact" method="POST" {action}>
-  <sl-input type="text" id="name" required label="Name" placeholder="Wanda Jones"></sl-input>
-  <sl-input label="Email Address" placeholder="you@yourdomain.com" id="email" name="email" type="email" required></sl-input>
+  <sl-input type="text" id="name" required label="Name" placeholder="Wanda Jones">
+    <sl-icon name="person" slot="suffix" role="presentation"></sl-icon>
+  </sl-input>
+  <sl-input label="Email Address" placeholder="you@yourdomain.com" id="email" name="email" type="email" required>
+    <sl-icon name="envelope-open" slot="suffix" role="presentation"></sl-icon>
+  </sl-input>
   <sl-textarea label="Message" placeholder="What's on your mind?" name="message" id="message" required></sl-textarea>
-  <sl-button variant="primary" type="submit">Send</sl-button>
-  <sl-button type="reset">Reset</sl-button>
+  <sl-button variant="primary" type="submit">
+    Send
+    <sl-icon slot="suffix" name="send-fill" role="presentation"></sl-icon>
+  </sl-button>
+  <sl-button type="reset">
+    Reset
+    <sl-icon slot="suffix" name="x-square" role="presentation"></sl-icon>
+  </sl-button>
   <input type="hidden" name="redirect" value={`${url.origin}/thanks`} />
   <input type="hidden" name="access_key" value={accessKey}>
 </form>

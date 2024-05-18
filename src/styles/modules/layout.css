@@ -6,6 +6,8 @@
   --grid-gutter: var(--space-s-l,
       clamp(1.125rem, 0.6467rem + 2.3913vw, 2.5rem));
   --grid-columns: 12;
+
+  --auto-2-cols: repeat(auto-fill, minmax(var(--auto-col-min, 290px), var(--auto-col-max, 1fr)));
 }
 
 .u-container {
@@ -40,6 +42,6 @@
   min-inline-size: 50%;
 }
 
-:where(figure, pre) {
+:where(figure, pre, .over-margin) {
   margin-inline: calc(var(--grid-gutter) * -1);
 }

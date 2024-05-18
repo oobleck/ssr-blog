@@ -70,8 +70,9 @@
 :where(h1, h2, h3, h4, h5, h6) {
   margin-block: var(--space-m-l);
   font-family: var(--heading-font);
-  font-weight: var(--weight-bold);
+  font-weight: var(--weight-semibold);
   color: var(--heading-color);
+  text-transform: capitalize;
 
   > small {
     display: block;
@@ -202,9 +203,9 @@
   font-size: var(--step--1);
 }
 
-:where(p code) {
+:where(:not(pre) > code) {
   word-break: break-word;
-  background-color: var(--paper-2);
+  background-color: var(--paper-subtle);
   padding: 0 0.5ch;
   margin-inline: 0.2ch;
   display: inline-block;

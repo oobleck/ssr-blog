@@ -5,7 +5,7 @@ import { getBlogPosts }  from "../../utils/get-posts";
 import Layout from "../../layouts/Layout.astro";
 
 export async function getStaticPaths() {
-  const blogEntries = await getBlogPosts(false);
+  const blogEntries = await getBlogPosts(true);
   return blogEntries.filter(({data: {date}}) => date < new Date("2024-05-03")).map((entry) => ({
     params: getBlogParams(entry),
     props: { entry, params: getBlogParams(entry) },
@@ -21,7 +21,7 @@ const seo = {
 };
 ---
 
-<Layout frontmatter={entry.data} searchable="false" showSearch={false} {seo} {...seo}>
+<Layout frontmatter={entry.data} searchable={false} showSearch={false} {seo} {...seo}>
   <meta slot="docHead" http-equiv="refresh" content={ `${redirectDelay}; url=${ redirectPath }` } />
   <h1 set:html={seo.title}></h1>
   <p>The post <q><a href={redirectPath}>{seo.title}</a></q> has moved. You will be automatically redirected in a moment, or click <a href={redirectPath}>here</a> to go now.</p>

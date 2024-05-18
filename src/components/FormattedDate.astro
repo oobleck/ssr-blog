@@ -7,8 +7,10 @@ interface Props {
   reklative?: boolean;
 }
 
-const { date, format = 'long', relative = true } = Astro.props;
+const { format = 'long', relative = true } = Astro.props;
+let { date } = Astro.props;
 const day = format === 'short' ? void 0 : 'numeric';
+date = new Date(date);
 ---
 
 <span class="datetime">

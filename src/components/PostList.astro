@@ -7,54 +7,92 @@ import TagsList from "./TagsList.astro"
 import { getBlogParams } from "../utils/post-params";
 import { getBlogPosts } from "../utils/get-posts";
 
+type Post = CollectionEntry<'blog'>;
+
 type Props = {
   // page: Page<CollectionEntry<"blog">>[];
   page?: any;
   limit?: number;
   includeDrafts?: boolean;
   cards?: boolean;
+  orderBy?: 'date' | '-date' | 'title' | '-title' | 'udatedDate' | '-updatedDate';
 };
 
-const { includeDrafts = false, limit, cards = false, page } = Astro.props;
-const blogPostPages = page?.data?.map(({props: {entry}}) => entry) ?? (await getBlogPosts(includeDrafts));
-const blogPosts = !limit ? blogPostPages : blogPostPages.slice(0, limit);
+function sortBy(sortBy: Props['orderBy'] = 'date'): (a: Post, b: Post) => number {
+  const willReverse = /^-/.test(sortBy) ? -1 : 1;
+  const postProp = sortBy.replace(/^-/, '');
+  return (a: Post, b: Post) => {
+    const aPost = a.data ?? a.frontmatter;
+    const bPost = b.data ?? b.frontmatter;
+    let aValue, bValue;
 
+    switch (postProp) {
+      case 'title':
+        return (aPost[postProp] > bPost[postProp] ? -1 : 1) * willReverse;
+        break;
+
+      case 'updatedDate':
+        aValue = aPost.updatedDate ?? aPost.date;
+        bValue = bPost.updatedDate ?? bPost.date;
+        break;
+
+      default:
+        aValue = aPost[propName];
+        bValue = bPost[propName];
+    }
+
+    return (aValue - bValue) * willReverse
+  };
+}
+
+const { includeDrafts = false, limit, cards = false, page, orderBy = '-updatedDate' } = Astro.props;
+const filterDrafts = ({props: {entry: {data} }}) => {
+  return includeDrafts || !data.draft;
+};
+let blogPostPages = page?.data?.filter(filterDrafts).map(({props: {entry}}) => entry) ?? (await getBlogPosts(includeDrafts));
+blogPostPages.sort(sortBy(orderBy));
+const blogPosts = !limit ? blogPostPages : blogPostPages.slice(0, limit);
 const HeadingTag = 'h6';
 ---
 
 <div class:list={[`post-list`, {"card-layout": cards}]}>
+  <!-- <p>Including drafts: {includeDrafts}</p> -->
   {
     blogPostPages?.length < 1 && (
       <p>No posts yet. Check back soon!</p>
     )
   }
-  <!-- {blogPostPages.length > limit && (<h6>Showing x of {blogPostPages.length}</h6>)} -->
+  {blogPosts.length > limit && (<h6>Showing {blogPosts.length} of {blogPostPages.length}</h6>)}
   {blogPosts?.length && (<ul>
     {blogPosts.map((post) => {
       const {data: {hero, heroDescription = "", date, updatedDate, description, title, tags = [], draft = false}} = post;
       const {path} = getBlogParams(post);
       const url = `/blog/${path}`;
       return !cards
-        ? (<li><a href={url}>{title}</a> <FormattedDate aria-label="Post updated date" date={updatedDate || date} /></li>)
+        ? (<li>
+            <a href={url} tabindex="0">{title}</a>
+            <FormattedDate aria-label="Post updated date" date={updatedDate || date} relative={false} />
+          </li>)
         : (<li>
           <sl-card class:list={[{'draft-post': draft}]}>
-            {hero && (<a href={url} slot="image">
-              <img src={hero} alt={heroDescription} />
-            </a>)}
+            <img src={hero} alt={heroDescription} slot="image" />
+            <!-- {hero && (<a href={url} slot="image" tabindex="0"> -->
+            <!--   <img src={hero} alt={heroDescription} /> -->
+            <!-- </a>)} -->
             <HeadingTag class="card-title">
               <a href={url} set:html={title}></a>
             </HeadingTa>
             <aside class="metadata">
-              <FormattedDate date={updatedDate || date} />
+              <FormattedDate date={updatedDate || date} relative={false} />
               <TagsList {tags} />
             </aside>
             {description && <p set:html={description}></p>}
-            <a href={url}>Read more...</a>
+            <a href={url} tabindex="0">Read more &raquo;</a>
           </sl-card>
         </li>)
     })}
   </ul>)}
-  {blogPostPages.length > limit && <a href="/blog/1">See more &raquo;</a> }
+  {blogPostPages.length > limit && <a href="/blog/1" tabindex="0">See more &raquo;</a> }
 </div>
 
 <style>
@@ -62,7 +100,7 @@ const HeadingTag = 'h6';
 
   .card-layout ul {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+    grid-template-columns: var(--auto-2-cols);
     gap: var(--grid-gutter);
     list-style: none;
     padding: 0;
