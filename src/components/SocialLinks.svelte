@@ -5,7 +5,7 @@
   export let homepage = false;
   export let rss = true;
   export let pixelfed = true;
-  export let socialLinks = social.filter(({name, url, icon}) => {
+  export let socialLinks = social.filter(({ name, url, icon }) => {
     switch (true) {
       case /\.pdf/i.test(url):
         return pdf;
@@ -27,7 +27,11 @@
 
 <ul class="social" style={`--socials-count: ${socialLinks.length}`}>
   {#each socialLinks as { icon, url, name }}
-    <li class="{/pdf/.test(icon) ? 'screen-only' : ''} {/home/.test(icon) ? 'print-only' : ''}">
+    <li
+      class="{/pdf/.test(icon) ? 'screen-only' : ''} {/home/.test(icon)
+        ? 'print-only'
+        : ''}"
+    >
       <a
         href={url}
         class="social__link"
@@ -36,10 +40,10 @@
         title={name}
         tabindex="0"
       >
-        <span class="sr-only">
+        <span hidden="from-humans">
           {settings.owner} on {name}
         </span>
-        <Icon icon={icon} class="social__icon" />
+        <Icon {icon} class="social__icon" />
       </a>
     </li>
   {/each}

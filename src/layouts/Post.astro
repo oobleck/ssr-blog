@@ -85,6 +85,7 @@ const featuredImageDims = [1024, 768];
   </article>
   <h5>Webmentions</h5>
   <web-mentions domain={settings.site} showTitle={false}></web-mentions>
+  {settings.bridgyEndpoints.map((url) => (<a href={url}></a>))}
 
   <!-- <aside slot="sidebar"> -->
   <!-- </aside> -->
@@ -112,14 +113,19 @@ const featuredImageDims = [1024, 768];
   }
 
   .post-header__title {
-    margin: var(--space-s) auto var(--space-2xs);
+    /* margin: var(--space-s) auto var(--space-2xs); */
     text-align: center;
   }
 
   .post-header__meta {
-    text-align: center;
+    /* text-align: center; */
+    display: flex;
+    flex-direction: column;
+    gap: round(var(--grid-gap), var(--v-grid));
+    align-items: center;
+    justify-content: flex-start;
     color: lighten(black, 50%);
-    font-weight: var(--weight-3);
+    font-weight: var(--weight-normal);
     font-size: var(--step--1);
   }
 

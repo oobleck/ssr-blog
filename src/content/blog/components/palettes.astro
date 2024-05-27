@@ -74,7 +74,7 @@ const isKnownHarmony = harmonies.includes(harmony);
   .palette-samples {
     position: relative;
     display: grid;
-    grid-template-columns: var(--auto-2-cols);
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: var(--space-3xs-2xs);
 
     .palette-chip {
@@ -91,7 +91,7 @@ const isKnownHarmony = harmonies.includes(harmony);
       &:hover {
         box-shadow: var(--shadow-5);
         z-index: var(--layer-2);
-        transform: scale(1.1);
+        transform: scale(1.05);
       }
 
       @supports (color: oklch(from red l c h)) {
@@ -113,6 +113,7 @@ const isKnownHarmony = harmonies.includes(harmony);
         /* margin: 0.2ch; */
         /* border: 1px solid; */
         background: oklch(from var(--contrast-background) l c h / 30%);
+        font-size: var(--step--1);
       }
     }
   }

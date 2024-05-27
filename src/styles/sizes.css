@@ -1,8 +1,6 @@
 /* @link https://utopia.fyi/type/calculator?c=320,18,1.2,1240,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
 
 :root {
-  --line-height: clamp(1.125, 1.0815em + 0.2174vi, 1.333);
-  --line-height: 1.5;
   --step--2: clamp(0.7813rem, 0.7747rem + 0.0326vi, 0.8rem);
   --step--1: clamp(0.9375rem, 0.9158rem + 0.1087vi, 1rem);
   --step-0: clamp(1.125rem, 1.0815rem + 0.2174vi, 1.25rem);
@@ -13,9 +11,7 @@
   --step-5: clamp(2.7994rem, 2.4462rem + 1.7658vi, 3.8147rem);
 }
 
-
 /* @link https://utopia.fyi/space/calculator?c=320,18,1.2,1240,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
-
 :root {
   --space-3xs: clamp(0.3125rem, 0.3125rem + 0vi, 0.3125rem);
   --space-2xs: clamp(0.5625rem, 0.5408rem + 0.1087vi, 0.625rem);

@@ -1,5 +1,5 @@
-import { remoteImageUrl } from "../utils/image.utils";
 import { transformUrl } from "unpic";
+import { remoteImageUrl } from "../utils/image.utils";
 
 // Main Site Settings
 const heroImageIds = {
@@ -60,9 +60,14 @@ export const settings = {
   email: `me@spencerrhodes.dev`,
   obfuscatedEmail: '',
   description: "User Interface Developer",
-  // hero: remoteImageUrl(heroImageIds.ggBridgeFog),
   hero: heros.blueRedStreaks,
   authorImage: "../assets/images/ssr-sawyer-avatar.png",
+  bridgyEndpoints: [
+    // https://brid.gy/about#webmentions
+    // https://brid.gy/mastodon/@oobleck@fosstodon.org
+    "https://brid.gy/publish/mastodon",
+    "https://brid.gy/publish/github",
+  ],
 };
 settings.site = `https://${settings.domain}`;
 settings.obfuscatedEmail = settings.email

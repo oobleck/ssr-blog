@@ -14,7 +14,7 @@ import { Icon } from "astro-icon/components";
           title={item.name}
           rel="me noreferrer"
         >
-          <span class="sr-only">
+          <span hidden="from-humans">
             {settings.title} on {item.name}
           </span>
           <Icon class="social__icon" name={item.icon} title={item.name} />

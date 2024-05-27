@@ -11,12 +11,27 @@
   --paper: var(--stone-0);
   --ink: var(--gray-9);
 
+  --link: var(--brand);
+  --link-hover: var(--accent);
+  --form-control-color: var(--brand);
+  --form-control-disabled: var(--ink-subtle);
+  --form-control-focus: var(--accent);
+  --form-background: var(--paper);
+  --input-border: var(--ink-subtle);
+  --input-focus-h: 245;
+  --input-focus-s: 100%;
+  --input-focus-l: 42%;
+  --select-border: var(--ink-subtle);
+  --select-focus: var(--accent);
+  --select-arrow: var(--select-border);
+
   color-scheme: light;
 
   @media screen and (prefers-color-scheme: dark) {
     --brand: var(--cyan-7);
     --paper: var(--gray-10);
     --ink: var(--gray-0);
+    --link-hover: oklch(from var(--accent) calc(l * 1.333) c h);
 
     color-scheme: dark;
   }
@@ -62,20 +77,6 @@
 }
 
 :root {
-  --link: var(--brand);
-  --link-hover: var(--accent);
-  --form-control-color: var(--brand);
-  --form-control-disabled: var(--ink-subtle);
-  --form-control-focus: var(--accent);
-  --form-background: var(--paper);
-  --input-border: var(--ink-subtle);
-  --input-focus-h: 245;
-  --input-focus-s: 100%;
-  --input-focus-l: 42%;
-  --select-border: var(--ink-subtle);
-  --select-focus: var(--accent);
-  --select-arrow: var(--select-border);
-
   --clip-angle-adjacent: 83%;
 
   /* top right, bottom right, bottom left, top left */

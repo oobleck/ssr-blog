@@ -2,18 +2,45 @@
 
 :root {
   --grid-max-width: 77.5rem;
-  --grid-max-width: 57rem;
-  --grid-gutter: var(--space-s-l,
-      clamp(1.125rem, 0.6467rem + 2.3913vw, 2.5rem));
+  --grid-max-width: 55rem;
+  --grid-gutter: var(
+    --space-s-l,
+    clamp(1.125rem, 0.6467rem + 2.3913vw, 2.5rem)
+  );
   --grid-columns: 12;
 
-  --auto-2-cols: repeat(auto-fill, minmax(var(--auto-col-min, 290px), var(--auto-col-max, 1fr)));
+  /* ~8px on a 16px rem */
+  --v-grid: 0.5rem;
+
+  /* Set `--self-v-spacing` in each selector that sets block spacing. */
+  --this-v-spacing: round(
+    down,
+    var(--self-v-spacing, 0),
+    var(--v-grid)
+  );
+
+  --auto-2-cols: repeat(auto-fill, minmax(47.5%, 1fr));
+  --auto-3-cols: repeat(auto-fill, minmax(290px, 1fr));
 }
 
 .u-container {
   max-width: var(--grid-max-width);
   padding-inline: var(--grid-gutter);
   margin-inline: auto;
+
+  [data-debug-grid] & {
+    --l: clamp(0, (var(--l-threshold) / l - 1) * infinity, 1);
+    --line-color: oklch(from var(--paper) var(--l) 0 h / 25%);
+    /* --line-color: oklch(from red l c h / 50%); */
+    background-image: linear-gradient(
+      var(--line-color), 
+      var(--line-color) 1px, 
+      #0000 1px, 
+      /* #0000 calc(var(--v-grid) - 1px) */
+      #0000 var(--v-grid)
+    );
+    background-size: 100% var(--v-grid);
+  }
 }
 
 .u-grid {
@@ -43,5 +70,5 @@
 }
 
 :where(figure, pre, .over-margin) {
-  margin-inline: calc(var(--grid-gutter) * -1);
+  margin-inline: calc(var(--grid-gutter) * -0.95);
 }

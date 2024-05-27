@@ -1,13 +1,12 @@
-import { readFile } from "fs";
 import mdx from "@astrojs/mdx";
 import sitemap from "@astrojs/sitemap";
+import svelte from "@astrojs/svelte";
+import { imageService } from "@unpic/astro/service";
 import compress from "astro-compress";
 import icon from "astro-icon";
 import { defineConfig } from "astro/config";
-import { browserslistToTargets } from "lightningcss";
 import browserslist from "browserslist";
-import { imageService } from "@unpic/astro/service";
-import svelte from "@astrojs/svelte";
+import { browserslistToTargets } from "lightningcss";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import markdownConfig from './markdown.config';
 
