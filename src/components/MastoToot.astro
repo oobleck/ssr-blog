@@ -1,5 +1,7 @@
 ---
 // import Card from './Card.astro';
+import sanitizeHtml from 'sanitize-html';
+
 const { src, label, inline = true } = Astro.props;
 const url = new URL(src);
 const {origin: domain, host} = url;
@@ -29,16 +31,15 @@ const postDate = toot.edited_at ?? toot.created_at;
     </header>
 
     <section class="card__content">
-      <Fragment set:html={toot.content}></Fragment>
+      <Fragment set:html={sanitizeHtml(toot.content)}></Fragment>
 
       {card && (
         <sl-card class="sub-card">
           <a href={card.url} target="_blank" tabindex="0" rel="nofollow" class="card__content">
             <small>{card.provider_name}</small>
-            <strong set:html={card.title} />
+            <strong set:html={sanitizeHtml(card.title)} />
             <small>by {card.author_name}</small>
           </a>
-          <!-- <Fragment set:html={card.description} /> -->
         </sl-card>
       )}
 
@@ -54,16 +55,6 @@ const postDate = toot.edited_at ?? toot.created_at;
         hour="numeric"
         minute="numeric"
       ></sl-format-date>
-      {/* toot.edited_at && (<Fragment>
-        Edited <sl-format-date
-        date={toot.edited_at}
-        month="short"
-        day="numeric"
-        year="numeric"
-        hour="numeric"
-        minute="numeric"
-      ></sl-format-date>
-      </Fragment>) */}
       {toot.replies_count && ( <sl-tooltip content={`${toot.replies_count} Replies`}>
         <sl-icon name="reply"></sl-icon>
         <sl-format-number value={toot.replies_count}></sl-format-number>
@@ -80,13 +71,14 @@ const postDate = toot.edited_at ?? toot.created_at;
     </footer>
   </sl-card>
 )}
-{inline && <a href={src} target="_blank" rel="noreferrer" set:html={label ?? title}></a>}
+{inline && <a href={src} target="_blank" rel="noreferrer" set:html={sanitizeHtml(label ?? title)}></a>}
 
 <style is:global>
 .toot-preview {
   display: block;
   max-width: calc(var(--grid-max-width) * 0.6);
   box-shadow: var(--shadow-2);
+  margin-inline: auto;
 
   .card__media img {
     aspect-ratio: unset !important;

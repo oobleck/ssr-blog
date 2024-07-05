@@ -1,13 +1,15 @@
 @import "open-props/colors" layer(third-party);
+/* @import "open-color/open-color.css" layer(third-party); */
 
 :root {
   /* Theming */
   --brand: var(--cyan-9);
   --brand-subtle: var(--cyan-5);
   --brand-shade: var(--cyan-9);
-  --accent: var(--orange-9);
-  --accent-subtle: var(--orange-5);
-  --accent-shade: var(--orange-10);
+  --accent-1: var(--red-10);
+  /* --accent-2: var(--accent-1); */
+  --accent-subtle: var(--red-8);
+  --accent-shade: var(--red-12);
   --paper: var(--stone-0);
   --ink: var(--gray-9);
 
@@ -37,7 +39,7 @@
   }
 
   /* If RCS is supported, use the generated palette instead. According to
-* caniuse, this will be 83% of global users. */
+   * caniuse, this will be 83% of global users. */
   @supports (color: oklch(from red l c h)) {
     --l-threshold: 0.7;
     --c-threshold: 0.7;
@@ -50,8 +52,8 @@
     /* Complementary color of the --brand */
     /* --accent-1: oklch(from var(--brand) l c calc(h - 180)); */
     --accent-1: var(--red-12);
-    --accent-2: oklch(from var(--brand) l c calc(h - 180));
     /* --accent-2: var(--accent-1); */
+    --accent-2: oklch(from var(--brand) l c calc(h - 180));
 
     /* Subtle variants */
     --brand-subtle: oklch(from var(--brand) var(--__l-subtle) var(--__c-subtle) h);
@@ -80,12 +82,10 @@
   --clip-angle-adjacent: 83%;
 
   /* top right, bottom right, bottom left, top left */
-  --angle-clip-path-top: polygon(
-    0 100%,
-    100% var(--clip-angle-adjacent),
-    100% 100%,
-    0 100%,
-  );
+  --angle-clip-path-top: polygon(0 100%,
+      100% var(--clip-angle-adjacent),
+      100% 100%,
+      0 100%,
+    );
   --sl-panel-background-color: var(--paper);
 }
-

@@ -5,10 +5,10 @@ import AboutMe from "../components/AboutMe.astro";
 import TagsList from "../components/TagsList.astro";
 import { unsplashCredit, unsplashUrl } from "../utils/unsplash.utils";
 import { Image } from "astro:assets";
+// import { Image } from "astro-preload/components";
 import { settings } from "../data/settings.ts";
 import FormattedDate from "../components/FormattedDate.astro";
 import Share from "../components/Share.astro";
-import Search from "../components/SiteSearch.astro";
 
 const { frontmatter } = Astro.props;
 const { draft, unsplashId, heroDescription, title, description, tags, date, updatedDate } = frontmatter;
@@ -166,5 +166,9 @@ const featuredImageDims = [1024, 768];
       /* z-index: var(--layer-1); */
       z-index: 0;
     }
+  }
+
+  .e-content {
+    margin-block-end: var(--space-l-xl);
   }
 </style>

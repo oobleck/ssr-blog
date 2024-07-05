@@ -4,6 +4,7 @@ import { Image } from "astro:assets";
 import { ABOUT_ME, ABOUT_ME_EXTENDED } from "../data/about";
 import {settings} from "../data/settings";
 import authorImg from "../assets/images/ssr-sawyer-avatar.png";
+import SocialLinks from "./SocialLinks.svelte";
 
 interface Props {
   avatar?: boolean;
@@ -11,6 +12,8 @@ interface Props {
   label?: boolean;
   intro?: boolean;
   extended?: boolean;
+  asEntryAuthor?: boolean;
+  readmore?: boolean;
 }
 
 const {
@@ -20,11 +23,12 @@ const {
   intro = false,
   extended = false,
   readmore = false,
+  asEntryAuthor = false,
 } = Astro.props;
 ---
 
 <div
-  class:list={["about-me vcard h-card", avatar ? "has-avatar" : "no-avatar"]}
+  class:list={["about-me vcard h-card", avatar ? "has-avatar" : "no-avatar", {"p-author": asEntryAuthor}]}
 >
   {
     label && (
@@ -50,6 +54,8 @@ const {
       <p class:list={["p-note", {"intro lead": intro}]} set:html={ABOUT_ME}></p>
       {!extended && readmore && <p><a href="/about">Read more&hellip;</a></p>}
       {extended && <p set:html={ABOUT_ME_EXTENDED.split(/[\r\n]+/gm).join('</p><p>')}></p>}
+      <a href={Astro.url.href.replace(Astro.url.origin, '')} class="sr-only u-url u-uid" rel="me">{settings.owner}</a>
+      <SocialLinks hidden={true} homepage={true} pdf={false} />
     </div>
   </div>
 </div>

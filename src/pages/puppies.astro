@@ -2,7 +2,6 @@
 import Layout from "../layouts/Layout.astro";
 import {Image} from "astro:assets";
 import {puppies, IPuppies} from "../data/puppies";
-import {settings} from "../data/settings";
 
 const seo = {
   title: "Our Animals",
@@ -18,7 +17,7 @@ const seo = {
     const slug = name.toLowerCase().replace(/[\W]+/g, '-');
     const link = `${Astro.url}/#${slug}`;
     const qrSize = 128;
-    const pagination = images?.length > 0 ? 'pagination' : null 
+    const pagination = images?.length > 0 ? 'pagination' : null
     return (
       <sl-card id={slug}>
         <header slot="header">
@@ -27,7 +26,7 @@ const seo = {
         </header>
           <sl-carousel { pagination } slot="image" loop>
           {Array.isArray(images) && images.map((img) => {
-            const Element = img?.startsWith('/') ? 'Image' : 'img';
+            const Element = img?.startsWith('/') ? Image : 'img';
             return (
             <sl-carousel-item>
               <Element src={img} size={640} alt={`Photo of ${name}, a ${breed}`} />

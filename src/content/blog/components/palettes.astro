@@ -1,22 +1,22 @@
 ---
 const {harmony, title} = Astro.props;
 const palette = [
-  'brand', 
-  'brand-subtle', 
-  'brand-shade', 
-  'accent-1', 
-  'accent-1-subtle', 
-  'accent-1-shade', 
-  'accent-2', 
-  'accent-2-subtle', 
+  'brand',
+  'brand-subtle',
+  'brand-shade',
+  'accent-1',
+  'accent-1-subtle',
+  'accent-1-shade',
+  'accent-2',
+  'accent-2-subtle',
   'accent-2-shade',
 ];
 const basics = [
-  'paper', 
-  'paper-subtle', 
-  'paper-shade', 
-  'ink', 
-  'ink-subtle', 
+  'paper',
+  'paper-subtle',
+  'paper-shade',
+  'ink',
+  'ink-subtle',
   'ink-shade',
 ];
 
@@ -28,47 +28,33 @@ const harmonies = [
 ];
 
 const css = `
-    /* Subtle variants */
     --brand-subtle: oklch(from var(--brand) var(--__l-subtle) var(--__c-subtle) h);
     --accent-1-subtle: oklch(from var(--accent-1) var(--__l-subtle) var(--__c-subtle) h);
     --accent-2-subtle: oklch(from var(--accent-2) var(--__l-subtle) var(--__c-subtle) h);
 
-    /* Shaded variants */
     --brand-shade: oklch(from var(--brand) calc(l * var(--l-threshold)) c h);
     --accent-1-shade: oklch(from var(--accent-1) calc(l * var(--l-threshold)) c h);
     --accent-2-shade: oklch(from var(--accent-2) calc(l * var(--l-threshold)) c h);
 
-    /* Palette aliases */
     --accent: var(--accent-1);
     --accent-subtle: var(--accent-1-subtle);
     --accent-shade: var(--accent-1-shade);
 `;
+const tokenRoots = ['brand', 'accent-1', 'accent-2'];
+const tokenVariations = ['subtle', 'shade'];
 const isKnownHarmony = harmonies.includes(harmony);
 ---
 
-{!isKnownHarmony && (
-  <section>
-    <!-- <h3>This site's palette</h3> -->
-    <div class="palette-samples over-margin">
-      {palette
-        .filter((token) => !token.includes(2))
-        .map((token) => (<div class="palette-chip" style={`--palette-color: var(--${token})`} data-token={token} 
-          aria-label={`Palette sample of the color assigned to the design token '${token}'`}></div>))}
-      {basics.map((token) => (<div class="palette-chip" style={`--palette-color: var(--${token})`} data-token={token}
+<section class={`h-${isKnownHarmony ? harmony : 'site'}`}>
+  {harmony && <h3>{harmony.replace('-', ' ')}</h3>}
+  <div class="palette-samples over-margin" style={harmony && css}>
+    {[...palette, ...basics]
+      // This filter hides basics in known harmones, or hides accent-2* in the site's palette
+      .filter((token) => isKnownHarmony ? !basics.includes(token) : !token.includes('2'))
+      .map((token) => (<div class="palette-chip" style={`--palette-color: var(--${token})`} data-token={token}
         aria-label={`Palette sample of the color assigned to the design token '${token}'`}></div>))}
-    </div>
-  </section>
-)}
-
-{isKnownHarmony && (
-  <section class={`h-${harmony}`}>
-    <h3>{title ?? harmony.replace('-', ' ')}</h3>
-    <div class="palette-samples over-margin" style={css}>
-      {palette.map((token) => (<div class="palette-chip" style={`--palette-color: var(--${token})`} data-token={token}
-        aria-label={`Palette sample of the color assigned to the design token '${token}'`}></div>))}
-    </div>
-  </section>
-)}
+  </div>
+</section>
 
 <style>
   .palette-samples {
@@ -84,7 +70,7 @@ const isKnownHarmony = harmonies.includes(harmony);
       background-color: var(--palette-color, #eee);
       color: var(--contrast-color, white);
       text-shadow: 1px 1px 1px black;
-      border-radius: var(--radius-1);
+      border-radius: var(--radius-2);
       box-shadow: var(--shadow-3);
       transition: 0.2s ease-in-out;
 
@@ -117,7 +103,9 @@ const isKnownHarmony = harmonies.includes(harmony);
       }
     }
   }
+</style>
 
+<style is:global>
   section.h-split-complementary {
     --split: 30;
     --accent-1: oklch(from var(--brand) l c calc(h - 180 - var(--split)));
@@ -137,7 +125,11 @@ const isKnownHarmony = harmonies.includes(harmony);
     --accent-1: oklch(from var(--brand) calc(l * 1.3) calc(c * 1.2) h);
     --accent-2: oklch(from var(--accent-1) calc(l * 1.3) calc(c * 1.2) h);
   }
-  section.h-tetradic {}
-  section.h-square {}
+  /* section.h-triadic {
+    --split: 90;
+    --accent-1: oklch(from var(--brand) l c calc(h - var(--split)));
+    --accent-2: oklch(from var(--brand) l c calc(h + var(--split)));
+    --accent-3: oklch(from var(--brand) l c calc(h + var(--split)));
+  } */
+  /* section.h-square {} */
 </style>
-

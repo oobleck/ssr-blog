@@ -1,18 +1,20 @@
-  <div id="search" class="u-container" transition:persist></div>
-  {/* https://chrispennington.blog/blog/pagefind-static-search-for-astro-sites/ */}
-  <script type="module">
-    await import('/pagefind/pagefind-highlight.js');
-    new PagefindHighlight({ highlightParam: "highlight" });
-  </script>
+---
+---
+<div id="search" class="u-container" transition:persist></div>
+{/* https://chrispennington.blog/blog/pagefind-static-search-for-astro-sites/ */}
+<script src="/find/pagefind-ui.js" is:inline></script>
+<script type="module">
+  await import('/find/pagefind-highlight.js');
+  new PagefindHighlight({ highlightParam: "highlight" });
+</script>
 
-  <script>
-    window.addEventListener("DOMContentLoaded", (event) => {
-      new PagefindUI({
-        element: "#search",
-        showSubResults: true,
-        resetStyles: true,
-        highlightParam: "highlight",
-      });
+<script>
+  window.addEventListener("DOMContentLoaded", (event) => {
+    new PagefindUI({
+      element: "#search",
+      showSubResults: true,
+      resetStyles: true,
+      highlightParam: "highlight",
     });
-  </script>
-
+  });
+</script>

@@ -1,0 +1,86 @@
+---
+import { settings } from "@/data/settings";
+import { SEO } from "astro-seo";
+
+const { code = 404, title = "Page not found" } = Astro.props;
+const pageTitle = `${code}: ${title}`;
+---
+
+<html>
+  <head>
+    <SEO
+      title={pageTitle}
+      charset="UTF-8"
+      titleTemplate={title === settings.title ? title : `%s – ${settings.title}`}
+      canonical={settings.site}
+      extend={{
+        meta: [
+          { name: "robots", content: "index, nofollow" },
+          { name: 'generator', content: Astro.generator },
+          { name: 'viewport', content: "width=device-width, initial-scale=1.0" },
+        ],
+        // link: [ ],
+      }}
+    />
+
+  </head>
+  <body>
+    <div class="wrapper">
+      <h1 class="message">
+        <span class="code">{code}</span> {title}
+      </h1>
+      <slot />
+    </div>
+  </body>
+</html>
+
+<style>
+/* @import "modern-normalize"; */
+@import "../styles/sizes.css";
+@import "../styles/theme.css";
+
+:root {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: -system-ui, sans-serif;
+
+  &, * {
+    box-sizing: border-box;
+  }
+}
+
+.wrapper {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
+  max-width: 600px;
+  align-items: center;
+  justify-content: center;
+}
+
+.code {
+  font-weight: 600;
+  position: relative;
+  color: var(--accent);
+
+  &::after {
+    content: '';
+    position: relative;
+    height: 1.2em;
+    /* width: 1px; */
+    line-height: 1;
+    display: inline-block;
+    border-inline-start: 0.075ch solid var(--ink-subtle);
+    margin-inline: 0.6ch 0.15ch;
+    bottom: -0.45ch;
+    /* opacity: 0.75; */
+  }
+}
+.message {
+  font-weight: 100;
+  font-size: var(--step-4);
+  line-height: 1;
+  /* text-transform: uppercase; */
+}
+</style>

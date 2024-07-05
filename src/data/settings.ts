@@ -19,37 +19,37 @@ const heroImageIds = {
 
 const heros = {
   arcticLake:
-    "https://images.unsplash.com/photo-1536745287225-21d689278fd1?w=2000",
+    "https://images.unsplash.com/photo-1536745287225-21d689278fd1",
   redBlueSwirl:
-    "https://images.unsplash.com/photo-1574169208507-84376144848b?w=2000",
+    "https://images.unsplash.com/photo-1574169208507-84376144848b",
   aquaOrangeFire:
-    "https://images.unsplash.com/photo-1599422314077-f4dfdaa4cd09?w=2000",
+    "https://images.unsplash.com/photo-1599422314077-f4dfdaa4cd09",
   paleBlueSnowscape:
-    "https://images.unsplash.com/photo-1558865869-c93f6f8482af?w=2000",
+    "https://images.unsplash.com/photo-1558865869-c93f6f8482af",
   neonInkSpill:
-    "https://images.unsplash.com/photo-1591393223703-56fe1347ac62?w=2000",
+    "https://images.unsplash.com/photo-1591393223703-56fe1347ac62",
   darkSunsetClouds:
-    "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=2000",
+    "https://images.unsplash.com/photo-1504608524841-42fe6f032b4b",
   greenRainyLake:
-    "https://images.unsplash.com/photo-1517635954237-7c23b37adb9c?w=2000",
+    "https://images.unsplash.com/photo-1517635954237-7c23b37adb9c",
   blueSunrise:
-    "https://images.unsplash.com/photo-1599711428625-f6cc0ca730b8?w=2000",
+    "https://images.unsplash.com/photo-1599711428625-f6cc0ca730b8",
   blueRedStreaks:
-    "https://images.unsplash.com/photo-1652044049927-7142ea82c81d?w=2000",
+    "https://images.unsplash.com/photo-1652044049927-7142ea82c81d",
 
   // https://unsplash.com/photos/calm-water-QtIXL7C4bB0
   blueGoldWaves:
-    "https://images.unsplash.com/photo-1463134836706-8bcc60f7d78b?w=2000",
+    "https://images.unsplash.com/photo-1463134836706-8bcc60f7d78b",
 
   // https://unsplash.com/photos/a-blurry-image-of-a-bright-orange-and-blue-light-sDd9hIAS_IU
-  darkAmberSparks: "https://images.unsplash.com/photo-1567919914972-4281c4e0e7ae?w=2000",
+  darkAmberSparks: "https://images.unsplash.com/photo-1567919914972-4281c4e0e7ae",
 
   // https://unsplash.com/photos/a-blurry-image-of-a-person-walking-down-a-street-cdZF9FO-tlo
   darkAquaRain: "https://images.unsplash.com/photo-1567919915310-0ec7b49bfb12?iw=2000",
 
-  sfFog: "https://images.unsplash.com/photo-1466446198467-e45c851bbd5a?w=2000",
+  sfFog: "https://images.unsplash.com/photo-1466446198467-e45c851bbd5a",
 
-  skullFire: "https://images.unsplash.com/photo-1654859869130-fd0a2aa5539b?w=2000",
+  skullFire: "https://images.unsplash.com/photo-1654859869130-fd0a2aa5539b",
 };
 
 export const settings = {
@@ -60,7 +60,8 @@ export const settings = {
   email: `me@spencerrhodes.dev`,
   obfuscatedEmail: '',
   description: "User Interface Developer",
-  hero: heros.blueRedStreaks,
+  // hero: `${heros.blueRedStreaks}?w=2000&h=300&fit=crop&fm=webp`,
+  hero: '/images/header-bg.webp',
   authorImage: "../assets/images/ssr-sawyer-avatar.png",
   bridgyEndpoints: [
     // https://brid.gy/about#webmentions

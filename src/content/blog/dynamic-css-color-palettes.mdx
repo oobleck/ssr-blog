@@ -1,14 +1,9 @@
 ---
 title: 'Dynamic CSS color palettes'
 description: 'Experiments in generating color palettes with native CSS capabilities only'
-# https://unsplash.com/photos/assorted-color-paints-and-paintbrushes-on-white-tarp-pfSNx3Z12K8
 hero: "https://images.unsplash.com/photo-1535673774336-ef95d2851cf3?w=1024&h=768&auto=format&fit=crop"
 heroDescription: 'Buckets of colorful paint on a white painters cloth'
 date: "2024-05-18"
-# layout: ../../layouts/Post.astro
-# unsplashId: 'E-Zuyev2XWo'
-# hero: https://images.unsplash.com/photo-1500674425229-f692875b0ab7
-# hero: https://images.unsplash.com/photo-1585074245728-eedb0cc44a66?q=80&w=900
 tags:
   - webdev
   - css
@@ -28,7 +23,7 @@ ticket](https://bugzilla.mozilla.org/show_bug.cgi?id=1701488) suggesting it may
 be implemented soon.
 
 Lea Verou recently [blogged about this
-topic](https://lea.verou.me/blog/2024/contrast-color/#fallback-for-browsers-that-don%E2%80%99t-support-rcs) 
+topic](https://lea.verou.me/blog/2024/contrast-color/#fallback-for-browsers-that-don%E2%80%99t-support-rcs)
 in great depth which inspired me to have another go at it.
 
 My first iteration resulted in the palette used on this site. My palette uses
@@ -137,9 +132,9 @@ each color variant and define some constants.
     */
     --__c-subtle: calc(c * clamp(0.1, (var(--l-threshold) / c - 0.5) * infinity, 0.75));
 
-    /* 
+    /*
       We do the same type of adjustment for the shade. Can you figure out how this one
-      works? Follow the same algorithm we used for `--__l-subtle` 
+      works? Follow the same algorithm we used for `--__l-subtle`
     */
     --__l-shade: calc(l * clamp(0.75, (var(--l-threshold) / l - 1) * infinity, 2));
 
@@ -235,9 +230,9 @@ the entire palette with a whole new `--brand` color!
     */
     --__c-subtle: calc(c * clamp(0.1, (var(--l-threshold) / c - 0.5) * infinity, 0.75));
 
-    /* 
+    /*
       We do the same type of adjustment for the shade. Can you figure out how this one
-      works? Follow the same algorithm we used for `--__l-subtle` 
+      works? Follow the same algorithm we used for `--__l-subtle`
     */
     --__l-shade: calc(l * clamp(0.75, (var(--l-threshold) / l - 1) * infinity, 2));
 

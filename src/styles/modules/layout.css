@@ -1,23 +1,17 @@
-/* @link https://utopia.fyi/grid/calculator?c=320,18,1.2,1240,20,1.25,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
-
 :root {
   --grid-max-width: 77.5rem;
   --grid-max-width: 55rem;
-  --grid-gutter: var(
-    --space-s-l,
-    clamp(1.125rem, 0.6467rem + 2.3913vw, 2.5rem)
-  );
+  --grid-gutter: var(--space-s-l,
+      clamp(1.125rem, 0.6467rem + 2.3913vw, 2.5rem));
   --grid-columns: 12;
 
   /* ~8px on a 16px rem */
   --v-grid: 0.5rem;
 
   /* Set `--self-v-spacing` in each selector that sets block spacing. */
-  --this-v-spacing: round(
-    down,
-    var(--self-v-spacing, 0),
-    var(--v-grid)
-  );
+  --this-v-spacing: round(down,
+      var(--self-v-spacing, 0),
+      var(--v-grid));
 
   --auto-2-cols: repeat(auto-fill, minmax(47.5%, 1fr));
   --auto-3-cols: repeat(auto-fill, minmax(290px, 1fr));
@@ -32,13 +26,11 @@
     --l: clamp(0, (var(--l-threshold) / l - 1) * infinity, 1);
     --line-color: oklch(from var(--paper) var(--l) 0 h / 25%);
     /* --line-color: oklch(from red l c h / 50%); */
-    background-image: linear-gradient(
-      var(--line-color), 
-      var(--line-color) 1px, 
-      #0000 1px, 
-      /* #0000 calc(var(--v-grid) - 1px) */
-      #0000 var(--v-grid)
-    );
+    background-image: linear-gradient(var(--line-color),
+        var(--line-color) 1px,
+        #0000 1px,
+        /* #0000 calc(var(--v-grid) - 1px) */
+        #0000 var(--v-grid));
     background-size: 100% var(--v-grid);
   }
 }
@@ -53,17 +45,17 @@
   flex-wrap: wrap;
   gap: var(--space-lg, 2rem);
 
-  &:has(aside) > .u-container {
+  &:has(aside)>.u-container {
     flex-shrink: 2;
   }
 }
 
-.with-sidebar main > aside {
+.with-sidebar main>aside {
   flex-grow: 1;
   max-width: 30%;
 }
 
-.with-sidebar main > :not(aside) {
+.with-sidebar main> :not(aside) {
   flex-basis: 0;
   flex-grow: 999;
   min-inline-size: 50%;

@@ -50,10 +50,10 @@ export const puppies: IPuppy[] = [
     gender: 'female',
     chipId: -1,
     images: [
-      "/images/luna-wren1.jpg",
-      "/images/luna-wren2.jpg",
-      "/images/luna-wren3.jpg",
-      "/images/luna-day1.jpg",
+      "images/luna-wren1.jpg",
+      "images/luna-wren2.jpg",
+      "images/luna-wren3.jpg",
+      "images/luna-day1.jpg",
     ],
     nicknames: ['Wrennie', "Renny Rockets", 'Beans', 'Lunatic'],
     favorites: {
@@ -70,10 +70,10 @@ export const puppies: IPuppy[] = [
     gender: 'female',
     nicknames: ['Mildred', 'Moose', 'Millie goat'],
     images: [
-      "/images/millie-maxwell3.jpg",
-      "/images/millie-maxwell2.jpg",
-      "/images/millie-maxwell1.jpg",
-      "/images/millie-day1.jpg",
+      "images/millie-maxwell3.jpg",
+      "images/millie-maxwell2.jpg",
+      "images/millie-maxwell1.jpg",
+      "images/millie-day1.jpg",
     ],
     favorites: {
       activity: "Eating and barking",
@@ -89,10 +89,10 @@ export const puppies: IPuppy[] = [
     gender: 'male',
     nicknames: ['So-so', "Brodie Wampus", 'Beefcake', 'Homie'],
     images: [
-      "/images/sawyer-branch1.jpg",
-      "/images/sawyer-branch2.jpg",
-      "/images/sawyer-branch3.jpg",
-      "/images/sawyer-day1.jpg",
+      "images/sawyer-branch1.jpg",
+      "images/sawyer-branch2.jpg",
+      "images/sawyer-branch3.jpg",
+      "images/sawyer-day1.jpg",
     ],
     favorites: {
       activity: "Cuddling and playing fetch",
@@ -108,10 +108,10 @@ export const puppies: IPuppy[] = [
     gender: 'female',
     nicknames: ['Pipps', 'Pippy', 'Sh*thead'],
     images: [
-      "/images/ada-everest1.jpg",
-      "/images/ada-everest3.jpg",
-      "/images/ada-everest2.jpg",
-      "/images/ada-day1.jpg",
+      "images/ada-everest1.jpg",
+      "images/ada-everest3.jpg",
+      "images/ada-everest2.jpg",
+      "images/ada-day1.jpg",
     ],
     favorites: {
       activity: "Eating, biting chins, and TURBO mode!",
