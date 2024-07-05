@@ -1,8 +1,25 @@
 {
   "headers": [
     {
-      "key": "Content-Security-Policy",
-      "value": "script-src 'nonce-random54987345987345' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; base-uri 'none';"
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "script-src 'nonce-random54987345987345' 'strict-dynamic' 'unsafe-inline' https:; object-src 'none'; base-uri 'none';"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        }
+      ]
     }
   ],
   "rewrites": [
@@ -15,8 +32,7 @@
           "value": "/.*(AdsBot-Google).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -27,8 +43,7 @@
           "value": "/.*(Amazonbot).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -39,8 +54,7 @@
           "value": "/.*(anthropic-ai).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -51,8 +65,7 @@
           "value": "/.*(Applebot-Extended).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -63,8 +76,7 @@
           "value": "/.*(Bytespider).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -75,8 +87,7 @@
           "value": "/.*(CCBot).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -87,8 +98,7 @@
           "value": "/.*(ChatGPT-User).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -99,8 +109,7 @@
           "value": "/.*(ClaudeBot).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -111,8 +120,7 @@
           "value": "/.*(Claude-Web).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -123,8 +131,7 @@
           "value": "/.*(cohere-ai).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -135,8 +142,7 @@
           "value": "/.*(Diffbot).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -147,8 +153,7 @@
           "value": "/.*(FacebookBot).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -159,8 +164,7 @@
           "value": "/.*(FriendlyCrawler).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -171,8 +175,7 @@
           "value": "/.*(Google-Extended).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -183,8 +186,7 @@
           "value": "/.*(GoogleOther).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -195,8 +197,7 @@
           "value": "/.*(GPTBot).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -207,8 +208,7 @@
           "value": "/.*(img2dataset).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -219,8 +219,7 @@
           "value": "/.*(omgili).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -231,8 +230,7 @@
           "value": "/.*(omgilibot).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -243,8 +241,7 @@
           "value": "/.*(peer39_crawler).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -255,8 +252,7 @@
           "value": "/.*(peer39_crawler/1.0).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -267,8 +263,7 @@
           "value": "/.*(PerplexityBot).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     },
     {
       "source": "/(.*)",
@@ -279,8 +274,7 @@
           "value": "/.*(YouBot).*/i"
         }
       ],
-      "destination": "/401",
-      "permanent": false
+      "destination": "/401"
     }
   ],
   "ignoreCommand": "git log -1 --pretty=oneline --abbrev-commit | grep -E -w '\\[(draft|skip deploy)\\]' && exit 0 || exit 1"

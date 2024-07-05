@@ -44,9 +44,6 @@ importers:
       astro-icon:
         specifier: ^1.1.0
         version: 1.1.0
-      astro-preload:
-        specifier: ^1.1.2
-        version: 1.1.2
       astro-remark-eleventy-image:
         specifier: ^2.0.1
         version: 2.0.1
@@ -1165,9 +1162,6 @@ packages:
 
   astro-icon@1.1.0:
     resolution: {integrity: sha512-Nksc09p7UuHeMcPNS9w1pKqRw3+wEmmh0A3FJW+FNXvqaeWI4RLvD1MCWErpY3Z5Cvad317rvLdik/Hg8GEk8Q==}
-
-  astro-preload@1.1.2:
-    resolution: {integrity: sha512-96UHdATRp/K8iVysylYu0V5QMD3FXBqqj2+cUwHOmc0/+lstY5Xnb+A5UgmecbrfHpwMws5SQaOYZ1c63cQu/A==}
 
   astro-remark-eleventy-image@2.0.1:
     resolution: {integrity: sha512-MB9+oGkWLqfi9CAedJksXQ1cofUulJIUpy8fsT5CqYXnqA/UDN08mD58QLITQv10r5q51p/8Cw5Q1/KSkWCkCg==}
@@ -5284,8 +5278,6 @@ snapshots:
       '@iconify/utils': 2.1.22
     transitivePeerDependencies:
       - supports-color
-
-  astro-preload@1.1.2: {}
 
   astro-remark-eleventy-image@2.0.1:
     dependencies:

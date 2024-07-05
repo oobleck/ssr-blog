@@ -43,7 +43,7 @@ async function build() {
               { type: "header", key: "User-Agent", value: `/.*(${bot}).*/i` },
             ],
             destination: "/401",
-            permanent: false,
+            // permanent: false,
           },
         ],
         [] as Record<string, any>[],
