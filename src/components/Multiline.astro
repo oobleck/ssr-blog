@@ -1,0 +1,19 @@
+---
+import { unescape } from "lodash-es";
+import MKD from "@components/MKD.astro";
+
+interface Props {
+  lead?: boolean;
+  copy?: string;
+  El?: any;
+}
+
+const {lead = false, copy: unused, El = 'p', ...props} = Astro.props;
+const copy = await Astro.slots.render('default') ?? Astro.props.copy ?? '';
+const newCopy = unescape(copy.split(/[\n\r]+/).join(`</${El}><${El}>`));
+---
+
+<MKD copy={newCopy} />
+<!-- <div {...props}>
+  {copy ? <El class:list={{ lead }} set:html={newCopy} /> : undefined}
+</div> -->

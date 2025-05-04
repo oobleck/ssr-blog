@@ -1,165 +1,242 @@
 ---
-import { settings } from "../data/settings";
-import { Icon } from "astro-icon/components";
-import MenuMain from "./MenuMain.astro";
-import ToggleColorModeButton from "./ToggleColorModeButton.astro";
-import ToggleMenuButton from "./ToggleMenuButton.astro";
+import Search from "astro-pagefind/components/Search";
+import {settings} from '@data/settings';
+import SocialLinks from './SocialLinks.astro';
+import NavLinks from './NavLinks.astro';
+import Highlight from './Highlight.astro';
+import Link from './HeaderLink.astro';
 
-const { unsplashId, heroId } = Astro.props;
-// const headerImage = unsplashUrl(unsplashId) || settings.hero;
-const headerImage = settings.hero;
-const headerClasses = [
-  "header",
-  {
-    "one-time-hero":heroId ||  unsplashId,
-  },
-];
+interface Props {
+	title?: string;
+	tagline?: string;
+	description?: string;
+	level?: number;
+	background?: string;
+}
 ---
 
-<header
-  class:list={headerClasses}
-  style={`background-image: url("${headerImage}");`}
->
-  <div class="container">
-    {
-      // H1 on homepage, P on other pages
-      Astro.url.pathname == "/" && (
-        <h1 class="header__title">
-          <a href="/" rel="me">
-            {/* <Icon name="material-symbols-light:rocket-launch-outline-rounded" size={80} /> */}
-            {settings.title}
-          </a>
-        </h1>
-      )
-    }
-    {
-      Astro.url.pathname != "/" && (
-        <p class="header__title">
-          <a href="/" rel="me">{settings.title}</a>
-        </p>
-      )
-    }
+<nav id="site-nav" class="wrapper stick-to-top">
+  <div class="inner-content">
+    <h2><a href="/">{settings.title}</a></h2>
+    <NavLinks />
 
-    <nav>
-      <MenuMain />
-      <ToggleColorModeButton />
-      <ToggleMenuButton icon="material-symbols-light:menu-rounded" />
-    </nav>
+    <!-- <Search className="pagefind-ui" id="main-search" /> -->
+
+    <!-- Social links -->
+    <SocialLinks primary={true} />
+    <sl-icon-button id="nav-trigger" name="list" label="Navigation"
+    ></sl-icon-button>
   </div>
-</header>
+</nav>
+
+<sl-drawer
+  id="nav-drawer"
+  hidden
+  style="--sl-panel-background-color: var(--paper);"
+>
+  <h2 class="fancy" slot="label">
+    <Link href="/" style="all: unset;">{settings.title}</Link>
+  </h2>
+
+  <h4><Highlight set:text="Site Nav" /></h4>
+  <NavLinks inline={false} />
+
+  <h4><Highlight set:text="Slash Pages" nth={1} /></h4>
+  <NavLinks inline={false} slashes={true} />
+
+  <h4><Highlight set:text="Find me on" nth={1} /></h4>
+  <SocialLinks primary={true} />
+</sl-drawer>
+
+<script>
+  const mobileNavTrigger: any = document.querySelector('#nav-trigger');
+  const mobileNavDrawer: any = document.querySelector('#nav-drawer');
+
+  mobileNavTrigger?.addEventListener('click', (ev) => {
+    mobileNavDrawer.setAttribute('hidden', false);
+    mobileNavDrawer.open = !mobileNavDrawer.open;
+  });
+
+  mobileNavDrawer.addEventListener('sl-after-show', () => {
+    mobileNavTrigger.setAttribute('aria-expanded', 'true');
+  });
+
+  mobileNavDrawer.addEventListener('sl-after-hide', () => {
+    mobileNavTrigger.setAttribute('aria-expanded', 'false');
+  });
+</script>
 
 <style>
-  @import "open-props/media";
+  #site-nav {
+    --__fg-color: var(--color__content--contrast);
+    --__bg-color: transparent;
+    --__border-color: white;
+    --sticky-header__start-bg: transparent;
+    --sticky-header__end-bg: var(--paper);
+    --enter: calc(var(--nav-height) * 0.618);
+    /* --exit: calc(var(--hero-height) * 0.5); */
 
-  .header {
-    --text-shadow: 0 0 0.25ch hsl(0 0 0 / 0.75);
+    position: relative;
+    border-block-end: 1px solid hsl(from var(--__border-color) h s l / 15%);
+    background-color: var(--__bg-color);
+    color: var(--__fg-color);
+    font-size: var(--step--1);
+    height: var(--nav-height);
+    position: sticky;
+    top: 0;
+    z-index: var(--layer-3);
 
-    background-color: var(--primary-color);
-    background-size: cover;
-    background-position: center;
-    color: white;
-    padding-top: var(--space-m);
-    padding-bottom: var(--space-l);
-    margin-bottom: var(--space-l);
-    clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--space-s)), 0 100%);
-
-    &.Xone-time-hero {
-      position: relative;
-      overflow: hidden;
-
-      &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: -1;
-        backdrop-filter: blur(23px);
-      }
+    /* &, */
+    &::after {
+      transition: background-color 0.4s var(--ease-out-4);
     }
 
-    @media (--md-n-above) {
-      position: relative;
-      background-position: center 95%;
-      background-attachment: fixed;
-      clip-path: polygon(
-        0 0,
-        100% 0,
-        100% calc(100% - var(--space-2xl)),
-        0 100%
-      );
-
-      :global(.level-primary) & {
-        padding-block: var(--space-3xl);
-      }
-
-      :global(.level-secondary) & {
-        padding-block: var(--space-l);
-      }
+    &::after {
+      content: '';
+      background-color: var(--__bg-color);
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: -1;
+      opacity: 0;
+      background-color: transparent;
     }
 
-    nav {
-      .no-list {
-        display: none;
-      }
+    * {
+      color: inherit;
     }
   }
-
-  :is(.header__title) {
+  h2 {
     margin: 0;
     font-size: var(--step-0);
-    font-family: var(--sans-serif);
-    font-weight: var(--font-weight-5);
-    text-transform: uppercase;
-    letter-spacing: var(--font-letterspacing-3);
-    text-shadow: var(--text-shadow);
-
-    @media (--md-n-above) {
-      font-size: var(--step-5);
-      font-weight: var(--font-weight-2);
-      padding-bottom: var(--space-xs);
-      line-height: 1;
-      padding-left: 0;
-      margin: 0;
-    }
+    text-transform: lowercase;
 
     a {
-      color: white;
-      text-decoration: none;
+      &::after {
+        content: '.';
+      }
 
-      &:hover,
-      &:focus-visible {
+      &.active {
         text-decoration: none;
-        color: var(--white);
-      }
-
-      &:focus-visible {
-        outline-color: currentColor;
       }
     }
   }
 
-  nav {
+  #nav-trigger {
+    font-size: var(--step-2);
+
+    @container nav (width >= 48rem) {
+      display: none;
+    }
+  }
+
+  #nav-drawer {
+    @container nav (width > 48rem) {
+      display: none !important;
+    }
+  }
+
+  .inner-content {
     display: flex;
     align-items: center;
-    justify-content: center;
-    gap: var(--space-3xs);
-
-    @media (--md-n-above) {
-      gap: var(--space-xs);
-    }
-  }
-
-  .container {
-    display: flex;
     justify-content: space-between;
-    align-items: center;
-    gap: var(--space-2xs);
+    height: 100%;
 
-    @media (--md-n-above) {
-      flex-direction: column;
-      align-items: flex-start;
+    a {
+      display: block;
+      text-decoration: none;
+    }
+
+    .social-links,
+    .social-links a {
+      display: flex;
+    }
+
+    svg {
+      aspect-ratio: 1;
+      height: 1.5em;
+    }
+  }
+</style>
+
+<style is:global>
+  #site-nav {
+    .internal-links {
+      height: 100%;
+      display: none;
+      gap: var(--space-xs-s);
+      align-items: center;
+      justify-content: space-evenly;
+
+      @container nav (width >= 48rem) {
+        display: flex;
+      }
+
+      a {
+        --__bar-height: 0.4ch;
+        --__indicator-color: var(--accent-1);
+
+        padding: 0 0.6ch;
+        height: 100%;
+        line-height: var(--nav-height);
+        text-decoration: none;
+        position: relative;
+        text-transform: uppercase;
+        text-align: center;
+        letter-spacing: 0.2ch;
+        font-size: var(--step--2);
+        font-weight: var(--weight-normal);
+        opacity: 0.8;
+        transition: opacity 0.3s var(--ease-1);
+        color: inherit;
+
+        &::after {
+          content: '';
+          position: absolute;
+          bottom: -1px;
+          left: 0;
+          right: 100%;
+          height: var(--__bar-height);
+          background-color: var(--__indicator-color);
+          transition: all 0.3s var(--ease-out-4);
+        }
+
+        &:is(:hover, .active)::after {
+          right: 0;
+        }
+
+        &:is(.active, :hover, :active) {
+          text-decoration: none;
+          right: 0;
+          opacity: 1;
+          font-weight: var(--weight-semibold);
+
+          &::before {
+            content: none;
+          }
+
+          &:is(.active:hover) {
+            --__indicator-color: var(--accent-2);
+            --__bar-height: 0.618ch;
+          }
+        }
+      }
+
+      a[href] {
+        text-transform: uppercase;
+      }
+    }
+
+    .social-links a {
+      color: inherit;
+    }
+
+    @container nav (width < 48rem) {
+      .social-links {
+        display: none;
+      }
     }
   }
 </style>

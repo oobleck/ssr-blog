@@ -1,0 +1,21 @@
+---
+interface Props {
+  phrase?: string;
+  nth?: number | number[];
+}
+
+const {phrase = await Astro.slots.render('default'), nth = [0]} = Astro.props;
+const _nth: number[] = [].concat(nth);
+const emLast = _nth[0] < 1;
+const phraseParts = phrase.split(' ');
+const bits = phraseParts.length === 1
+  ? phrase
+  : phraseParts.map((word, ww) => {
+    const wordJudge = _nth.includes(ww + 1) || (phraseParts.length - 1 === ww && emLast);
+    return wordJudge
+      ? `<span class="text-emphasis" style="color: var(--palette__primary)">${word}</span>`
+      : word;
+}).join(' ');
+---
+
+<Fragment set:html={bits} />

@@ -1,0 +1,47 @@
+---
+title: /interests
+blodyClass: page-interests
+hero:
+  image: https://images.unsplash.com/flagged/photo-1572262009654-ca16420e41bb
+  creditUrl: https://unsplash.com/photos/grayscale-photo-of-man-looking-at-bookshelves-c1W-b2g-Yy8
+  altText: Grayscale photo of man looking at bookshelves
+  position: 50% 10%
+---
+
+import Multiline from '@components/Multiline.astro';
+import { IInterest, INTERESTS, TInterestCategory } from '@data/interests';
+
+export const interests = INTERESTS.reduce((agg, interest) => {
+  const {categories} = interest;
+  categories?.forEach((cat) => {
+    if (cat === "currently") {
+      return;
+    }
+    agg[cat] = agg[cat] ?? [];
+    agg[cat].push(interest);
+  });
+
+return agg;
+}, {});
+
+I'm neurodivergent (<acronym title="Attention Deficit Hyperactivity Disorder">ADHD</acronym>), so this list could be very long.
+
+{Object.entries(interests)?.map(([category, items]) => {
+return (
+
+<details open>
+<summary><h2 style="display: inline-block">{category}</h2></summary>
+{items.map((item) => (
+<Fragment>
+  <h3>
+    {item.categories.includes('currently') && (<span>✨ </span> )}
+    {item.title}
+  </h3>
+
+      {item.description && <Multiline>{item.description}</Multiline>}
+    </Fragment>
+  ))}
+</details>
+
+)
+})}

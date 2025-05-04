@@ -1,0 +1,34 @@
+---
+title: Spencer Rhodes
+navLabel: Home
+navIndex: 0
+description: User Interface Developer
+level: 0
+hero:
+  # image: https://images.unsplash.com/photo-1543196614-e046c7d3d82e?q=80&w=2682&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D
+  # image: https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?w=2682&fit=crop&fm=webp
+  # image: https://unsplash.com/photos/DfffcjQ106U/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8N3x8d29vZHdvcmtpbmd8ZW58MHx8fHwxNzQwMzU5MzU1fDA&force=true&w=1920
+  # creditUrl: https://unsplash.com/photos/a-man-working-on-a-piece-of-wood-DfffcjQ106U
+  # image: https://unsplash.com/photos/ZJ8M0bfiu8U/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8MTJ8fGRyYW1hdGljJTIwYmxhY2slMjBhbmQlMjB3aGl0ZXxlbnwwfHx8fDE3NDE4NDI2ODJ8MA&force=true&w=1920
+  # creditUrl: https://unsplash.com/photos/grayscale-photo-of-bridge-over-body-of-water-ZJ8M0bfiu8U
+  image: https://unsplash.com/photos/WY302kitn7U/download?ixid=M3wxMjA3fDB8MXxzZWFyY2h8Nnx8ZHJhbWF0aWMlMjBzYW4lMjBmcmFuY2lzY298ZW58MHwwfHx8MTc0MTg0Mjg4Mnwy&force=true&w=1920
+  creditUrl: https://unsplash.com/photos/photography-of-bridge-WY302kitn7U
+---
+
+import RecentPosts from '@components/RecentPosts.astro';
+import ArticlesChrono from '@components/ArticlesChrono.astro';
+
+<AboutMe brief={true} showTitle={false} />
+
+<ArticlesChrono level="month" />
+
+<div class="grid-auto">
+  <div>
+    ### Recent Posts
+    <RecentPosts layout="mini" numPosts={3} />
+  </div>
+  <div>
+    ### Recent Projects
+    <RecentPosts type="works" numPosts={3} layout="mini" />
+  </div>
+</div>

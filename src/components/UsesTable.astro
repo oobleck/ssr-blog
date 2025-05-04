@@ -1,0 +1,66 @@
+---
+import { Icon } from 'astro-icon/components';
+import { type IUsesProps, PLATFORM_ICONS } from '@data/uses';
+import NavLink from './HeaderLink.astro';
+
+interface Props extends IUsesProps {}
+
+const {items, category, description} = Astro.props;
+---
+
+<h4 id={`category-${category.toLowerCase()}`}>{category}</h4>
+<p set:html={description} />
+
+<table class="sticky-header">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Platforms</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {
+      items?.map((item) => {
+        const { name, url, description, platforms = [], oss = false } = item;
+        const desc = description?.split(/[\r\n]+/).join('</p><p>');
+        return (
+          <tr>
+            <th>
+              {url ? <NavLink set:html={name} href={url} /> : <>{name}</>}
+              {oss && (
+                <Icon
+                  name="ri:open-source-line"
+                  title="Open Source"
+                  role="presentation"
+                />
+              )}
+            </th>
+            <td>
+              {platforms?.map(
+                (plt) =>
+                  PLATFORM_ICONS[plt] && (
+                    <Icon name={PLATFORM_ICONS[plt]} title={plt} />
+                  ),
+              )}
+            </td>
+            <td>{desc && <p set:html={desc} />}</td>
+          </tr>
+        );
+      })
+    }
+  </tbody>
+</table>
+
+<style>
+  p:only-child {
+    margin: 0;
+  }
+
+  svg {
+    + & {
+      margin-inline-start: 0.5ch;
+    }
+  }
+</style>

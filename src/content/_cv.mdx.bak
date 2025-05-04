@@ -1,0 +1,8 @@
+---
+title: Resume
+navLabel: Resume
+---
+
+import Resume from '@components/Resume.svelte';
+
+<Resume client:visible />

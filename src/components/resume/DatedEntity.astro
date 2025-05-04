@@ -1,0 +1,62 @@
+---
+import HeaderLink from '@components/HeaderLink.astro';
+import DatedHeader from './DatedHeader.astro';
+import { sub } from 'date-fns';
+
+type Dates = Date | string | number;
+
+interface Props {
+  type: 'experience' | 'work' | 'school' | 'education';
+  title?: string;
+  subtitle?: string;
+  url?: string;
+  dates?: [Dates, Dates];
+  summary?: string;
+  description?: string;
+}
+
+const {
+  title,
+  subtitle,
+  dates = [],
+  url,
+  summary,
+  description,
+  type = 'experience',
+} = Astro.props;
+const hType = /education|school/i.test(type) ? 'education' : 'experience';
+const hasTitleSlot = Astro.slots.has('title');
+const hasSubtitleSlot = Astro.slots.has('subtitle');
+const hasSummarySlot = Astro.slots.has('summary');
+const hasDescriptionSlot = Astro.slots.has('description');
+const HeaderEl = dates?.length ? DatedHeader : 'header';
+const LinkEl = url ? HeaderLink : Fragment;
+---
+
+<article class:list={[`h-event p-${hType}`]}>
+  <HeaderEl {dates}>
+    {hasTitleSlot && <slot name="title" />}
+    {
+      !hasTitleSlot && title && (
+        <h3 class="entity-title h-name">
+          <LinkEl href={url} set:text={title} />
+        </h3>
+      )
+    }
+    {hasSubtitleSlot && <slot name="subtitle" />}
+    {
+      !hasSubtitleSlot && subtitle && (
+        <h4 class="entity-subtitle" set:text={subtitle} />
+      )
+    }
+  </HeaderEl>
+
+  <section>
+    <div class="p-summary">
+      {hasSummarySlot ? <slot name="summary" /> : summary}
+    </div>
+    <div class="p-description">
+      {hasDescriptionSlot ? <slot name="description" /> : description}
+    </div>
+  </section>
+</article>

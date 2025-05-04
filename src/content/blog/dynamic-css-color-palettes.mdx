@@ -1,17 +1,26 @@
 ---
 title: 'Dynamic CSS color palettes'
 description: 'Experiments in generating color palettes with native CSS capabilities only'
-hero: "https://images.unsplash.com/photo-1535673774336-ef95d2851cf3?w=1024&h=768&auto=format&fit=crop"
-heroDescription: 'Buckets of colorful paint on a white painters cloth'
-date: "2024-05-18"
+images:
+  - image: https://images.unsplash.com/photo-1534082753658-1dcb40af5719
+    creditUrl: https://unsplash.com/photos/yellow-black-green-and-orange-digital-wallpaper--5fbmfaInwg
+    altText: Yellow, black, green, and orange digital wallpaper
+pubDate: "2024-05-18T18:03:00.000Z"
+updatedDate: "2025-02-15T18:03:00.000Z"
+category: Dev
 tags:
-  - webdev
-  - css
-  - color
-  - design-systems
+  - CSS
+  - Color
+  - Design Systems
+changelog:
+  - date: March 8, 2025
+    description: "This site's design and colors have changed, but this palette scheme remains. So while the exmaple color in this article, <kbd>cadetblue</kbd>, is no longer used, it doesn't matter for the sake of code examples."
 ---
 
-import Palettes from "./components/palettes.astro";
+import Palettes, {tokens} from "./components/palettes.astro";
+// import theme from '../../styles/theme.css?raw';
+
+## Introduction
 
 I've dabbled with CSS-only color palettes before, but the outcome was limited
 because of incomplete browser support for Relative Color Syntax, or
@@ -37,25 +46,24 @@ image of this site, and follows the
 harmony scheme. In this case, the colors are sourced from "close enough" color
 tokens provided by [Open Props](https://open-props.style/#colors).
 
-Ok, I said "can be 100% derived" above. But in my case `--accent-1` is actually
+~~Ok, I said "can be 100% derived" above. But in my case `--accent-1` is actually
 <code style="background-color: var(--red-12); color: oklch(100%
 0 0 / 75%)">red-12</code> because the <code
 style="background-color:var(--accent-2);color: oklch(100% 0 0 / 75%)">calculated
 complement</code> is too desaturated and boring for my taste. However, the rest
 of the palettes displayed on this page are 100% derived from the one `--brand`
-token.
+token.~~
 
-  - brand (light: cyan-9 / dark: cyan-7)
-  - paper (stone-0 / gray-10)
-  - ink (gray-9 / gray-0)
-  - accent (red-12)
+<ul>
+{Object.entries(tokens).map(([token, value]) => (<li>{token}: <kbd>{value ?? 'n/a'}</kbd></li>))}
+</ul>
 
 <Palettes title="false" small="true"></Palettes>
 
-I should also add, that the contrasting text on each of these chips is also
+I should also mention that the contrasting text on each of these chips is also
 derived from the given background token of each chip. I didn't have to fuss with
 that or use other tricks to make the text stand out. I did, however, define
-a fallback for Firefox and other browsers that don't support RCS.
+a fallback for browsers that don't support RCS.
 
 ```css
 --palette-color: whatever-color-you-need-the-contrasting-color-of;
@@ -271,4 +279,5 @@ https://www.colorsexplained.com/color-harmony/
 <Palettes harmony="split-complementary"></Palettes>
 <Palettes harmony="analogous"></Palettes>
 <Palettes harmony="triadic"></Palettes>
+<Palettes harmony="quadratic"></Palettes>
 <Palettes harmony="monochromatic"></Palettes>

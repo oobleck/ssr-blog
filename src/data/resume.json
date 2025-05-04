@@ -1,0 +1,231 @@
+{
+  "$schema": "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
+  "basics": {
+    "name": "Spencer Rhodes",
+    "label": "Building compelling user interfaces.",
+    "image": "",
+    "email": "me@spencerrhodes.dev",
+    "phone": "",
+    "url": "",
+    "summary": "I'm a User Interface Developer with a passion for creating visually stunning and user-friendly applications and websites. My background in art and design also gives me a unique perspective in my work, and my diverse interests in science, technology, and music, always drive me to learn something new. I am a curious and inquisitive person who is dedicated to always improving my skills and abilities.",
+    "location": {
+      "countryCode": "US",
+      "address": "United States"
+    },
+    "profiles": [
+      {
+        "network": "LinkedIn",
+        "username": "oobleck",
+        "url": "https://www.linkedin.com/in/oobleck/"
+      }
+    ]
+  },
+  "work": [
+    {
+      "name": "OpenText",
+      "position": "Sr. Software Engineer - Fortify UI Lead",
+      "startDate": "2023-01-31",
+      "endDate": "",
+      "highlights": [],
+      "summary": "Technology: Angular, Typescript, Sass, AngularJS, Karma, Jasmine, Cypress, Storybook, Angular Material, Java, Gradle, Git, Jenkins, Artifactory\n\n- Technical UI lead for a team of 5 engineers globally\n- Improved app load time by 30% with aggressive lazy loading and leveraging the Ivy AOT compiler\n- Introduced higher standards for code quality with pre-commit checks and automated testing\n- Introduced style guides for whole UI tech stack\n- Upgraded and re-engineered primary feature to Angular 10 with state management & simplified maintainability\n- Added tests for legacy code written without tests",
+      "url": "https://www.linkedin.com/company/2709",
+      "location": "Santa Clara, California, United States"
+    },
+    {
+      "name": "Micro Focus",
+      "position": "Senior User Interface Engineer",
+      "startDate": "2020-05-31",
+      "endDate": "2023-01-31",
+      "highlights": [],
+      "summary": "Technology: Angular, Typescript, Sass, AngularJS, Karma, Jasmine, Cypress, Storybook, Angular Material, Java, Gradle, Git, Jenkins, Artifactory\n\n- Technical UI lead for a team of 5 engineers globally\n- Improved app load time by 30% with aggressive lazy loading and leveraging the Ivy AOT compiler\n- Introduced higher standards for code quality with pre-commit checks and automated testing\n- Introduced style guides for whole UI tech stack\n- Upgraded and re-engineered primary feature to Angular 10 with state management & simplified maintainability\n- Added tests for legacy code written without tests",
+      "url": "https://www.linkedin.com/company/6371",
+      "location": "Santa Clara, California, United States"
+    },
+    {
+      "name": "Cohesity",
+      "position": "Senior Member Of Technical Staff (User interface Engineer)",
+      "startDate": "2015-07-31",
+      "endDate": "2020-04-30",
+      "highlights": [],
+      "summary": "Technology: JavaScript, TypeScript, Sass, AngularJS, Angular 8, Karma, Jasmine, Jest, Angular Material, YAML, Go\n\n- Created a living style guide showcasing existing UI widgets and style patterns for easy reference by teams across multiple continents to improve consistency of user experience\n- Architected mission critical disaster recovery & clone UI workflows for MS SQL & Oracle Databases, Pure storage arrays, NAS appliances, VMware Virtual Machines, and File recovery\n- Built UI to restore protection jobs archived on cloud storage services like AWS, Google Nearline, etc.\n- Worked closely with UX team to revise and implement the vision while meeting technical needs and limitations\n- Unit tested code to ensure quality using Karma, Jasmine, and Jest",
+      "url": "https://www.linkedin.com/company/3750699",
+      "location": "San Jose, CA"
+    },
+    {
+      "name": "Badger Meter",
+      "position": "Sr. User Interface Engineer",
+      "startDate": "2014-03-31",
+      "endDate": "2015-07-31",
+      "highlights": [],
+      "summary": "Technology: JavaScript, Sass, AngularJS, Backbone, Python, MySQL, AWS\n\n- Architected and implemented a white-labelled and localizable prototype RESTful application for Utility customer-outreach using AngularJS\n- Created a UI style guide to unify and streamline reuse of UI components across multi-disciplinary teams\n- Introduced coding standards and procedures for building user interfaces on multiple applications\n- Implemented Python and MySQL backend + REST services for new features",
+      "url": "https://www.linkedin.com/company/46076",
+      "location": "Los Gatos, CA"
+    },
+    {
+      "name": "SolutionSet",
+      "position": "Frontend Engineer",
+      "startDate": "2010-03-31",
+      "endDate": "2014-03-31",
+      "highlights": [],
+      "summary": "Technology: JavaScript, jQuery, Sass, AngularJS, Backbone, .Net, Ruby\n\n- Lead Frontend Developer on projects for clients like Adobe's EchoSign, Cloudera, and VMware\n- Heavy use of JavaScript, jQuery, Sass, and HTML5, including Backbone and AngularJS application development\n- Worked extensively with CMSs like Adobe CQ (Adobe AEM), Sitecore, and Crown Peak",
+      "url": "https://www.linkedin.com/company/15372",
+      "location": "Palo Alto, CA"
+    }
+  ],
+  "volunteer": [],
+  "education": [
+    {
+      "institution": "San Francisco State University",
+      "area": "Industrial Arts-Product Development Emphasis",
+      "studyType": "Bachelor of Arts - BA",
+      "startDate": "2004-03-31",
+      "endDate": "2006-08-31",
+      "score": "",
+      "courses": []
+    }
+  ],
+  "awards": [],
+  "certificates": [],
+  "publications": [],
+  "skills": [
+    {
+      "name": "Programming Languages",
+      "level": "Advanced",
+      "keywords": [
+        "Javascript",
+        "Typescript",
+        "Python",
+        "PHP",
+        "Java",
+        "Bash",
+        "CoffeeScript",
+        "css3",
+        "html5"
+      ],
+      "rating": 4,
+      "yearsOfExperience": 16
+    },
+    {
+      "name": "Web Development",
+      "level": "Expert",
+      "keywords": [
+        "Angular",
+        "AngularJS",
+        "Astro",
+        "Sass",
+        "Karma",
+        "Bash",
+        "Linux",
+        "Docker",
+        "Jasmine",
+        "Cypress",
+        "Jest",
+        "NodeJS"
+      ],
+      "rating": 5,
+      "yearsOfExperience": 13
+    },
+    {
+      "name": "Dev Ops",
+      "level": "Beginner",
+      "keywords": [
+        "Jenkins",
+        "Artifactory",
+        "AWS",
+        "Docker",
+        "GitLab"
+      ],
+      "rating": 2.5,
+      "yearsOfExperience": 3
+    }
+  ],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native Speaker"
+    },
+    {
+      "fluency": "Limited Working",
+      "language": "French"
+    },
+    {
+      "fluency": "Elementary",
+      "language": "Spanish"
+    }
+  ],
+  "interests": [],
+  "references": [
+    {
+      "name": "Manoj Singhal",
+      "reference": "Spencer and I worked @Cohesity for almost 5 years. He is one of the early frontend engineers. I found him thorough, systematic, always open for suggestions, delivery-focused and very well organized professional. His technical expertise, passion to build a great UI and patience to go through multiple iterations under extreme time pressure helped to build a great yet simple user interface. He is a great asset to any organization and I wish him all the best for his future endeavors."
+    },
+    {
+      "name": "Maulik Fojdar",
+      "reference": "It was a privilege to work with Spencer at Cohesity for more than 2 years. He is one of the best Frontend Engineers I have worked with. The level of quality in the features he has developed is exceptional. He would always work on a feature with a future vision which helps in scaling the feature with minimum maintenance. He brings in a lot of best code practices to the team via his code reviews. His feedback is always valuable in enhancing the code and design quality of the product. He is always available for help when the team is in need. He has the capability of taking massive projects and architect them. He is an excellent communicator and always vocal about new ideas for improving the product. He would be a great asset to any team he works for. It was a pleasure working with Spencer and would highly recommend him. "
+    },
+    {
+      "name": "Jeff Howard",
+      "reference": "I’ve been working side-by-side with Spencer at Cohesity for almost five years, and he is a solid contributor that has a strong propensity to do things the right way. This is apparent in his attention to detail in code reviews, commitment to unit testing, defining and documenting of standards and best practices, and authorship of a flexible JIRA dashboard that countless co-workers use. Over the years, he has helped move the team forward in many ways while juggling feature work and assisting with customer issues. Cohesity wouldn’t be where it is today without his efforts, and I’m grateful that he is a part of our team."
+    },
+    {
+      "name": "Dominic C.",
+      "reference": "Spencer is reliable, dependable, and meticulous. I have had the pleasure of working with Spencer for the past 2 years at Cohesity and every project that he is put on, Spencer completes his projects on time and with great quality.  \n\nI have never had to follow up with Spencer to figure out where we stand on our engineering deliverables because he is trustworthy and highly dependable. If there are roadblocks to our deliverables, Spencer would inform me so that we can work together to remove the roadblock. Spencer is an asset to any organization and I am very happy to have such a reliable engineer working with me at Cohesity. "
+    },
+    {
+      "name": "Herb Hosman",
+      "reference": "Spencer is on a level of his own. He finds creative solutions using modern frameworks and technologies. He also writes beautiful code. I learned a lot from Spencer that has been invaluable in my technical development. I'm grateful for my time working with him!"
+    },
+    {
+      "name": "Braden Molyneux",
+      "reference": "My experience with Spencer has been nothing less than stellar. His experience and large technical foundation made him an invaluable asset for the many projects on which we worked together. I always felt that my best interests, and the interests of the group and project at large, were a top priority for Spencer. This created a sense of loyalty and trust at a level that is rare when working with consultants/vendors and gave me great confidence in his work. I was frequently impressed with the extensive knowledge of modern, and even cutting edge, front-end solutions he would draw on to create a custom solution for us. Spencer always had an answer. All this always made me feel that my interests as a stakeholder were in exceptionally capable hands."
+    },
+    {
+      "name": "Janelle Gee",
+      "reference": "When Spencer first started working at SolutionSet he was assigned to my project.  I was quickly impressed with his dedication and willingness to learn new technologies.  Throughout our time together I was always excited to have him on the team.  I know the work would get done with impeccable quality and with a great attitude, no matter the difficulty of the task.  Any team would be lucky to have Spencer join them!"
+    },
+    {
+      "name": "David Vu",
+      "reference": "Spencer was one of one of the most dedicated and reliable colleagues that I have pleasure to work with.  His technical talent and experience helped to modernize and improve our business processes and productivity.  Given our company's limited IT resources, Spencer always came up with practical solutions that enabled our account managers meet their clients' needs."
+    }
+  ],
+  "projects": [
+    {
+      "name": "TXU Energy - Mobile, Web, DSM",
+      "startDate": "2012-11-30",
+      "summary": null,
+      "url": null,
+      "endDate": "2014-07-31"
+    },
+    {
+      "name": "Adobe EchoSign.com",
+      "startDate": "2012-04-30",
+      "summary": "Redesign & rebuild: visual design, web design, user experience, content, strategy & research, system integration. technologies used: Adobe CQ CMS, Java, Salesforce, HTML/CSS, JavaScript, Adobe Marketing Cloud, Adobe Test and Target, Site Catalyst.",
+      "url": "https://www.echosign.adobe.com/en/home.html",
+      "endDate": "2014-12-31"
+    },
+    {
+      "name": "Adobe Acrobat",
+      "startDate": "2012-08-31",
+      "summary": "Complete redesign and restructure of the Adobe Document Solutions product websites. Sites included the Acrobat, Adobe Send, EchoSign, ExportPDF, FormsCentral and PDF Pack product websites. ",
+      "url": "https://www.acrobat.com/en_us.html",
+      "endDate": "2013-03-31"
+    },
+    {
+      "name": "Cloudera.com",
+      "startDate": "2012-07-31",
+      "summary": "Ground up rebuild: design, UE, technical architecture, 3rd party system integration. Technology used: Adobe CQ CMS, Salesforce, Eloqua, WordPress, HTML5/SCSS, and JavaScript.",
+      "url": "http://www.cloudera.com/",
+      "endDate": "2013-01-31"
+    },
+    {
+      "name": "Meru Networks Homepage",
+      "startDate": "",
+      "summary": "Full stack homepage redesign: user experience, visual design, technical design, technical development, print material design\n\nTechnologies used: CrownPeak CMS, Microsoft .NET, HTML/CSS, JavaScript",
+      "url": "http://www.merunetworks.com/"
+    }
+  ],
+  "meta": {
+    "version": "v1.0.0",
+    "canonical": "https://github.com/jsonresume/resume-schema/blob/v1.0.0/schema.json"
+  }
+}

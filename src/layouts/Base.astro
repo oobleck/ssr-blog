@@ -1,0 +1,129 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Footer from "../components/Footer.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import { SITE_TAGLINE, SITE_TITLE } from "../consts";
+
+type BGPositionValue = string | number;
+export interface Props {
+  title?: string;
+  tagline?: string;
+  description?: string;
+  level?: 0 | 1 | 2 | number;
+  bodyClass?: string;
+  heroBg?: string;
+  heroPosition?: BGPositionValue | readonly [BGPositionValue, BGPositionValue];
+}
+
+const {
+  title = SITE_TITLE,
+  tagline = SITE_TAGLINE,
+  description = tagline,
+  level = 1,
+  bodyClass,
+  heroBg,
+  heroPosition = ['50%', '50%'],
+} = Astro.props;
+const siteTitle = `${[title, description ?? tagline].join(' - ')} | ${SITE_TITLE}`;
+const pageSlug = Astro.url.pathname.replace(/\W+/gi, '-');
+---
+
+<!doctype html>
+<html id="top" lang="en-US" transition:name="root" transition:animate="none">
+  <head>
+    <BaseHead title={siteTitle} {description} />
+  </head>
+  <body
+    class:list={[bodyClass, `level-${level} page__${pageSlug}`]}
+    transition:animate="fade"
+  >
+    <aside class="features-banner ink-info no-print">
+      <div class="wrapper">
+        <p class="feat-rcs feat-cq feat-animation-range">
+          <sl-icon name="info-circle" class="text-info"></sl-icon>
+          This browser does not support the modern CSS features used to style and
+          dynamically alter the page layout. Your browsing experience may be degraded.
+        </p>
+      </div>
+    </aside>
+    <!-- Navigation -->
+    {
+      Astro.slots.has('nav') ? (
+        <div class="wrapper">
+          <slot name="nav" />
+        </div>
+      ) : (
+        <Header {...Astro.props} />
+      )
+    }
+
+    <!-- Hero -->
+    <slot name="hero">
+      <Hero {...Astro.props} background={heroBg} {heroPosition} />
+    </slot>
+
+    <!-- Content -->
+    <div id="main-content" class="wrapper content-container">
+      <slot />
+    </div>
+
+    <!-- Footer -->
+    {
+      Astro.slots.has('footer') ? (
+        <div class="wrapper">
+          <slot name="footer" />
+        </div>
+      ) : (
+        <Footer />
+      )
+    }
+
+    <sl-tooltip content="Return to top">
+      <sl-icon-button
+        name="arrow-up"
+        href="#top"
+        class="return-to-top stick-to-top"
+        aria-label="Return to top"
+      >
+      </sl-icon-button>
+    </sl-tooltip>
+
+    <script>
+      /**
+       * Map for feature detection, a la Modernizr.
+       *
+       * Key is the class name.
+       * Value is a tuple of props and values to test. When the tuple is a single
+       * entity, they key is used as the property.
+       */
+      const features = new Map<string, string[]>([
+        ['animation-range', ['100%']],
+        ['rcs', ['color', 'hsl(from black h s l)']],
+        ['container-queries', ['container-type', 'size']],
+      ]);
+      const root = document.documentElement;
+      root.className = root.className ?? 'touhed';
+
+      features.forEach((args, feature) => {
+        const testProp = args[1] ? args[0] : feature;
+        const testValue = args[1] ?? args[0];
+
+        root.classList.add(
+          `${CSS.supports(testProp, testValue) ? '' : 'no-'}${feature}`,
+        );
+      });
+
+      document.body.addEventListener('click', (event: any) => {
+        if (
+          event.target?.tagName === 'A' &&
+          event.target?.origin !== window.location.origin
+        ) {
+          event.preventDefault();
+          window.open(event.target.href, '_blank', 'noopener,noreferrer');
+        }
+      });
+    </script>
+    <slot name="trailer" />
+  </body>
+</html>

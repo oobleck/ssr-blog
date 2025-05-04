@@ -1,17 +1,151 @@
 ---
-import { settings } from "../data/settings";
-import SocialLinks from "./SocialLinks.svelte";
-const date = new Date();
+import {settings} from '@data/settings';
+import ArticlesChrono from "./ArticlesChrono.astro";
+import Categories from "./Categories.astro";
+import Highlight from "./Highlight.astro";
+import NavLinks from "./NavLinks.astro";
+import RecentPosts from "./RecentPosts.astro";
+import Share from "./Share.astro";
+import SocialLinks from "./SocialLinks.astro";
+import TagCloud from "./TagCloud.astro";
+import AboutMe from './AboutMe.astro';
+import { careerHighlighter } from '@utils/career-highlighter';
+import { ABOUT_ME } from '@data/about';
+import { parseMarkdown } from '@utils/parse-markdown';
+
+const today = new Date();
+const { owner, title } = settings;
 ---
 
-<footer id="site-footer" class="footer">
-  <div class="u-container">
-    <hr>
-    <SocialLinks client:visible />
-    <p class="copyright">
-      &copy; {date.getFullYear()} <a href="/" rel="me">{settings.owner}</a>, unless otherwise noted.
-      Powered by <a href="http://astro.build" target="_blank">Astro</a>.
-    </p>
-  </div>
+<footer id="site-footer" class="wrapper">
+  <section class="inner">
+    <div class="col-1">
+      <!-- <h3 class="fancy">Let's work together</h3> -->
+      <h3 class="fancy">{title}</h3>
+      <Fragment set:html={parseMarkdown(ABOUT_ME)} />
+      <Share primaryOnly={true} showLabel={true} />
+
+      <h5><Highlight nth={1}>Find me</Highlight></h5>
+      <SocialLinks />
+      <p>
+        &copy; 1998 - {today.getFullYear()}
+        {owner}. All rights reserved unless otherwise noted.
+      </p>
+    </div>
+    <div class="col-2">
+      <div class="sub-col-1">
+        <div class="hunk">
+          <h5><Highlight nth={2}>Site Links</Highlight></h5>
+          <NavLinks inline={false} />
+        </div>
+
+        <div class="hunk">
+          <h5><Highlight nth={1}>Slash Pages</Highlight></h5>
+          <NavLinks inline={false} slashes={true} />
+        </div>
+      </div>
+
+      <div class="sub-col-2">
+        <div class="hunk">
+          <h5><Highlight nth={2}>Journal Tags</Highlight></h5>
+          <TagCloud type="blog" />
+        </div>
+
+        <div class="hunk">
+          <h5><Highlight nth={2}>Journal Categories</Highlight></h5>
+          <Categories />
+        </div>
+      </div>
+    </div>
+    <div class="col-3">
+      <h5><Highlight>Recent Works</Highlight></h5>
+      <RecentPosts type="works" includeCurrent={true} />
+
+      <h5><Highlight>Recent Posts</Highlight></h5>
+      <RecentPosts includeCurrent={true} />
+    </div>
+  </section>
 </footer>
 
+<style>
+  #site-footer {
+    --footer-font-size: 0.8em;
+
+    position: relative;
+    padding: var(--space-2xl-3xl) 0;
+    /* border-top: 1ch solid var(--paper-subtle); */
+    background-color: var(--gray-10);
+    color: var(--gray-5);
+    font-size: var(--footer-font-size);
+
+    :is(:empty) + & {
+      margin-top: var(--space-2xl-3xl);
+    }
+
+    &::before {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      content: '';
+      display: block;
+      height: 1ch;
+      background-color: var(--paper-shade);
+      border-bottom: 1px solid var(--accent-1);
+    }
+
+    * {
+      color: inherit;
+    }
+
+    :not(h1, h2, h3, h4, h5, h6, .social-links, .social-share-buttons) {
+      font-size: inherit;
+    }
+
+    :is(h1, h2, h3, h4, h5, h6) {
+      color: var(--color__content--contrast);
+
+      &:first-child {
+        margin-top: 0;
+      }
+
+      &:where(h3) {
+        text-transform: uppercase;
+        position: relative;
+      }
+    }
+
+    [class*='col-']:not([class*='sub-col-']) {
+      container: footer-column / inline-size;
+    }
+
+    [class*='sub-col-'] {
+      @container footer-column (width >= 10rem) {
+        display: grid;
+        gap: var(--grid-gutter);
+        grid-template-columns: repeat(auto-fit, minmax(42.7%, 1fr));
+        margin-block-end: var(--grid-gutter);
+      }
+    }
+  }
+
+  .inner {
+    @media screen and (min-width: 30rem) {
+      display: grid;
+      grid-template-columns: 1.618fr repeat(2, minmax(10rem, 1fr));
+      column-gap: var(--space-xl-2xl);
+      row-gap: var(--grid-gutter);
+    }
+  }
+</style>
+
+<style is:global>
+  #site-footer {
+    :is(p, :is(ul, ol):not(.social-links, .social-share-buttons) *) {
+      font-size: var(--footer-font-size);
+    }
+    :is(.recent-posts, .mini-article, p) {
+      font-size: var(--footer-font-size);
+    }
+  }
+</style>

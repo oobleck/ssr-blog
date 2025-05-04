@@ -22,6 +22,7 @@
       ]
     }
   ],
+  "ignoreCommand": "git log -1 --pretty=oneline --abbrev-commit | grep -E -w '\\[(draft|skip deploy)\\]' && exit 0 || exit 1",
   "rewrites": [
     {
       "source": "/(.*)",
@@ -29,7 +30,29 @@
         {
           "type": "header",
           "key": "User-Agent",
-          "value": "/.*(AdsBot-Google).*/i"
+          "value": "/.*(AI2Bot).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(Ai2Bot-Dolma).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(aiHitBot).*/i"
         }
       ],
       "destination": "/401"
@@ -62,7 +85,29 @@
         {
           "type": "header",
           "key": "User-Agent",
+          "value": "/.*(Applebot).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
           "value": "/.*(Applebot-Extended).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(Brightbot 1.0).*/i"
         }
       ],
       "destination": "/401"
@@ -106,7 +151,7 @@
         {
           "type": "header",
           "key": "User-Agent",
-          "value": "/.*(ClaudeBot).*/i"
+          "value": "/.*(Claude-Web).*/i"
         }
       ],
       "destination": "/401"
@@ -117,7 +162,7 @@
         {
           "type": "header",
           "key": "User-Agent",
-          "value": "/.*(Claude-Web).*/i"
+          "value": "/.*(ClaudeBot).*/i"
         }
       ],
       "destination": "/401"
@@ -139,6 +184,39 @@
         {
           "type": "header",
           "key": "User-Agent",
+          "value": "/.*(cohere-training-data-crawler).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(Cotoyogi).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(Crawlspace).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
           "value": "/.*(Diffbot).*/i"
         }
       ],
@@ -150,7 +228,40 @@
         {
           "type": "header",
           "key": "User-Agent",
+          "value": "/.*(DuckAssistBot).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
           "value": "/.*(FacebookBot).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(Factset_spyderbot).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(FirecrawlAgent).*/i"
         }
       ],
       "destination": "/401"
@@ -194,6 +305,28 @@
         {
           "type": "header",
           "key": "User-Agent",
+          "value": "/.*(GoogleOther-Image).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(GoogleOther-Video).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
           "value": "/.*(GPTBot).*/i"
         }
       ],
@@ -205,7 +338,139 @@
         {
           "type": "header",
           "key": "User-Agent",
+          "value": "/.*(iaskspider/2.0).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(ICC-Crawler).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(ImagesiftBot).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
           "value": "/.*(img2dataset).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(imgproxy).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(ISSCyberRiskCrawler).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(Kangaroo Bot).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(meta-externalagent).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(Meta-ExternalAgent).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(meta-externalfetcher).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(Meta-ExternalFetcher).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(NovaAct).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(OAI-SearchBot).*/i"
         }
       ],
       "destination": "/401"
@@ -238,7 +503,7 @@
         {
           "type": "header",
           "key": "User-Agent",
-          "value": "/.*(peer39_crawler).*/i"
+          "value": "/.*(Operator).*/i"
         }
       ],
       "destination": "/401"
@@ -249,7 +514,18 @@
         {
           "type": "header",
           "key": "User-Agent",
-          "value": "/.*(peer39_crawler/1.0).*/i"
+          "value": "/.*(PanguBot).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(Perplexity-User).*/i"
         }
       ],
       "destination": "/401"
@@ -271,11 +547,109 @@
         {
           "type": "header",
           "key": "User-Agent",
+          "value": "/.*(PetalBot).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(Scrapy).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(SemrushBot-OCOB).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(SemrushBot-SWA).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(Sidetrade indexer bot).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(TikTokSpider).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(Timpibot).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(VelenPublicWebCrawler).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
+          "value": "/.*(Webzio-Extended).*/i"
+        }
+      ],
+      "destination": "/401"
+    },
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "header",
+          "key": "User-Agent",
           "value": "/.*(YouBot).*/i"
         }
       ],
       "destination": "/401"
     }
-  ],
-  "ignoreCommand": "git log -1 --pretty=oneline --abbrev-commit | grep -E -w '\\[(draft|skip deploy)\\]' && exit 0 || exit 1"
+  ]
 }

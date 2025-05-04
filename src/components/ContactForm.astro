@@ -1,26 +1,151 @@
 ---
+import { maskedEmail, maskEmail } from "@utils/mask-email";
+import { settings } from "@data/settings";
+import Email from "@components/Email.astro";
+
 const {url} = Astro;
+const {email} = settings;
 const accessKey = 'a59b24ed-bb73-4bb6-8cb0-fb57a5f8f3f1';
 const action = 'https://api.web3forms.com/submit';
+
+// https://docs.hcaptcha.com/invisible
 ---
 
-<form name="contact" method="POST" {action}>
-  <sl-input type="text" id="name" required label="Name" placeholder="Wanda Jones">
-    <sl-icon name="person" slot="suffix" role="presentation"></sl-icon>
-  </sl-input>
-  <sl-input label="Email Address" placeholder="you@yourdomain.com" id="email" name="email" type="email" required>
-    <sl-icon name="envelope-open" slot="suffix" role="presentation"></sl-icon>
-  </sl-input>
-  <sl-textarea label="Message" placeholder="What's on your mind?" name="message" id="message" required></sl-textarea>
-  <sl-button variant="primary" type="submit">
-    Send
-    <sl-icon slot="suffix" name="send-fill" role="presentation"></sl-icon>
-  </sl-button>
-  <sl-button type="reset">
-    Reset
-    <sl-icon slot="suffix" name="x-square" role="presentation"></sl-icon>
-  </sl-button>
+Email me @ <Email
+  address="inquiry@spencerrhodes.dev"
+  displayAddress={maskEmail('inquiry@spencerrhodes.dev')}
+  extra={`subject=${encodeURIComponent('Web Inquiry')}`}
+/>, or message me here:
+
+<form id="contact-form" name="contact" method="POST" {action}>
+  <div class="control-group">
+    <sl-input
+      type="text"
+      id="name"
+      name="from_name"
+      placeholder="ex: Piper Noe…"
+      label="Your name"
+    >
+      <sl-icon slot="suffix" name="person" role="presentation"></sl-icon>
+    </sl-input>
+  </div>
+
+  <div class="control-group">
+    <sl-input
+      label="Email address"
+      placeholder="ex: pipernoe@tsunami.th…"
+      id="email"
+      name="email"
+      type="email"
+      required
+    >
+      <sl-icon slot="suffix" name="envelope"></sl-icon>
+    </sl-input>
+  </div>
+
+  <div class="control-group">
+    <sl-input
+      label="Subject"
+      placeholder="Subject…"
+      id="subject"
+      name="subject"
+      type="text"
+    >
+      <sl-icon slot="suffix" name="chat-right-heart"></sl-icon>
+    </sl-input>
+  </div>
+
+  <div class="control-group">
+    <sl-textarea
+      label="Your message"
+      placeholder="What's on your mind?"
+      name="message"
+      id="message"
+      required
+    >
+      <sl-icon slot="suffix" name="chat-right-text"></sl-icon>
+    </sl-textarea>
+  </div>
+
+  <div class="control-group">
+    <sl-input
+      label="Are you a human?"
+      placeholder="Are you a human?"
+      id="validate-person"
+      type="number"
+      required
+    >
+      <sl-icon slot="suffix" name="robot" class="validate-person"></sl-icon>
+    </sl-input>
+  </div>
+
+  <!-- <div
+    class="h-captcha"
+    data-captcha="true"
+    data-theme="dark"
+    data-size="invisible"
+  >
+  </div> -->
+
+  <div class="ctas">
+    <sl-button variant="default" type="reset" class="link">
+      Cancel
+      <sl-icon slot="suffix" name="x-square" role="presentation"></sl-icon>
+    </sl-button>
+    <sl-button variant="primary" class="primary Xh-captcha" type="submit">
+      Send
+      <sl-icon slot="suffix" name="send-fill" role="presentation"></sl-icon>
+    </sl-button>
+  </div>
   <input type="hidden" name="redirect" value={`${url.origin}/thanks`} />
-  <input type="hidden" name="access_key" value={accessKey}>
+  <input type="hidden" name="access_key" value={accessKey} />
 </form>
 
+<style>
+  sl-icon[name='robot'] {
+    --__stroke-width: 0.2ch;
+    --__stroke-color: hsl(from var(--color__danger) h s l / 65%);
+    --__stroke-color: hsl(from var(--ink-subtle) h s l / 50%);
+
+    position: relative;
+    border: var(--__stroke-width) solid var(--__stroke-color);
+    border-radius: 2em;
+    padding: 0.25ch;
+
+    &::after {
+      content: '';
+      display: block;
+      background-color: var(--__stroke-color);
+      height: 100%;
+      width: var(--__stroke-width);
+      top: 0;
+      left: calc(50% - var(--__stroke-width) * 0.5);
+      position: absolute;
+      transform: rotate(45deg);
+    }
+  }
+</style>
+
+<script type="module">
+  function rand(min, max) {
+    // min and max included
+    return Math.floor(Math.random() * (max - min + 1) + min);
+  }
+  const $form = document.querySelector('#contact-form');
+  const $captcha = document.querySelector('#validate-person');
+  const partA = rand(1, 10);
+  const partB = rand(1, 23);
+  const expectation = partA * partB;
+  $captcha.placeholder = `What is ${partA} × ${partB}?`;
+  $captcha.label = $captcha.placeholder;
+  $form.addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    // Add your form submission logic here
+    if (+$captcha.value === expectation) {
+      $captcha.name = $captcha.placeholder;
+      // Submit the form
+      $form.submit();
+    }
+  });
+</script>
+<!-- <script src="https://web3forms.com/client/script.js" async defer></script> -->

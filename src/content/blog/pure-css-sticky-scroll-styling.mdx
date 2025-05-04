@@ -1,0 +1,164 @@
+---
+title: Pure CSS Sticky Scrolled Styling
+description: Learn how to create scrolled sticky element styles purely with CSS
+pubDate: "March 22, 2025 1:35 pm"
+category: Dev
+noHero: true
+tags:
+  - CSS
+  - Web Development
+  - Frontend Development
+images:
+  - image: https://images.unsplash.com/photo-1596097500554-30c105edacfb
+    creditUrl: https://unsplash.com/photos/man-in-black-jacket-and-pants-jumping-on-brown-rock-formation-during-daytime-VULVydw3nV0
+    altText: Man in jacket and black pants jumping on brown rock formation in the fog
+---
+
+## Introduction
+
+When I first built this site, I wanted a sticky header with navigation. Especially for mobile browsers where content can push the nav many screens up as the User scrolls down. That's easy enough to do using CSS's [sticky positioning with `position: sticky`](https://developer.mozilla.org/en-US/docs/Web/CSS/position#sticky_positioning) (just be sure it's parent isn't positioned `grid` nor `flex`). But what if I wanted to style the header differently when it's "stuck," or scrolled? For the last several years people have typically done this with JavaScript and the [`IntersectionObserver`](https://www.smashingmagazine.com/2021/07/dynamic-header-intersection-observer/). That's how I initially implemented sticky header with scroll position based styling.
+
+In my case, I wanted the header to be transparent with contrasting text to help showcase the large hero images I use, but to be opaque when scrolled to make the header easier to read when scrolled over top of content. Maybe blur the background a little bit for a frosted effect that helps reduce the distraction and potential confusion of text under text. I also like when sticky elements have  a little drop shadow to help cue the User to the fact that the thing is overlayed and encourage scrolling.
+
+One of my goals is to minimize the amount of JavaScript used on the site. I want to use vanilla CSS whenever possible to create a smooth and responsive user experience. One way to achieve this is by using [CSS scroll-driven animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_scroll-driven_animations). That sounds like what I'm trying to do, right?
+
+## Basic setup
+
+Let's start with a basic layout without any animations or scroll effects.
+
+```html title="index.html"
+<!-- Assume basic document boilerplate -->
+<body>
+  <header id="main-header">
+    <nav id="primary-nav">
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section>
+      <h1>Welcome to My Site</h1>
+      <p>This is a sample paragraph.</p>
+      <!-- And so on and so forth... -->
+    </section>
+  </main>
+</body>
+```
+
+```css title="styles.css"
+body {
+  --nav-height: 4rem;
+
+  background-color: white;
+  color: black;
+  font-size: 16px;
+  font-family: system-ui;
+  font-weight: 400;
+}
+
+#main-header {
+  position: sticky;
+  top: 0;
+  height: var(--nav-height);
+  background-color: white;
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid hsl(0 0 0 / 10%);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+#primary-nav {
+  height: 100%;
+
+  <!-- Check out that sweet native selector nesting! 🎉 -->
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    gap: 1ch;
+    height: 100%;
+
+    li {
+      padding: 0;
+      margin: 0;
+    }
+  }
+}
+```
+
+Pretty straight forward, right? This is a decent sticky header, as-is.
+
+## Add scroll-driven animation
+
+Now lets add some sugar 🍭. We need a few things to simplify the implementation. Let's split the styling up so that most of it is done in the basic CSS, and move just a little bit into the animation `@keyframes`.
+
+Lets say we want the nav bar to be 4rem tall, transparent with black text when the document is scrolled to the top; and 2.33rem tall, dark teal green with white text when scrolled down. This will give the affect of having a full-size header at the top and shrinking it a little when scrolled to help the User focus on our content and not take up too much of their viewport if they're using a mobile browser.
+
+To do this, let's define a few variables (because we always want to keep our code [[https://wikiless.funami.tech/wiki/Don't_repeat_yourself|DRY]], [[https://fosstodon.org/tags/amiright|#amiright]]), and define the animation.
+
+```css title="styles.css"
+body {
+  --header-bg-start: transparent;
+  --header-bg-end: hsl(0 0 10% / 93%);
+  --header-color-start: black;
+  --header-color-end: white;
+  --nav-height-start: 4rem;
+  --nav-height-end: 2.33rem;
+
+  /* The rest from before... */
+}
+
+#main-header {
+  /* The rest... */
+  animation: sticky-header 1s ease-in-out;
+  animation-timeline: scroll();
+  animation-duration: 1s;
+  transition: all 0.5s ease-out;
+}
+
+@keyframes sticky-header {
+  0% {
+    background-color: var(--header-bg-start);
+    color: var(--header-color-start);
+    height: var(--nav-height-start);
+  }
+  100% {
+    background-color: var(--header-bg-end);
+    color: var(--header-color-end);
+    height: var(--nav-height-end);
+  }
+}
+```
+
+Now, this animation without additional configuration will transition from one state at the top to the final state at the bottom of the document. This is sort of what we're after, except that it doesn't achieve the goal of obscuring the content beneath it when scrolled down until we reach the bottom of the page.
+
+We can do better.
+
+## Limiting the animation range
+
+If you're familiar with CSS animations, you might see where I'm heading with this. We need to set an [`animation-range`](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-range). Let's assume we want the transition to begin after the User has scrolled the initial height of the nav bar (`--nav-height-start`), and end after they've scrolled a distance of 2x that height.
+
+```css title="styles.css"
+#main-header {
+  /* The stuff from before... */
+  animation-range: enter var(--nav-height-start) exit calc(2 * var(--nav-height-start));
+}
+```
+
+What this does is it defines where the animation will start (enter), and where it will end (exit). Another simple way to think about this is you know how in the `@keyframes` definition we defined a 0% and 100%? Well, this basically tells the browser where 0% starts, and where 100% ends. So we're drastically limiting the range compared to before where the range was the entire document.
+
+> [!note] Note
+> It's worth noting that [`animation-range`](https://developer.mozilla.org/en-US/docs/Web/CSS/animation-range#browser_compatibility) has limited browser support at the time of writing this. cough-Firefox-cough-🫣.
+
+## Putting it all together
+
+Here are all the previous snippets pulled together in a working demo. In this demo I've added the dropshadow and blur effect.
+
+Another fun thing I did in the demo but didn't describe here is the automatic contrasting text driven by the background color. I've covered that a little bit in my other post, "[[dynamic-css-color-palettes|Dynamic CSS Color Palettes]]".
+
+<CodePen id="QwWxbRr" tabs="result" clickToRun={false} />

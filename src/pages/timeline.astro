@@ -1,0 +1,13 @@
+---
+import TimelineComp from "@components/Timeline.astro";
+import Layout from "@layouts/Base.astro";
+
+// https://unsplash.com/photos/black-flat-screen-tv-turned-on-displaying-game-7BcHkouw6Uc
+const heroBg = 'https://images.unsplash.com/photo-1603516875773-9a4c1861d5ed?q=80&w=2534&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
+---
+
+<Layout title="/timeline" {heroBg}>
+  <main>
+    <TimelineComp showTitle={false} fancy={true} location={false} />
+  </main>
+</Layout>

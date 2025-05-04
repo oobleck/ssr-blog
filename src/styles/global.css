@@ -1,0 +1,62 @@
+@layer third-party,
+reset,
+typography,
+theme,
+utility,
+layout,
+page,
+component,
+overrides;
+
+@import 'open-props/easings' layer(third-party);
+@import 'open-props/colors' layer(third-party);
+@import 'open-props/shadows' layer(third-party);
+@import 'open-props/zindex' layer(third-party);
+@import 'open-props/borders' layer(third-party);
+
+@import './reset.css';
+@import './animations.css';
+@import './utility.css';
+@import './theme.css';
+@import './layout.css';
+@import './typography.css';
+@import './forms.css';
+@import './tables.css';
+/* @import './print.css'; */
+
+:root {}
+
+@layer overrides {}
+
+@layer third-party {
+  blockquote {
+    border-left: 0.3ch solid var(--palette__secondary);
+    padding: 0 0 0 var(--block-margin);
+    margin: 0px;
+    font-size: 1.333em;
+
+    p {
+      &:is(:empty) {
+        display: none;
+      }
+
+      &:empty~p {
+        margin-block-start: 0;
+        /* outline: 2px dotted magenta; */
+      }
+    }
+
+    cite {
+      opacity: 0.6;
+
+      &::before {
+        content: '- ';
+      }
+    }
+  }
+
+  hr {
+    border: none;
+    border-top: 1px solid rgb(var(--gray-light));
+  }
+}

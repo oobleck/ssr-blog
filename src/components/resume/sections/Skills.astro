@@ -1,0 +1,52 @@
+---
+import Section from "../Section.astro"
+import { skills } from "@data/resume.json"
+
+interface Props {
+  max: number;
+}
+
+function skillsSort(a, b) {
+  if (b.rating !== undefined) {
+    return b.rating - (a.rating ?? 0);
+    // return a.level.localeCompare(b.level);
+  }
+
+  return 0;
+  // return a.name.localeCompare(b.name);
+}
+
+const {max = 20} = Astro.props;
+---
+
+<Section title="Skills">
+  {
+    skills
+      ?.sort(skillsSort)
+      // .slice(0, max)
+      .map(({ name, level, keywords, rating, yearOfExperience }) => {
+        return (
+          <dl class="skills-category">
+            <dt>
+              <h4>{name}</h4>
+              <sl-progress-bar
+                class="no-print"
+                label={`${name} skills rating ${rating}`}
+                value={(rating / 5) * 100}
+                style="--indicator-color: var(--brand); --track-color: var(--paper-subtle); --label-color: var(--stone-1); --height: 0.25ch;"
+              />
+            </dt>
+            {!!keywords.length && (
+              <dd>
+                <ul class="skills-list">
+                  {keywords.map((keyword) => {
+                    return <li class="p-skill">{keyword}</li>;
+                  })}
+                </ul>
+              </dd>
+            )}
+          </dl>
+        );
+      })
+  }
+</Section>

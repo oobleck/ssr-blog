@@ -1,0 +1,140 @@
+.page-uses {
+  details {
+    --inset: 1em;
+
+    padding-inline: var(--inset);
+    margin-block-end: 1.618em;
+  }
+
+  summary {
+    margin-inline: calc(-1 * var(--inset));
+
+    .category {
+      text-transform: capitalize;
+
+      &:has(~ span)::after {
+        content: ':';
+        display: inline-block;
+        font-weight: normal;
+      }
+    }
+  }
+
+  p.name {
+    margin-block: 0.5em;
+  }
+
+  .metadata {
+    font-size: 0.8em;
+  }
+
+  ul.inline.metadata {
+    margin: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5ch;
+
+    li {
+      margin: 0;
+    }
+  }
+
+  ul:not(.inline) {
+    padding-inline: 0;
+    margin-inline: 0;
+
+    >li {
+      list-style-type: none;
+      margin: 1.618em 0;
+      padding-inline: 0;
+    }
+  }
+}
+
+.page-colophon {
+  .licenses-table {
+    max-width: 100%;
+    overflow: auto;
+  }
+
+  :where(.table, [role='table']) {
+    --cell-spacing: 0.75ch;
+
+    font-size: var(--step--1);
+    max-width: 100%;
+    width: 100%;
+    display: table;
+  }
+
+  :where(.thead, .tbody, .tfooter, [role='rowgroup']) {
+    display: table-row-group;
+  }
+
+  :is(.thead) {
+    :where(.th, .td) {
+      xborder-block-start: 0;
+      border-block-end: 1px solid var(--ink-subtle);
+    }
+
+    :is(.th, [role='columnheader']) {
+      font-weight: var(--weight-bold);
+    }
+  }
+
+  :where(.tr, [role='row']) {
+    display: table-row;
+  }
+
+  :where(.th, .td, [role='cell']) {
+    display: table-cell;
+    padding: var(--cell-spacing);
+    border-block-end: 1px solid var(--ink-shade);
+  }
+
+  :is(.tbody) {
+    > :is(.tr:nth-child(odd)) {
+      background-color: hsl(0 0 0 / 3%);
+    }
+  }
+}
+
+.page-interests {
+  summary {
+    h2 {
+      display: inline-block;
+    }
+  }
+}
+
+.works-listing {
+  >ul {
+    /* display: grid;
+    gap: 1em;
+    grid-template-columns: repeat(var(--num-cols, 3), 1fr); */
+    gap: 5em;
+
+    >li {
+      display: grid;
+      grid-template-columns: 1fr 5fr;
+      gap: var(--space-xl);
+    }
+  }
+
+  aside {
+    &.works-meta {
+      dl {
+        position: sticky;
+        top: calc(1.618em + var(--nav-height));
+        align-self: baseline;
+      }
+    }
+  }
+}
+
+.works-page {
+  .works-title {
+    outline: 2px dotted magenta;
+    text-transform: uppercase;
+  }
+}

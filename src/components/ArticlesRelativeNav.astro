@@ -1,0 +1,71 @@
+---
+import { getMergedPosts } from '@utils/merged-posts';
+import Link from './HeaderLink.astro';
+interface Props {
+  type?: Parameters<typeof getMergedPosts>[1];
+  layout?: 'compact' | 'full';
+}
+
+const {type = 'blog', layout = 'full'} = Astro.props;
+const noun = type === 'works' ? 'project' : 'article';
+const posts = (await getMergedPosts(void 0, type));
+const isCompact = layout === 'compact';
+const currentPostIndex = posts.findIndex((post) => post.id == Astro.params.slug);
+const previousPost = currentPostIndex + 1 === posts.length ? undefined : posts[currentPostIndex + 1];
+const nextPost = currentPostIndex === 0 ? undefined : posts[currentPostIndex - 1];
+
+function trimTitle(title: string, length = 30) {
+  return title.length > length ? `${title.slice(0, length)}...` : title;
+}
+
+---
+
+{
+  (previousPost || nextPost) && (
+    <nav class="article-relative-nav">
+      <ul class="plain inline">
+        {previousPost && (
+          <li>
+            <sl-tooltip
+              content={`Previous ${noun}: ${previousPost.data.title}`}
+            >
+              <Link href={`/${type}/${previousPost.id}/`}>
+                <sl-icon name="chevron-double-left" />
+                {isCompact && <>Prev {noun}</>}
+                {!isCompact && trimTitle(previousPost.data.title)}
+              </Link>
+            </sl-tooltip>
+          </li>
+        )}
+        {nextPost && (
+          <li>
+            <sl-tooltip content={`Next ${noun}: ${nextPost.data.title}`}>
+              <Link href={`/${type}/${nextPost.id}/`}>
+                {isCompact && <>Next {noun}</>}
+                {!isCompact && trimTitle(nextPost.data.title)}
+                <sl-icon name="chevron-double-right" />
+              </Link>
+            </sl-tooltip>
+          </li>
+        )}
+      </ul>
+    </nav>
+  )
+}
+
+<style>
+  .article-relative-nav {
+    margin-block: var(--block-margin);
+  }
+
+  ul.inline {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  li a {
+    display: inline-flex;
+    gap: 0.5ch;
+    align-items: center;
+  }
+</style>

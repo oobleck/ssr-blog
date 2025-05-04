@@ -1,0 +1,45 @@
+---
+import {settings, GPG_PUBLIC_KEY_ID} from '@data/settings';
+import Link from './HeaderLink.astro';
+import pubKey from '../../public/public-key.txt?raw';
+
+interface Props  {
+  qr?: boolean;
+  keyId?: string;
+}
+
+const {qr = false, keyId = GPG_PUBLIC_KEY_ID} = Astro.props;
+const importCommand = `gpg --keyserver pgp.mit.edu --recv ${keyId}`;
+---
+
+<details>
+  <summary>Expand for my GPG public key</summary>
+  <p>
+    <Link href="/public-key.txt" rel="me" class="u-key">
+      {
+        qr ? (
+          <sl-qr-code
+            class="u-key"
+            value={`${settings.site}/public-key.txt`}
+            label="Scan for my GPG public key"
+            size={350}
+            error-correction="H"
+            background="transparent"
+            fill="darkcyan"
+            style="vertical-align: top;"
+          />
+        ) : (
+          <Fragment>My GPG public key</Fragment>
+        )
+      }
+    </Link>
+    <sl-copy-button value={pubKey} copy-label="Copy my GPG public key"
+    ></sl-copy-button>
+  </p>
+  <p>
+    To use it:
+    <kbd set:text={importCommand} />
+    <sl-copy-button value={importCommand} copy-label="Copy import command"
+    ></sl-copy-button>
+  </p>
+</details>

@@ -1,0 +1,54 @@
+---
+import Link from '@components/HeaderLink.astro';
+import {taggify} from '@utils/taggify';
+
+interface Props {
+  tags?: string[];
+  type?: 'works' | 'post';
+  layout?: 'list' | 'inline'
+}
+const {tags = [], type = 'blog', layout = 'list'} = Astro.props;
+---
+
+{
+  !tags.length ? (
+    void 0
+  ) : (
+    <ul class:list={[`tags-list plain list-${layout}`]}>
+      {tags.map((tag) => (
+        <li>
+          <Link href={`/${type}/tags/${taggify(tag)}`}>{tag}</Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
+<style>
+  ul.tags-list {
+    font-size: inherit;
+
+    &.list-inline {
+      display: inline;
+
+      > li {
+        display: inline-block;
+      }
+    }
+  }
+  li {
+    list-style-type: none;
+
+    &::marker {
+      display: none;
+      content: none;
+    }
+
+    &:not(:last-of-type) {
+      &::after {
+        content: ',';
+        margin-inline-end: 0.5ch;
+      }
+    }
+  }
+</style>

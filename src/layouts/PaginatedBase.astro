@@ -1,0 +1,35 @@
+---
+import type { Page } from 'astro';
+import Layout, {type Props as BaseProps} from './Base.astro';
+import PaginationButtons from '@components/PaginationButtons.astro';
+import {titlecase} from '@utils/titlecase';
+
+interface Props extends BaseProps{
+  page: Page;
+  urlBase?: string;
+  [k: string]: unknown;
+}
+
+const { page, type = 'generic', urlBase = 'journal', ...rest } = Astro.props;
+const { lastPage, currentPage } = page;
+const locale = new Intl.Locale('en-US');
+const pageOf = titlecase(`Page ${currentPage} of ${lastPage}`);
+---
+
+<Layout {...rest}>
+  <main class:list={`${type}-listing`}>
+    {lastPage > 1 && <h3 set:text={pageOf} />}
+
+    <slot />
+
+    {page.lastPage > 1 && <PaginationButtons {page} slug={urlBase} />}
+  </main>
+</Layout>
+
+<style is:global>
+  :is(.blog-listing, .works-listing) {
+    .pagination-buttons {
+      margin-block-start: var(--space-l-xl);
+    }
+  }
+</style>

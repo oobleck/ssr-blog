@@ -1,0 +1,23 @@
+---
+import { slugifyCategory } from '@utils/categories';
+
+interface Props {
+  title: string;
+  className?: string;
+}
+
+const { title, className, ...attribs } = Astro.props
+const sectionClass = `section-${slugifyCategory(title)}`
+---
+
+<section class:list={['resume-section', sectionClass, className]} {...attribs}>
+  {
+    title && !Astro.slots.has('title') && (
+      <h2 class="resume-section-title" set:html={title} />
+    )
+  }
+  <slot name="title" />
+  <div class="section-content">
+    <slot />
+  </div>
+</section>

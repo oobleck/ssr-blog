@@ -1,0 +1,14 @@
+---
+import Section from "../Section.astro";
+import { basics } from "@data/resume.json";
+import { careerHighlighter } from "@utils/career-highlighter";
+
+const { summary } = basics;
+---
+
+<Section className="p-summary">
+  <Fragment
+    class="lead"
+    set:html={careerHighlighter(summary.replace(/^[\r\n]/, ''), 'gim')}
+  />
+</Section>

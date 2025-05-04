@@ -1,0 +1,52 @@
+---
+title: Projects
+navLabel: Projects
+navIndex: 2
+level: 1
+hero:
+  image: https://images.unsplash.com/photo-1597960194599-22929afc25b1
+  creditUrl: https://unsplash.com/photos/brown-wooden-table-with-chairs-ngLt4Y1vI_Q`
+---
+
+import { fetchCollection } from '@utils/get-collection';
+import RecentPosts from '@components/RecentPosts.astro';
+import Meta from '@components/WorksMeta.astro';
+
+import './mdx-styles.css';
+
+export const works = await fetchCollection('worksLocal');
+
+<div class="works-listing">
+  <ul class="plain grid">
+    {works.map((project) => {
+      const { id, data } = project;
+      const workLink = `/works/${id}`;
+      return (
+        <li>
+          <aside class="works-meta">
+            <Meta project={project} simple={true} />
+          </aside>
+          <div class="works-summary">
+            {data.images.length ? (
+              <Gallery
+                images={data.images}
+                heroOnly={true}
+                layout="stack"
+                linkTo={workLink}
+              />
+            ) : undefined}
+            <h3>
+              <Link set:html={data.title} href={workLink} />
+            </h3>
+            {data.description && (
+              <p set:html={data.description.slice(0, 300)}></p>
+            )}
+            <Link class="read-more" href={workLink}>
+              Read more
+            </Link>
+          </div>
+        </li>
+      );
+    })}
+  </ul>
+</div>

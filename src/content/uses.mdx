@@ -1,0 +1,68 @@
+---
+title: /uses
+description: The things I use on the regular
+bodyClass: page-uses
+hero:
+  image: https://images.unsplash.com/photo-1668949272039-8bd576c86579
+  creditUrl: https://unsplash.com/photos/a-group-of-blue-and-red-metal-objects-OS0lmo9_8T8
+  altText: A group of blue and red metal lanterns
+---
+
+import UsesDetails from '@components/UsesDetails.astro';
+import UsesTable from '@components/UsesTable.astro';
+import { IUses, USES } from '@data/uses';
+import './mdx-styles.css';
+
+export const uses = USES.reduce(
+  (agg, item) => {
+    item.categories?.forEach((cat) => {
+      agg.categories[cat] = agg.categories[cat] ?? [];
+      agg.categories[cat].push(item);
+    });
+    return agg;
+  },
+  { categories: {} },
+);
+
+export const catDescriptions = {
+  defaults: 'The default apps on the computers and machines I use regularly.',
+  'day job':
+    "I WFH full time since 2020, so there's a lot of overlap in my daily drivers.",
+};
+export const categorySort = ([cat1, items1 = []], [cat2, items2 = []]) => {
+  return (
+    Boolean(/default/i.test(cat2)) - Boolean(/default/i.test(cat1)) ||
+    items2.length - items1.length ||
+    cat1.localeCompare(cat2)
+  );
+};
+export const showTabular = true;
+export const Component = showTabular ? UsesTable : UsesDetails;
+
+These are the things I use regularly, including my default apps on the platforms I use.
+
+I always prefer <abbr title="Open Source Software">OSS</abbr> over closed-source proprietary options, but it's not always possible or pleasant.
+
+Skip to a section:
+
+<ul class="section-menu inline menu">
+  {Object.entries(uses.categories)
+    .sort(categorySort)
+    .map(([cat]) => (
+      <li>
+        <NavLink href={`#category-${cat}`} set:text={cat} />
+      </li>
+    ))}
+</ul>
+
+{Object.entries(uses.categories)
+.sort(categorySort)
+.map(([category, items], ii) => {
+return (
+
+<Component
+  category={category}
+  items={items}
+  description={catDescriptions[category]}
+/>
+); })}

@@ -1,6 +1,9 @@
 ---
 // import Card from './Card.astro';
 import sanitizeHtml from 'sanitize-html';
+import FormattedDate from './FormattedDate.astro';
+import Link from './HeaderLink.astro';
+import {Icon} from 'astro-icon/components';
 
 const { src, label, inline = true } = Astro.props;
 const url = new URL(src);
@@ -15,77 +18,85 @@ const postDate = toot.edited_at ?? toot.created_at;
 // console.log({card, toot})
 ---
 {!inline && (
-  <sl-card
-    class="toot-preview"
+  <div
+    class="toot-preview card"
     url={src}
     media={card.image}
   >
-    <header slot="header">
-      <sl-avatar image={toot.account.avatar_static}></sl-avatar>
+    <header slot="header" class="media-object">
+      <img src={toot.account.avatar_static} alt={`Avatar image User "${toot.account.display_name}"`} />
       <h6 class="username">
         {toot.account.display_name}
         <small>
-          <a href={toot.account.url} target="_blank" rel="nofollow" tabindex="0">@{toot.account.username}</a>
+          <Link href={toot.account.url} tabindex="0">@{toot.account.username}</>
         </small>
       </h6>
     </header>
 
     <section class="card__content">
-      <Fragment set:html={sanitizeHtml(toot.content)}></Fragment>
+      <blockquote set:html={sanitizeHtml(toot.content)} />
 
       {card && (
-        <sl-card class="sub-card">
-          <a href={card.url} target="_blank" tabindex="0" rel="nofollow" class="card__content">
+        <div class="card sub-card">
+          <Link href={card.url} tabindex="0" class="card__content">
             <small>{card.provider_name}</small>
             <strong set:html={sanitizeHtml(card.title)} />
             <small>by {card.author_name}</small>
-          </a>
-        </sl-card>
+          </Link>
+        </div>
       )}
 
-      <p><a href={toot.url} tabindex="0" target="_blank" rel="nofollow">Join the conversation...</a></p>
+      <p><Link href={toot.url} tabindex="0">Join the conversation...</Link></p>
     </section>
 
     <footer slot="footer">
-      <sl-format-date
-        date={toot.created_at}
-        month="short"
-        day="numeric"
-        year="numeric"
-        hour="numeric"
-        minute="numeric"
-      ></sl-format-date>
-      {toot.replies_count && ( <sl-tooltip content={`${toot.replies_count} Replies`}>
-        <sl-icon name="reply"></sl-icon>
-        <sl-format-number value={toot.replies_count}></sl-format-number>
-      </sl-tooltip> )}
-      {toot.reblogs_count && ( <sl-tooltip content={`${toot.reblogs_count} Boosts`}>
-        <sl-icon name="repeat"></sl-icon>
-        <sl-format-number value={toot.reblogs_count}></sl-format-number>
-      </sl-tooltip> )}
-      {toot.favourites_count && ( <sl-tooltip content={`${toot.favourites_count} Favorites`}>
-        <sl-icon name="heart"></sl-icon>
-        <sl-format-number value={toot.favourites_count}></sl-format-number>
-      </sl-tooltip> )}
+      <FormattedDate
+        date={new Date(toot.created_at)}
+        format={{
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+          hour: "numeric",
+          minute: "numeric",
+        }}
+      ></FormattedDate>
+      {toot.replies_count && ( <div title={`${toot.replies_count} Replies`}>
+        <Icon class="replies" name="mdi:reply-outline"></Icon>
+        <span set:text={toot.replies_count}></span>
+      </div> )}
+      {toot.reblogs_count && ( <div title={`${toot.reblogs_count} Boosts`}>
+        <Icon class="reblogs" name="mdi:repeat"></Icon>
+        <span set:text={toot.reblogs_count}></span>
+      </div> )}
+      {toot.favourites_count && ( <div title={`${toot.favourites_count} Favorites`}>
+        <Icon class="favorites" name="mdi:heart-outline"></Icon>
+        <span set:text={toot.favourites_count}></span>
+      </div> )}
       <!-- <sl-relative-time date={postDate}></sl-relative-time> -->
     </footer>
-  </sl-card>
+  </div>
 )}
-{inline && <a href={src} target="_blank" rel="noreferrer" set:html={sanitizeHtml(label ?? title)}></a>}
+{inline && <Link href={src} set:html={sanitizeHtml(label ?? title)}></Link>}
 
-<style is:global>
+<style>
 .toot-preview {
-  display: block;
   max-width: calc(var(--grid-max-width) * 0.6);
   box-shadow: var(--shadow-2);
   margin-inline: auto;
+  border: 1px solid var(--paper-shade);
 
   .card__media img {
     aspect-ratio: unset !important;
   }
 }
 
-[slot="header"] {
+.username {
+  small {
+    display: block;
+  }
+}
+
+header {
   width: 100%;
   display: flex;
   justify-content: flex-start;
@@ -97,15 +108,19 @@ const postDate = toot.edited_at ?? toot.created_at;
   }
 }
 
-[slot="footer"] {
+footer {
   display: flex;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: center;
   gap: 1ch;
 
   > * {
     font-size: var(--step--2);
-    flex: 1;
+    /* flex: 1; */
+  }
+
+  > :first-child {
+    margin-inline-end: auto;
   }
 }
 
@@ -123,11 +138,9 @@ const postDate = toot.edited_at ?? toot.created_at;
   }
 }
 
-sl-format-date {
-  flex: 0 0 100%;
-}
-
 .sub-card {
+  border: 1px solid var(--paper-shade);
+
   .card__content {
     > * {
       display: block;
@@ -135,14 +148,16 @@ sl-format-date {
   }
 }
 
-sl-icon {
-  &[name*="reply"] {
+[data-icon] {
+  display: inline-block;
+
+  &.replies {
     color: cadetblue;
   }
-  &[name*="repeat"] {
+  &.reblogs {
     color: green;
   }
-  &[name*="heart"] {
+  &.favorites {
     color: indianred;
   }
 }

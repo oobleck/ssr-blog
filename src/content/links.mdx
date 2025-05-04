@@ -1,0 +1,159 @@
+---
+title: /links
+hero:
+  image: https://images.unsplash.com/photo-1639823933284-3dba80c84a96
+  creditUrl: https://unsplash.com/photos/a-man-in-a-space-suit-flying-through-the-air-ONHYh31_yJ4
+  altText: A man in a space suit flying through the air in bright neon colors
+  position: 75% 10%
+---
+
+import { blogroll, BlogrollItem } from '@data/blogroll.ts';
+
+export const categorySortFn = ([_a, aItems], [_b, bItems]) => bItems.length - aItems.length;
+export const itemSortFn = (a, b) => {
+  const aDate = new Date(a.dateUpdated ?? a.dateAdded);
+  const bDate = new Date(b.dateUpdated ?? b.dateAdded);
+  const dateSort = bDate - aDate;
+
+  return dateSort || (a.syndicationLink ? -1 : 1)
+};
+
+export const roll = blogroll.reduce((agg, item) => {
+  const { category } = item;
+  [].concat(category).forEach((category) => {
+    agg[category] = agg[category] ?? [];
+    agg[category].push(item);
+  });
+  return agg;
+}, {});
+
+export const iconSize = 20;
+
+export function detectIcon(url) {
+  if (/github/i.test(url)) {
+    return 'ri:github-line';
+  }
+  if (/git|forge|svn/i.test(url)) {
+    return 'ri:git-branch-line';
+  }
+  if (/feed|rss/i.test(url)) {
+    return 'ri:rss-fill';
+  }
+  if (/\.[a-z]{2,}\/@[a-z]{2,}/i.test(url)) {
+    return 'ri:mastodon-line';
+  }
+
+return 'ri:planet-line';
+}
+
+<p>
+  This is a list of websites, blogs, etc. that I visit with some regularity, or
+  recommend. You can also download this as an{' '}
+  <a href="/blogroll.opml">OPML file</a>.
+</p>
+<h3>Quick links</h3>
+<ul class="plain inline menu">
+  {Object.keys(roll).map((category) => (
+    <li>
+      <a href={`#category-${category}`}>{category}</a>
+    </li>
+  ))}
+</ul>
+{Object.entries(roll)
+  .sort(categorySortFn)
+  .map(([category, items]) => {
+    return (
+      <Fragment>
+        <h4 id={`category-${category}`}>{category}</h4>
+        <ul>
+          {items
+            .sort(itemSortFn)
+            .map(
+              ({
+                webpage,
+                label,
+                syndicationLink,
+                description,
+                dateAdded,
+                dateUpdated,
+                tags = [],
+              }) => {
+                const [homepage, ...altUrls] = webpage;
+                const iconName = /rss/i.test(syndicationLink)
+                  ? 'ri:rss-fill'
+                  : 'ri:rss-fill';
+                return (
+                  <li class="h-card h-entry">
+                    <input
+                      type="hidden"
+                      class="p-category"
+                      value={[...tags, category].join(', ')}
+                    />
+                    <a
+                      href={homepage}
+                      target="_blank"
+                      rel="nofollow noreferrer"
+                      class="p-name u-url u-bookmark-of"
+                    >
+                      {label}
+                    </a>
+                    {syndicationLink && (
+                      <a
+                        href={syndicationLink}
+                        target="_blank"
+                        rel="nofollow noreferrer"
+                        class="u-url u-bookmark-of"
+                        aria-label="RSS Feed"
+                      >
+                        <Icon
+                          name={iconName}
+                          size={iconSize}
+                          role="presentation"
+                          title="RSS Feed"
+                        />
+                      </a>
+                    )}
+                    {altUrls.length > 0 && (
+                      <span class="additional-urls">
+                        {altUrls.map((altUrl) => {
+                          return (
+                            <Fragment>
+                              <a
+                                href={altUrl}
+                                target="_blank"
+                                rel="nofollow noreferrer"
+                                class="u-url u-bookmark-of"
+                                aria-label={label}
+                                title={altUrl}
+                              >
+                                <Icon
+                                  name={detectIcon(altUrl)}
+                                  role="presentation"
+                                  size={iconSize}
+                                />
+                              </a>
+                            </Fragment>
+                          );
+                        })}
+                      </span>
+                    )}
+                    {description && (
+                      <Fragment>
+                        &ndash;{' '}
+                        <span
+                          class="p-note"
+                          set:html={description.replace(/[\.]?$/i, '.')}
+                        />
+                      </Fragment>
+                    )}
+                    {/* <div>
+            <small>Updated <sl-relative-time date={dateUpdated || dateAdded}></sl-relative-time></small>
+          </div> */}
+                  </li>
+                );
+              },
+            )}
+        </ul>
+      </Fragment>
+    );
+  })}

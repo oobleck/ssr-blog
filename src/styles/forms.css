@@ -1,0 +1,98 @@
+@layer components {
+  :root {
+    --required-content-color: var(--accent-2, crimson);
+    --sl-input-required-content-color: var(--required-content-color);
+
+    ::part(form-control-label) {
+      --sl-input-required-content-color: var(--required-content-color);
+    }
+
+    /* ::part(suffix) {
+      --sl-input-icon-color: var(--brand);
+    } */
+  }
+
+  :where(form) {
+    width: 100%;
+  }
+
+  :where(input:not([type='radio'], [type='checkbox']), select, textarea, sl-input input, sl-textarea textarea) {
+    display: block;
+    width: 100%;
+    font-family: var(--font-family__content);
+    line-height: var(--line-height__content);
+    padding: var(--space-3xs-2xs) var(--space-2xs-xs);
+    border: 1px solid var(--paper-shade);
+    border-radius: var(--radius-1);
+
+    &:focus {
+      border-color: currentColor;
+      outline-color: var(--palette__primary--subtle);
+    }
+
+    &:where([disabled], :disabled, .disabled) {
+      background-color: var(--paper-subtle);
+      cursor: no-drop;
+    }
+  }
+
+  :where(label) {
+    display: block;
+    font-weight: var(--weight-semibold);
+    margin-block: var(--block-margin);
+
+    &:has(+ [required], > [required]) {
+      &::after {
+        color: var(--required-content-color);
+        /* font-weight: bold; */
+        content: '*';
+        display: inline-block;
+        margin-inline-start: 0.3ch;
+      }
+    }
+  }
+
+  ::placeholder {
+    color: var(--paper-shade);
+  }
+
+  :where(button, [type="button"], [role="button"]) {
+    border: 1px solid;
+    padding: var(--space-2xs);
+    border-radius: var(--radius-2);
+    min-width: 5em;
+    cursor: pointer;
+
+    &:is([type='submit'], .primary):not(.disabled, [disabled], :disabled) {
+      background-color: var(--palette__brand);
+      border-color: var(--palette__primary--subtle);
+      color: var(--gray-0);
+    }
+
+    &:is(.link, .tertiary) {
+      background-color: transparent;
+      border-color: transparent;
+    }
+  }
+
+  :where(.ctas) {
+    margin-block: var(--block-margin);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--block-margin);
+  }
+
+  :where(.form-control) {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: start;
+    gap: var(--block-margin);
+    margin-top: var(--block-margin);
+  }
+
+  :where(.control-group) {
+    margin-block: var(--block-margin);
+  }
+}

@@ -1,0 +1,147 @@
+---
+import FormattedDate from '@components/FormattedDate.astro';
+import Hero from '@components/Hero.astro';
+import Highlight from '@components/Highlight.astro';
+import ImageCarousel from '@components/ImageCarousel.astro';
+import ImageGallery from '@components/ImageGallery.astro';
+import Share from '@components/Share.astro';
+import WorksMeta from '@components/WorksMeta.astro';
+import ArticlesRelativeNav from '@components/ArticlesRelativeNav.astro';
+import { getMergedPosts, type MergedProject } from '@utils/merged-posts';
+import BaseLayout from './Base.astro';
+
+type Props = MergedProject['data'] & {post: MergedProject}
+
+const specificPost = Astro.props.post ?? Astro.props;
+const {
+  title,
+  description,
+  images = [],
+  noHero = false,
+  level = 0,
+  galleryType = 'stack',
+  client,
+  draft,
+} = specificPost?.data ?? specificPost;
+const heroImage = images.find(({featured}) => featured) ?? images[0];
+// console.log({heroImage})
+const [post] = await (Astro.props.post
+  ? Promise.resolve([specificPost])
+  : getMergedPosts(void 0, 'works'));
+---
+
+<BaseLayout
+  {title}
+  {description}
+  {level}
+  bodyClass={`works-post layout__wide ${draft ? 'draft-project' : ''}`}
+>
+  <Hero slot="hero" {title} {level} background={heroImage?.image}>
+    <Fragment slot="tagline">
+      <h3 class="page-subtitle" set:html={client ?? description} />
+      {
+        post.data.endDate && (
+          <div class="meta">
+            <FormattedDate
+              date={post.data.endDate}
+              format={{ month: 'long', day: void 0, year: 'numeric' }}
+            />
+          </div>
+        )
+      }
+    </Fragment>
+  </Hero>
+  <main class:list={['works-page', { grid: images?.length }]}>
+    {
+      !noHero && images?.length ? (
+        <div class="gallery">
+          {galleryType === 'carousel' ? (
+            <ImageCarousel {images} />
+          ) : (
+            <ImageGallery {images} layout={galleryType} />
+          )}
+        </div>
+      ) : undefined
+    }
+    <article>
+      <h2 class="works-title fancy"><Highlight>{title}</Highlight></h2>
+      <WorksMeta project={post} />
+      <div class="prose">
+        {description && <p set:html={description} class="lead" />}
+        <slot />
+      </div>
+      {/* <h4><Highlight nth={1}>Share this Project</Highlight></h4> */}
+      <div class="share-links">
+        <div>Share:</div>
+        <Share
+          post={specificPost.data ? specificPost : { data: specificPost }}
+          primaryOnly={true}
+          plain={true}
+        />
+      </div>
+      <ArticlesRelativeNav type="works" layout="compact" />
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .grid {
+    @container main (width >= 45rem) {
+      display: grid;
+      grid-template-columns: 3fr 2fr;
+      gap: var(--space-2xl);
+    }
+  }
+
+  .share-links {
+    border-block: 1px solid var(--ink-subtle);
+    margin-top: var(--space-m-l);
+    padding-block: 1em;
+    display: flex;
+    gap: 1em;
+    align-items: center;
+    font-weight: var(--weight-bold);
+    /* text-transform: uppercase; */
+    font-size: var(--step--1);
+  }
+
+  .gallery {
+    margin-block-end: var(--grid-gutter);
+  }
+
+  main {
+    @container main (width >= 60rem) {
+      margin-inline: auto;
+    }
+  }
+
+  article {
+    top: calc(var(--nav-height) + var(--space-xs-s));
+    align-self: baseline;
+
+    > :first-child {
+      margin-top: 0;
+    }
+
+    @container main (width > 60rem) {
+      position: sticky;
+      /* max-height: calc(100vh - var(--nav-height));
+
+        .prose {
+          max-height: 42vh;
+          overflow-y: auto;
+        } */
+    }
+  }
+
+  .draft-project {
+    .page-title {
+      &::after {
+        color: var(--color__danger) !important;
+        content: ' (Draft)' !important;
+        font-weight: var(--weight-bold);
+        font-style: italic;
+      }
+    }
+  }
+</style>

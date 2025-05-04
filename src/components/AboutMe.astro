@@ -1,113 +1,106 @@
 ---
-import { Icon } from "astro-icon/components";
-import { Image } from "astro:assets";
-import { ABOUT_ME, ABOUT_ME_EXTENDED } from "../data/about";
-import {settings} from "../data/settings";
-import authorImg from "../assets/images/ssr-sawyer-avatar.png";
-import SocialLinks from "./SocialLinks.svelte";
+import Pic from './Pic.astro';
+import { ABOUT_ME, ABOUT_ME_EXTENDED } from '@data/about';
+import Timeline from './Timeline.astro';
+import NavLinks from './NavLinks.astro';
+import Highlight from './Highlight.astro';
+import Link from './HeaderLink.astro';
+import { settings } from '@data/settings';
+import GpgKey from './GpgKey.astro';
+import {imageUrl} from "@utils/image-url";
+import { careerHighlighter } from '@utils/career-highlighter';
 
 interface Props {
-  avatar?: boolean;
-  position?: "start" | "end";
-  label?: boolean;
-  intro?: boolean;
-  extended?: boolean;
-  asEntryAuthor?: boolean;
-  readmore?: boolean;
+  brief?: boolean;
+  compact?: boolean;
+  showPhoto?: boolean;
+  showTitle?: boolean;
 }
 
-const {
-  avatar = true,
-  position = "start",
-  label = true,
-  intro = false,
-  extended = false,
-  readmore = false,
-  asEntryAuthor = false,
-} = Astro.props;
+const {brief = true, showPhoto = true, compact = false, showTitle = true} = Astro.props;
+
+let intro = ABOUT_ME;
+
+intro = careerHighlighter(compact ? `${intro.slice(0, 200)}&hellip;` : intro, 'im');
+
+const avatarSize = compact ? 320 : 640;
+const avatar = settings.authorImage && await imageUrl(settings.authorImage, {width: avatarSize, height: avatarSize});
 ---
 
-<div
-  class:list={["about-me vcard h-card", avatar ? "has-avatar" : "no-avatar", {"p-author": asEntryAuthor}]}
->
-  {
-    label && (
-      <header>
-        <h4 class="p-name p-org">{settings.owner}</h4>
-      </header>
-    )
-  }
-  <div class:list={["aboutme-wrapper", `avatar-at-${position}`]}>
-    {
-      avatar && (
-        <div class="avatar u-logo">
-          {/* <Icon name={LOGO_ICON} size={100} aria-hidden="true" />  */}
-          <img
-            src={authorImg.src}
-            width={authorImg.width}
-            alt="Photo of this site's owner sitting in a car with a Goldendoodle dog on his lap looking out the driver's side window"
-          />
-        </div>
-      )
+<div class:list={[`about-me-wrapper h-card`, {layout__compact: compact}]}>
+  <input type="hidden" name="Author-name" value={settings.owner} class="p-name" />
+  <input type="hidden" name="Author-url" value={settings.site} class="u-url" />
+  <figure class:list={['photo-container', {compact, brief}]}>
+    {showPhoto
+      ? <Pic src={avatar} width={avatarSize} class="u-photo" alt={`Photo of ${settings.owner}, this website's owner.`} />
+      : void 0
     }
-    <div class="summary">
-      <p class:list={["p-note", {"intro lead": intro}]} set:html={ABOUT_ME}></p>
-      {!extended && readmore && <p><a href="/about">Read more&hellip;</a></p>}
-      {extended && <p set:html={ABOUT_ME_EXTENDED.split(/[\r\n]+/gm).join('</p><p>')}></p>}
-      <a href={Astro.url.href.replace(Astro.url.origin, '')} class="sr-only u-url u-uid" rel="me">{settings.owner}</a>
-      <SocialLinks hidden={true} homepage={true} pdf={false} />
-    </div>
-  </div>
+    <figcaption>
+      {!compact && showTitle ? (
+        <h3><Highlight set:html="A bit about me &hellip;" nth={4} /></h3>
+      ) : undefined}
+
+      <Fragment set:html={intro} />
+      {brief && (
+        <Link href="/about" class="read-more u-url">Read more</Link>
+      )}
+    </figcaption>
+  </figure>
+
+  {!brief && (
+    <Fragment set:html={careerHighlighter(ABOUT_ME_EXTENDED, 'im')} />
+    <p>Or check out my <Link href="/cv">Résumé</Link>.</p>
+    <details>
+      <summary>More details&hellip;</summary>
+
+      <h3><Highlight set:text="Slash pages" nth={1} /></h3>
+      <NavLinks inline={true} slashes={true} />
+
+      <!-- <h3><Highlight set:text="Life milestones" nth={2} /></h3>
+      <Timeline showTitle={false} milestones={true} duration={true} location={false} fancy={false} /> -->
+    </details>
+    <GpgKey qr={true} />
+  )}
 </div>
 
 <style>
-  @import "open-props/media";
-  @import "open-props/radius";
+.about-me-wrapper {
+  container: about-me / inline-size;
+}
 
-  .about-me.h-card {
-    --avatar-diameter: calc(var(--space-2xl) * 3);
+.photo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: top;
+  justify-content: flex-start;
 
-    container: aboutme / inline-size;
+  img {
+    aspect-ratio: 1;
+  }
 
-    svg {
-      aspect-ratio: 1;
-      min-width: 100px;
-    }
+  @container about-me (width > 30rem) {
+    &:not(.compact) {
+      flex-direction: row;
+      gap: var(--space-2xl);
 
-    .avatar {
       img {
-        aspect-ratio: var(--aspect-ratio-square);
-        border-radius: var(--radius-round);
-        width: var(--avatar-diameter);
-        border: 1px solid;
-        padding: 2%;
+        margin-block-end: var(--space-m);
+        max-width: 20rem;
+        /* max-height: 40rem; */
       }
     }
 
-    p.p-note {
-      margin-block-start: 0;
-    }
-
-    .aboutme-wrapper {
-      display: flex;
-      flex-direction: column;
-      gap: var(--grid-gutter);
-
-      @container aboutme (width > 480px) {
-        --avatar-diameter: calc(var(--space-2xl) * 2);
-
-        flex-direction: row;
-        justify-content: flex-start;
-        align-items: top;
-
-        &.avatar-at-end {
-          flex-direction: row-reverse;
-        }
-
-        .avatar {
-          margin: 0;
-        }
+    figcaption {
+      > :first-child {
+        margin-top: unset;
       }
     }
+  }
+}
+</style>
+
+<style is:global>
+  .about-me-wrapper figcaption p {
+    font-size: var(--font-size__lead);
   }
 </style>

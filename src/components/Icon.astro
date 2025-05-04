@@ -1,0 +1,18 @@
+---
+import {Icon} from 'astro-icon/components';
+
+interface Props {
+  name: string;
+  label?: string;
+  size?: number;
+}
+
+const {name, label, size} = Astro.props;
+const Tag = name.includes(':') ? Icon : 'sl-icon';
+const attribs = {
+  name,
+  label,
+};
+---
+
+<Tag {...attribs} />

@@ -1,0 +1,241 @@
+---
+import FormattedDate from './FormattedDate.astro';
+import FancyDate from './FancyDate.astro';
+import type { CollectionEntry } from 'astro:content';
+import { Icon } from 'astro-icon/components';
+import Tags from '@components/Tags.astro';
+import {settings} from '@data/settings';
+import type { MergedPost, MergedProject } from '@utils/merged-posts';
+
+interface Props {
+	post: (MergedPost | MergedProject)['data'];
+	id?: string;
+	stacked?: boolean;
+	showIcons?: boolean;
+	showTags?: boolean;
+	showAuthor?: boolean;
+	showCategory?: boolean;
+	showDate?: boolean;
+	showUpdatedDate?: boolean;
+	showPermalink?: boolean;
+	showComments?: boolean;
+	showTitle?: boolean;
+}
+
+const {
+	post,
+	id,
+	stacked = true,
+	showIcons = true,
+	showTags = true,
+	showDate = true,
+	showUpdatedDate = true,
+	showAuthor = false,
+	showCategory = true,
+	showPermalink = false,
+	showComments = true,
+	showTitle = false,
+} = Astro.props;
+const {pubDate, updatedDate, endDate, author, category, tags = []} = post;
+const date = pubDate ?? endDate;
+const _date = new Date(date);
+const postTitle = `${post.title} ${post.draft ? ' (Draft)' : ''}`
+const TTEl = showIcons ? Fragment : 'sl-tooltip';
+---
+
+<div class="post-metadata">
+  {
+    showDate && stacked && (
+      <FancyDate class="post-date" date={pubDate.toString()} />
+    )
+  }
+
+  <ul class:list={['plain meta-data', { stacked, 'has-icons': showIcons }]}>
+    {
+      post.draft && (
+        <li class="post-draft">
+          {showIcons && <sl-icon name="cone-striped" inert />}
+          DRAFT
+        </li>
+      )
+    }
+    {
+      showTitle && (
+        <li class="post-title">
+          <h4 set:html={postTitle} />
+        </li>
+      )
+    }
+    {
+      showAuthor && (
+        <li title="Author">
+          {showIcons && <sl-icon name="person" inert />}
+          {author ?? settings.owner}
+        </li>
+      )
+    }
+    {
+      date && showDate && !stacked && (
+        <li title="Published date">
+          {showIcons && <sl-icon name="calendar-event" inert />}
+          <sl-tooltip
+            content={`${endDate ? 'Completed' : 'Published'} on ${date.toLocaleDateString()}`}
+          >
+            <FormattedDate date={date} format={{ month: 'short' }} />
+          </sl-tooltip>
+        </li>
+      )
+    }
+    {
+      showUpdatedDate && updatedDate && (
+        <li class="post-updated-date" title="Updated date">
+          {showIcons && <sl-icon name="calendar-event" inert />}
+          <sl-tooltip content={`Updated on ${updatedDate.toLocaleString()}`}>
+            <FormattedDate date={updatedDate} format={{ month: 'short' }} />
+          </sl-tooltip>
+        </li>
+      )
+    }
+    {
+      post.readingTime > 0 && (
+        <li title="Reading time">
+          {showIcons && <sl-icon name="stopwatch" inert />}
+          {post.readingTime}m read
+        </li>
+      )
+    }
+    {
+      showCategory && (
+        <li title="Category">
+          {showIcons && <sl-icon name="folder2-open" inert />}
+          {category?.name ?? category ?? 'Misc'}
+        </li>
+      )
+    }
+    {
+      showTags && tags.length ? (
+        <li class="meta__tags" title="Tags">
+          {showIcons && <sl-icon name="tags" inert />}
+          <Tags tags={tags} layout="inline" />
+        </li>
+      ) : undefined
+    }
+    {
+      showComments && (
+        <li title="Comments">
+          {showIcons && <sl-icon name="chat-right" inert />}
+          <a href="#post-comments" class="comments-count">
+            No Comments
+          </a>
+        </li>
+      )
+    }
+    {
+      showPermalink && stacked && (
+        <li title="Permalink">
+          {showIcons && <sl-icon name="link-45deg" inert />}
+          <a href={`/blog/${id}`}>Permalink</a>
+        </li>
+      )
+    }
+  </ul>
+</div>
+
+<style>
+  .post-metadata {
+    --__font-size: var(--step--1);
+    --_spacer: var(--space-xs-s);
+
+    &:has(.stacked) {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+  }
+
+  .post-date:has(+ .stacked) {
+    margin-bottom: var(--_spacer);
+    padding-bottom: var(--_spacer);
+    border-bottom: 1px solid var(--paper-shade);
+  }
+
+  .post-draft {
+    font-weight: var(--weight-bold);
+    color: var(--color__danger);
+
+    sl-icon {
+      color: var(--color__warning);
+      font-size: 2em;
+    }
+  }
+
+  .meta-data {
+    --icon-size: 1em;
+
+    font-size: var(--__font-size);
+    width: 100%;
+
+    > li {
+      > * {
+        display: inline-block;
+
+        &:is(sl-icon) {
+          margin-inline-end: 1ch;
+          vertical-align: top;
+          transform: translateY(10%);
+        }
+      }
+    }
+
+    .meta__tags {
+      white-space: wrap;
+
+      > ul {
+        display: inline;
+      }
+    }
+
+    &.stacked {
+      display: flex;
+      flex-direction: column;
+      white-space: nowrap;
+      text-align: right;
+      gap: 0.5em;
+
+      /* @media screen and (min-width: 52rem) {} */
+    }
+
+    &:not(.stacked) {
+      --item-gap: 1em;
+      --item-separator: '•';
+
+      display: block;
+
+      li {
+        display: inline-block;
+
+        &:not(:first-child) {
+          margin-inline-start: var(--item-gap);
+        }
+      }
+
+      &:not(.has-icons) {
+        --item-gap: 0.12ch;
+
+        li {
+          &:not(:first-child) {
+            &::before {
+              content: var(--item-separator);
+              color: var(--accent-1);
+              margin-inline-end: var(--item-gap);
+            }
+          }
+        }
+      }
+    }
+  }
+
+  sl-icon {
+    font-size: 1.333em;
+  }
+</style>

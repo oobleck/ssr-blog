@@ -1,0 +1,43 @@
+---
+import Section from "@components/resume/Section.astro";
+import { basics } from "@data/resume.json";
+import SocialLinks from "@components/SocialLinks.astro";
+import Figure from "@components/Figure.astro";
+import Pic from "@components/Pic.astro";
+import image from "@assets/images/site-author.png";
+import { settings } from "@data/settings";
+
+const { name, label, email, location = {} } = basics;
+const { city, region } = location;
+---
+
+<Section className="section-info">
+  <div class="candidate-info h-card">
+    <h1 class="p-name">{name}</h1>
+    <h2 class="page-subtitle">{label}</h2>
+    {
+      city && region && (
+        <span>
+          <sl-icon name="map" />
+          {city}, {region}
+        </span>
+      )
+    }
+    <footer class="print">
+      <SocialLinks primary={true} />
+      <!-- <sl-button
+        id="pdf-download"
+        href={settings.resumePdfFile}
+        target="_blank"
+        rel="me"
+      >
+        <sl-icon name="download"></sl-icon>&nbsp; Download PDF
+      </sl-button> -->
+    </footer>
+  </div>
+  <!-- <div>
+    <Figure layout="plain">
+      <Pic class="u-photo" src={image} alt={name} width={600} />
+    </Figure>
+  </div> -->
+</Section>

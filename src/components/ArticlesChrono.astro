@@ -1,0 +1,112 @@
+---
+import {getMergedPosts, type MergedPost} from '@utils/merged-posts';
+import { chronoSlug, chronoUnslug } from '@utils/chrono-slug';
+import Link from "@components/HeaderLink.astro";
+import { postsCount } from '@utils/posts-count';
+import { formatDate } from '@utils/format-date';
+
+interface Props {
+  level: 'year' | 'month';
+  layout?: 'stacked' | 'graph';
+};
+
+const {level = 'year', layout = 'graph'} = Astro.props;
+const isStacked = layout === 'stacked';
+
+function sorter([a]: [string, MergedPost[]], [b]: [string, MergedPost[]]): number {
+  const levelA = new Date(a).getTime();
+  const levelB = new Date(b).getTime();
+  return isStacked ? levelB - levelA : levelA - levelB;
+}
+const counts = await postsCount(level);
+const maxCount = Math.max(...Object.values(counts).map(({length}) => length));
+---
+
+<dl class:list={[`article-graph grouped-by-${level} layout__${layout}`]}>
+  {
+    Object.entries(counts)
+      .sort(sorter)
+      .map(([label, {length: count}]) => (
+        <Link class="chrono-group" href={`/blog/chrono/${label}`}>
+          <dt>{formatDate(chronoUnslug(label), 'short')}</dt>
+          <dd
+            style={{ '--graph-height': `${(count / maxCount) * 100}%` }}
+            data-count={count}
+          >
+            {layout === 'graph' && (
+              <span class="label">
+                {count.toLocaleString()} post{count === 1 ? '' : 's'}
+              </span>
+              <div class="graph" />
+            )}
+            {layout === 'stacked' && <>({count.toLocaleString()})</>}
+          </dd>
+        </Link>
+      ))
+  }
+</dl>
+
+<style>
+  .article-graph.layout__stacked {
+    .chrono-group {
+      display: flex;
+      gap: 0.5ch;
+    }
+
+    :where(dd, dt) {
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+
+    .label {
+      display: none;
+    }
+  }
+
+  .article-graph.layout__graph {
+    display: flex;
+    gap: 1ch;
+    align-items: flex-end;
+    justify-content: flex-start;
+    justify-content: space-between;
+    width: 100%;
+
+    .chrono-group {
+      display: flex;
+      flex-direction: column-reverse;
+      gap: 0.5ch;
+      min-height: 7rem;
+      max-height: 10rem;
+      height: 15vh;
+      text-align: center;
+
+      &:hover {
+        --label-opacity: 1;
+      }
+    }
+
+    dd {
+      margin: 0;
+      height: 100%;
+      width: 100%;
+      display: flex;
+      gap: 1ch;
+      flex-direction: column;
+      justify-content: space-between;
+      background-color: oklch(from gray l c h / 10%);
+      /* background-color: var(--paper-subtle); */
+
+      .label {
+        opacity: var(--label-opacity, 0);
+        transition: opacity 0.5s var(--ease-out-4);
+      }
+    }
+
+    .graph {
+      min-height: 0.1ch;
+      height: var(--graph-height, 1ch);
+      width: 100%;
+      background-color: currentColor;
+    }
+  }
+</style>

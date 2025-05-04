@@ -1,0 +1,78 @@
+---
+import BaseLayout from '@layouts/Base.astro';
+import PostCard from '@components/PostCard.astro';
+import TagCloud from '@components/TagCloud.astro';
+import { getMergedPosts } from '@utils/merged-posts';
+import {taggify} from '@utils/taggify';
+import MiniArticle from '@components/MiniArticle.astro';
+import { getFeaturedImage } from '@utils/get-featured-image';
+
+const { tag } = Astro.params;
+const { posts } = Astro.props;
+
+export async function getStaticPaths() {
+  // const allPosts = Object.values(import.meta.glob('../posts/*.md', { eager: true }));
+  const allPosts = await getMergedPosts();
+
+  const uniqueTags = [...new Set(allPosts.map((post: any) =>
+    post.data.tags.map((tag) => taggify(tag))).flat())];
+  return uniqueTags.map((_tag) => {
+    const tag = taggify(_tag);
+    const filteredPosts = allPosts.filter((post: any) => post.data.tags.map((tag) => tag.toLowerCase()).includes(tag));
+    return {
+      params: { tag },
+      props: { posts: filteredPosts },
+    };
+  });
+}
+const numPosts = posts.length.toLocaleString();
+const hero = getFeaturedImage(posts[0]?.data.images);
+---
+
+<BaseLayout
+  title={`#${tag}`}
+  description={`${numPosts} Post${posts.length === 1 ? '' : 's'} tagged with "${tag}"`}
+  level={2}
+  heroBg={hero}
+>
+  <main>
+    <ul class="plain stacked">
+      {posts.map((post: any) => {
+        return (
+          <li>
+            <MiniArticle article={post} showExcerpt={true} />
+            <!-- <PostCard post={post} brief={true} /> -->
+          </li>
+        );
+      })}
+    </ul>
+    <aside>
+      <div class="sidebar-widget tags">
+        <h4>Tags</h4>
+        <TagCloud type="blog" />
+      </div>
+    </aside>
+  </main>
+</BaseLayout>
+
+<style>
+  main {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-gap: var(--grid-gutter);
+  }
+
+  aside {
+    position: relative;
+    display: block;
+  }
+
+  .sidebar-widget.tags {
+    position: sticky;
+    top: calc(var(--nav-height) + var(--grid-gutter));
+  }
+
+  ul.plain {
+    gap: var(--grid-gutter);
+  }
+</style>

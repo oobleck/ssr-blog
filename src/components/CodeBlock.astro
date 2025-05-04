@@ -1,0 +1,56 @@
+---
+/**
+ * Wrapper around AstroJS's {@link Code} component that handles importing
+ * specified local files and rendering them in the Shiki block.
+ *
+ * @example
+ * ```astro
+ * <CodeBlock lang="js">Content to highlight</CodeBlock>
+ * <CodeBlock lang="js" showCopyButton={false}>{contentVar}</CodeBlock>
+ * ```
+ */
+import unescape from 'lodash-es/unescape';
+import { Code as AstroCode } from 'astro:components';
+import { Code as ExpressiveCode } from 'astro-expressive-code/components'
+import { SHIKI_CONFIG } from '@data/settings';
+
+interface Props {
+  lang?: any;
+  showCopyButton?: boolean;
+  filename?: string;
+  useShiki?: boolean;
+}
+
+const {lang, showCopyButton = true, filename, useShiki = false} = Astro.props;
+const Code = useShiki ? AstroCode : ExpressiveCode;
+let code: string = await Astro.slots.render('default');
+code = unescape(code);
+---
+
+<div class="code-block">
+  {
+    useShiki && showCopyButton && (
+      <sl-copy-button value={code} copy-label="Copy code" />
+    )
+  }
+  <Code {lang} {code} title={filename} data-theme={SHIKI_CONFIG.themes?.dark} />
+</div>
+
+<style>
+  .code-block {
+    position: relative;
+
+    sl-copy-button {
+      color: var(--gray-0);
+      position: absolute;
+      top: 0.5ch;
+      right: 0.5ch;
+      opacity: 0.5;
+      transition: opacity 0.3s var(--ease-out-4);
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+</style>
