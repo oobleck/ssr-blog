@@ -1,0 +1,129 @@
+---
+import {getImage, Picture} from 'astro:assets';
+import type { MergedPost, MergedProject } from '@utils/merged-posts'
+import Link from './HeaderLink.astro';
+import Multiline from './Multiline.astro';
+import PostMetadata from './PostMetadata.astro';
+import type { CollectionEntry } from 'astro:content'
+import type { CollectionKey } from 'astro:content';
+
+interface Props {
+  article: MergedPost | MergedProject;
+  alt?: boolean;
+  truncate?: number;
+  showMetadata?: boolean;
+  showExcerpt?: boolean;
+}
+
+const { article, alt = false, truncate, showMetadata = true, showExcerpt = false } = Astro.props;
+const featuredImage = article.data.images?.find(image => image.featured) ?? article.data.images?.[0];
+let pathSlug: CollectionKey = 'pubDate' in article.data ? 'blog' : 'works';
+pathSlug = 'endDate' in article.data ? 'works' : pathSlug;
+const url = `/${pathSlug}/${article.id}`;
+const {description = ''} = article.data;
+const desc = description.slice(0, truncate);
+const tSuffix = desc?.length < description?.length ? '...' : '';
+const featImage = featuredImage?.image?.src ?? featuredImage?.image;
+const figureStyles = {
+  '--featured-image': `url(${featImage})`,
+  '--featured-position': featuredImage?.position,
+};
+---
+
+<figure class:list={[`mini-article`, { showExcerpt, alt }]}>
+  {
+    featuredImage && (
+      <Link
+        href={url}
+        class="img-link"
+        role="presentation"
+        style={figureStyles}
+      />
+    )
+  }
+  <figcaption>
+    <Link href={url} class="article-title">{article.data.title}</Link>
+
+    {
+      showMetadata && (
+        <PostMetadata
+          post={article.data}
+          showIcons={showExcerpt}
+          stacked={false}
+          showUpdatedDate={false}
+          showComments={false}
+          showTags={false}
+        />
+      )
+    }
+
+    {
+      showExcerpt && (
+        <section>
+          <Multiline El="div" set:html={desc + tSuffix} />
+        </section>
+      )
+    }
+  </figcaption>
+</figure>
+
+<style>
+  .mini-article {
+    --thumb-sqr: var(--space-xl-2xl);
+    --thumb-sqr: 20%;
+    --media-gap: var(--space-xs-s);
+    --content-gap: 0.618ch;
+    --filter: grayscale(1) contrast(150%);
+
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: var(--media-gap);
+
+    &.showExcerpt {
+      --media-gap: var(--space-s-m);
+    }
+
+    &.alt {
+      flex-direction: row-reverse;
+    }
+
+    &:hover {
+      --filter: unset;
+    }
+  }
+
+  figcaption {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: var(--content-gap);
+
+    p {
+      font-size: var(--step-0);
+    }
+  }
+
+  :where(.img-link, img) {
+    display: block;
+    border-radius: var(--radius-1);
+    width: 20%;
+    max-width: var(--step-4);
+    aspect-ratio: 1;
+  }
+
+  .article-title {
+    position: relative;
+    margin-top: -0.333ch;
+  }
+
+  .img-link {
+    background-image: var(--featured-image);
+    background-size: cover;
+    background-position: var(--featured-position, center);
+    filter: var(--filter);
+    transition: filter 0.3s var(--ease-out-4);
+  }
+</style>

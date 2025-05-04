@@ -1,5 +1,5 @@
 ---
-import { social } from "../data/settings";
+import { social } from "@data/settings";
 
 const { url: cpUrl } = social.find(({name}) => name === "Codepen") ?? {};
 const {
@@ -19,20 +19,32 @@ const src = `https://codepen.io/${username}/embed/${
 const penUrl = `https://codepen.io/${username}/pen/${id}`;
 ---
 
-{id && (
-  <figure class="codepen-frame">
-    <iframe
-      scrolling="no"
-      {title}
-      {src}
-      style={`width:100%; aspect-ratio:16/9`}
-      frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
-      <a href={penUrl}>See the pen by @{username}</a>
-    </iframe>
-    <figcaption>
-      <a href={penUrl} target="_blank" rel="me noreferrer">
-        See the pen by @{username}
-      </a>
-    </figcaption>
-  </figure>
-)}
+{
+  id && (
+    <figure class="codepen-frame">
+      <iframe
+        scrolling="no"
+        {title}
+        {src}
+        style={`width:100%; aspect-ratio:3/2`}
+        frameborder="no"
+        loading="lazy"
+        allowtransparency="true"
+        allowfullscreen="true"
+      >
+        <a href={penUrl}>See the pen by @{username}</a>
+      </iframe>
+      <figcaption>
+        <a href={penUrl} target="_blank" rel="me noreferrer">
+          See the pen by @{username}
+        </a>
+      </figcaption>
+    </figure>
+  )
+}
+
+<style>
+  figcaption {
+    font-size: var(--step--1, 0.8rem);
+  }
+</style>

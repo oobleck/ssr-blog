@@ -1,0 +1,162 @@
+---
+import { TIMELINE, timelineSorter } from "@data/timeline";
+
+export interface Props {
+  showTitle?: string;
+  fancy?: boolean;
+  milestones?: boolean;
+  age?: boolean;
+  duration?: boolean;
+  location?: boolean;
+  descriptions?: boolean;
+}
+
+const {
+  showTitle = "Timeline",
+  fancy = true,
+  milestones: showMilestones = false,
+  age: showAge = false,
+  duration: showDuration = true,
+  descriptions: showDesc = true,
+  location: showLocations = true,
+} = Astro.props;
+const timeline = TIMELINE.filter(({milestone}) => showMilestones ? milestone: true).sort(timelineSorter);
+const msYear = 3.15576e+10;
+const msMonth = 2.6298e+9;
+const bday = new Date(TIMELINE[0].start);
+const formatDate = (date: Date | string) => {
+  const _date = date instanceof Date ? date : new Date(date);
+  const { format } = new Intl.DateTimeFormat('en-US', {
+    year: 'numeric',
+    month: 'short',
+  })
+  return format(_date);
+};
+
+const calculateDuration = (date: string | Date, root = bday, unit = msYear) => {
+  const _date = date instanceof Date ? date : new Date(date);
+  const delta = Math.abs(_date.getTime() - root.getTime());
+  return Math.round(delta / unit);
+}
+---
+
+<h2 set:html={showTitle} />
+<ol class:list={['timeline', {fancy}]}>
+  {timeline.map((event) => {
+  const {title, start, end = start, description, categories = [], location} = event;
+  const age = calculateDuration(start);
+  let duration = calculateDuration(end, new Date(start), msMonth);
+  const years = duration >= 12 ? Math.round(duration / 12) : duration
+  // const startDate = new Date(start);
+  return (
+    <li class:list={['timeline-event', categories[0]]}>
+    <h4 id={`event-${title.toLowerCase().replace(/[\s]+/gi, '-')}`} set:html={title} />
+      {showDesc && description && (<div set:html={description} />)}
+      <div class="metadata">
+        <div>
+          {formatDate(start)}
+          {end !== start && (<span>- {formatDate(end)}</span>)}
+          <!-- (<sl-relative-time date={start} format="short" numeric="always"></sl-relative-time>) -->
+          {showAge && (<>(~{age} y/o)</>)}
+        </div>
+        {showDuration && end !== start && (<span>Duration: ~{years} {years !== duration ? 'yr' : 'mo'}.</span>)}
+        {showLocations && location && (<div set:html={location} />)}
+        <!-- <div>{categories.join(', ')}</div> -->
+      </div>
+    </li>
+    );
+  })}
+</ol>
+
+<style>
+.timeline {
+  position: relative;
+  margin: 0;
+  padding: 0;
+
+  &.fancy {
+    --anchor-diameter: 1ch;
+    --anchor-x-offset: calc(var(--anchor-diameter) * -1.5);
+    --event-width: calc(50% - (var(--anchor-diameter) * 1));
+    --event-offset: calc((var(--anchor-diameter) * 2) + var(--event-width));
+
+    display: block;
+    margin: 2em auto;
+    width: fit-content;
+    min-width: 35em;
+    list-style: none;
+
+    &::before {
+      content: '';
+      position: absolute;
+      width: 1px;
+      top: -1.618em;
+      bottom: -1.618em;
+      left: calc(50% - var(--anchor-diameter) * 1.5);
+      left: 50%;
+      border-left: 1px dashed var(--ink-subtle);
+    }
+
+    .timeline-event {
+      --anchor-color: var(--__accent, var(--brand));
+      --event-border: 5px solid var(--anchor-color);
+
+      position: relative;
+      margin: 1ch 0 2em;
+      margin-inline-start: var(--event-offset);
+      padding: 1ch 1em;
+      background-color: var(--paper-subtle);
+      background-color: hsl(from var(--__accent) h s l / 13%);
+      width: var(--event-width);
+      /* min-width: 20em; */
+      border-inline-end: var(--event-border);
+      border-radius: var(--radius-2);
+      box-shadow: var(--shadow-3);
+
+      &::before {
+        position: absolute;
+        content: '';
+        top: calc(var(--anchor-diameter) * -1);
+        left: var(--anchor-x-offset);
+        width: var(--anchor-diameter);
+        height: var(--anchor-diameter);
+        background-color: var(--anchor-color);
+        border-radius: var(--anchor-diameter);
+        box-shadow: var(--shadow-2);
+      }
+
+      &:nth-child(odd) {
+        margin-left: 0;
+        border-inline-end: 0;
+        border-inline-start: var(--event-border);
+
+        &::before {
+          left: auto;
+          right: var(--anchor-x-offset);
+        }
+      }
+
+      &.Life {
+        --__accent: var(--palette__primary);
+      }
+
+      &.Work {
+        --__accent: var(--palette__secondary);
+      }
+
+      &.School {
+        --__accent: var(--pink-9);
+      }
+
+      &.Project {
+        --__accent: var(--accent-3);
+      }
+    }
+
+  }
+
+  &:not(.fancy) .timeline-event {
+    margin-block: var(--step--1);
+  }
+}
+</style>

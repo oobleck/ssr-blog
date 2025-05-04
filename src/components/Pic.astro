@@ -1,0 +1,15 @@
+---
+import {Picture} from "astro:assets";
+import {type Props as PictureProps} from "astro/components/Picture.astro";
+
+interface Props {
+  width?: number;
+  height?: number;
+  formats?: string[];
+  [k: string]: any;
+}
+
+const {width = 1000, height = width, formats = ['webp', 'avif', 'png'], ...otherProps} = Astro.props;
+---
+
+<Picture {width} {height} {formats} {...otherProps} />

@@ -1,0 +1,79 @@
+---
+import Link from '@components/HeaderLink.astro';
+import { getMergedPosts } from '@utils/merged-posts';
+import { fetchCollection } from '@utils/get-collection';
+import { type CollectionKey } from 'astro:content';
+import MiniArticle from './MiniArticle.astro';
+import PostMetadata from './PostMetadata.astro';
+
+interface Props {
+  numPosts?: number;
+  type?: 'blog' | 'works';
+  readMore?: boolean;
+  includeCurrent?: boolean;
+  layout?: 'list' | 'mini';
+}
+
+const {numPosts = 3, type = 'blog', includeCurrent = false, layout = 'mini'} = Astro.props;
+
+const allPosts = (await getMergedPosts(void 0, type))
+  .filter((post) => includeCurrent || !Astro.url.pathname.includes(post.id))
+
+const posts = allPosts.slice(0, numPosts);
+
+const {readMore = allPosts.length > numPosts} = Astro.props;
+const isList = layout === 'list';
+const isMini = layout === 'mini';
+const TTEl = isList ? 'sl-tooltip' : Fragment;
+---
+
+<ul
+  class:list={[
+    `recent-posts type-${type} layout__${layout}`,
+    { plain: isMini },
+  ]}
+>
+  {
+    posts?.length
+      ? posts.map((post: any) => {
+          return (
+            <li>
+              {isList && (
+                <>
+                  <Link href={`/${type}/${post.id}`}>{post.data.title}</Link>
+                  <PostMetadata
+                    post={post.data}
+                    stacked={false}
+                    showComments={false}
+                    showTags={false}
+                    showAuthor={false}
+                    showIcons={false}
+                  />
+                </>
+              )}
+              {isMini && <MiniArticle article={post} showMetadata={true} />}
+            </li>
+          );
+        })
+      : undefined
+  }
+</ul>
+{
+  readMore && (
+    <p>
+      <Link href={`/${type}`} set:html="Read more" class="read-more" />
+    </p>
+  )
+}
+
+<style>
+  .layout__mini {
+    gap: var(--space-s-m);
+  }
+  .recent-posts {
+    .post-metadata {
+      font-style: italic;
+      opacity: 0.666;
+    }
+  }
+</style>

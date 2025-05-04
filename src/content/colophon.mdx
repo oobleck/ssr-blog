@@ -1,0 +1,45 @@
+---
+title: /colophon
+body-class: page-colophon
+hero:
+  image: https://images.unsplash.com/photo-1634654284517-dd5cd3d04f27
+  creditUrl: https://unsplash.com/photos/a-man-in-a-space-suit-with-a-skull-on-his-helmet-arxIJ2pWXXc
+  altText: A skeleton in a space suit
+  position: 50% 45%
+---
+
+import Licenses from '../components/Licenses.astro';
+
+<AboutMe readmore={true} />
+
+This website was first published in the Spring of 2024 in sunny California. It
+is built on a [2022 M1 MacBook Air](https://www.apple.com/macbook-air/) using
+[Astro JS](https://astro.build) and [Neovim](https://neovim.io).
+
+#### Essential Tools
+
+- [Astro](https://astro.build)
+- [Neovim](https://neovim.io)
+- [Utopia](https://utopia.fyi)
+- [Open Props](https://open-props.style)
+- [Iconify](https://iconify.design)
+- [Pnpm](https://pnpm.io)
+
+#### Development Tools
+
+<details open>
+  <summary><strong slot="summary" set:text="Production Dependencies" /></summary>
+  <Licenses />
+</details>
+
+<details>
+  <summary><strong slot="summary" set:text="Development Dependencies" /></summary>
+  <Licenses group="dev" />
+</details>
+
+More info about what software and things I use regularly is on my
+[/uses](/uses) page.
+
+#### Server Software
+
+This site is hosted on [Vercel](https://vercel.com).

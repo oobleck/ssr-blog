@@ -1,0 +1,409 @@
+---
+import {settings} from "@data/settings";
+import SocialLinks from "@components/SocialLinks.astro";
+import Hero from "@components/Hero.astro";
+import About from "@components/resume/sections/About.astro"
+import Education from "@components/resume/sections/Education.astro"
+import Experience from "@components/resume/sections/Experience.astro"
+// import Certificate from "@components/resume/sections/Certificate.astro"
+import CvHero from "@components/resume/sections/CvHero.astro";
+import Projects from "@components/resume/sections/Projects.astro"
+import Skills from "@components/resume/sections/Skills.astro"
+// import KeyboardManager from "@components/KeyboardManager.astro"
+import resume from "@data/resume.json";
+import References from "@components/resume/sections/References.astro";
+import NavLinks from "@components/NavLinks.astro";
+
+const { name, label } = resume.basics;
+// Credit: https://unsplash.com/photos/a-tall-yellow-building-with-a-sky-in-the-background-ilLu21dy_-w
+const heroBg = 'https://images.unsplash.com/photo-1677031407873-21d0befe85be';
+const heroPosition = ['center', '0'];
+---
+
+<!-- <Layout title={name} {heroBg} bodyClass="resume-page h-resume"> -->
+<header
+  class="wrapper content-container no-print"
+  slot="nav"
+  style={`margin-block: var(--block-margin);`}
+>
+  <!-- <a href="/"><sl-icon name="arrow-left-circle"></sl-icon> Back</a> -->
+  <div class="inner-content"><NavLinks /></div>
+</header>
+<Fragment slot="hero"></Fragment>
+<Fragment slot="footer"></Fragment>
+<!-- <Hero slot="hero" background={heroBg} {heroPosition} title={name}>
+    <Fragment slot="tagline">
+      <h3 class="page-subtitle">{label}</h3>
+      <SocialLinks />
+      <sl-tooltip content="Download PDF" id="pdf-download">
+        <a href={settings.resumePdfFile} target="_blank" rel="me">
+          <sl-icon name="download"></sl-icon>&nbsp; Download as PDF
+        </a>
+      </sl-tooltip>
+    </Fragment>
+  </Hero> -->
+
+<main>
+  <CvHero />
+  {!!resume.basics?.name && <About />}
+  {!!resume.skills?.length && <Skills />}
+  {!!resume.work?.length && <Experience />}
+  {!!resume.education?.length && <Education />}
+  {!!resume.certificates?.length && <Certificate />}
+  {!!resume.references?.length && <References />}
+  {!!resume.projects?.length && <Projects />}
+</main>
+
+<!-- <KeyboardManager /> -->
+
+<style is:global>
+  @page {
+    size: letter portrait;
+    margin: 2cm;
+
+    @top-left {
+      border: none;
+    }
+
+    @bottom-left {
+      border: none;
+    }
+  }
+
+  :root {
+    --content-max-width: 55rem;
+    --grid-gutter: var(--space-l-xl);
+
+    @media screen {
+      .resume-section {
+        margin-block-start: var(--space-l-xl);
+      }
+    }
+
+    @media print {
+      /* filter: grayscale(100%); */
+      font-size: 9pt;
+
+      :is(h1, h2, h3, h4, h5, h6) {
+        margin-block: 0 1ch;
+      }
+
+      :is(h1) {
+        color: var(--brand);
+      }
+
+      :is(
+        #site-nav,
+        #site-footer,
+        #hero,
+        #pdf-download,
+        .section-projects,
+        .section-testimonials,
+        sl-progress-bar
+      ) {
+        display: none;
+      }
+
+      .print-page-header {
+        position: fixed;
+        top: -100%;
+      }
+
+      a {
+        color: unset;
+        text-decoration: none;
+        font-weight: unset;
+
+        &::after {
+          content: none;
+        }
+      }
+
+      :is(main) {
+        all: unset;
+      }
+
+      .resume-section-title {
+        color: var(--brand-shade);
+      }
+
+      .resume-section:not(.section-news) {
+        --gap: var(--space-s-m);
+        --section-border-color: var(--paper-subtle);
+        border-top: 1px solid var(--section-border-color);
+        margin-top: var(--gap);
+        padding-top: var(--gap);
+      }
+
+      .resume-testimonial:nth-child(n + 4) {
+        display: none;
+      }
+
+      .entity-title {
+        a.X {
+          &::after {
+            content: attr(href);
+            margin-block-start: 1ch;
+            display: block;
+            opacity: 0.75;
+          }
+        }
+      }
+
+      :is(.social-links) {
+        display: grid;
+        grid-template-columns: 2em auto-fit;
+        grid-template-areas: 'icon content';
+        row-gap: 0.1ch;
+        column-gap: 1ch;
+
+        .social-link {
+          display: inline-flex;
+          gap: var(--space-2xs);
+          align-items: baseline;
+          justify-content: space-between;
+
+          li {
+            margin: 0;
+            padding: 0;
+          }
+
+          &::after {
+            content: attr(href);
+            grid-area: content;
+            font-size: 1em;
+            font-weight: var(--weight-normal);
+          }
+
+          .social-icon {
+            grid-area: icon;
+          }
+
+          &[href*='/contact'] {
+            &::after {
+              content: attr(title) !important;
+            }
+          }
+
+          &:has([name*='rss'], [name*='disroot']) {
+            display: none !important;
+          }
+        }
+      }
+
+      :is(.section-skills) {
+        dt {
+          h4 {
+            margin: 0;
+          }
+        }
+      }
+    }
+  }
+
+  :is(#hero, #site-nav, #site-footer) {
+    display: none;
+  }
+  .page-subtitle {
+    color: inherit;
+  }
+
+  section.resume-section {
+    .page-subtitle {
+      font-weight: var(--weight-normal);
+    }
+
+    @container main (width >= 50rem) {
+      /* &:not(.section-news) {
+        display: grid;
+        grid-template-areas: 'heading content';
+        grid-template-columns: 2cm 1fr;
+        column-gap: var(--space-l-xl);
+      } */
+
+      /* .resume-section-title {
+        margin-block-start: 0;
+      } */
+    }
+
+    &.section-news {
+      .section-content > p:first-child {
+        font-size: var(--font-size__lead);
+      }
+    }
+
+    .resume-section-title {
+      font-size: 1.618rem;
+      font-size: var(--step-1);
+      font-weight: var(--weight-semibold);
+      break-after: avoid;
+    }
+
+    /* &:not(:first-child) {
+      margin-block-start: var(--space-m-l);
+    } */
+
+    .entity-title {
+      margin-block: 0;
+    }
+
+    .section-content {
+      strong {
+        font-style: normal;
+        font-weight: var(--weight-semibold);
+      }
+    }
+
+    &.section-work-experience {
+      :is(.highlights li) {
+        padding-inline-start: 0.5ch;
+        margin-inline-start: 0.5ch;
+      }
+    }
+
+    &:is(.section-testimonials, .section-projects) {
+      /* break-inside: avoid; */
+      page-break-before: always;
+    }
+
+    article {
+      /* break-inside: avoid; */
+    }
+
+    .resume-testimonial {
+      break-inside: avoid;
+      margin-block-start: 0;
+
+      &:not(:first-child) {
+        margin-block-start: var(--space-m-l);
+      }
+    }
+
+    &.section-projects {
+      .section-content > ul {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(46.6%, 1fr));
+        gap: var(--grid-gutter);
+
+        li {
+          margin: 0;
+        }
+      }
+    }
+
+    sl-progress-bar {
+      --sl-border-radius-pill: 0;
+
+      /* display: none; */
+
+      @container main (width >= 40rem) {
+        display: block;
+      }
+    }
+  }
+
+  .resume-page {
+    .resume-section {
+      li:has(article):not(:first-child) {
+        margin-block-start: var(--space-s-m);
+        break-inside: avoid;
+      }
+
+      &.section-skills {
+        .section-content {
+          @container main (width >= 40rem) {
+            display: grid;
+            gap: var(--grid-gutter);
+            grid-template-columns: repeat(auto-fit, minmax(20%, 1fr));
+          }
+
+          /* @container main (width >= 53rem) {
+            columns: 4;
+          } */
+        }
+
+        .skills-category {
+          display: flex;
+          flex-direction: column;
+          gap: var(--block-margin);
+          margin: 0;
+
+          dt {
+            h4 {
+              margin-block-start: 0;
+            }
+          }
+
+          dd {
+            margin: var(--blog-margin) 0 0;
+          }
+        }
+
+        .skills-list {
+          list-style-type: none;
+          margin: 0;
+          padding: 0;
+          columns: 3;
+
+          li {
+            &::marker {
+              content: unset;
+            }
+          }
+
+          @container main (width >= 35rem) {
+            columns: 2;
+          }
+
+          @container main (width >= 53rem) {
+            /* columns: 4; */
+          }
+        }
+      }
+    }
+
+    :is(.dates-range, .p-locality) {
+      font-size: 0.85em;
+      opacity: 0.75;
+    }
+
+    @media (min-width: 40rem) {
+      .dated-header {
+        display: flex;
+        width: 100%;
+        gap: var(--grid-gutter);
+        align-items: baseline;
+        justify-content: space-between;
+      }
+
+      .resume-section {
+        &:has(.candidate-info) {
+          .section-content {
+            width: 100%;
+            display: flex;
+            gap: var(--grid-gutter);
+            align-items: flex-start;
+            justify-content: flex-end;
+
+            .candidate-info {
+              margin-inline-end: auto;
+
+              > * {
+                margin-block: 0.33em;
+              }
+
+              > :first-child {
+                margin-block-start: 0;
+              }
+            }
+
+            :is(img) {
+              width: 9rem !important;
+              aspect-ratio: 1;
+            }
+          }
+        }
+      }
+    }
+  }
+</style>

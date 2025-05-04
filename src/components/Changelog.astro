@@ -1,0 +1,52 @@
+---
+import { z } from "astro:content";
+import { ZChangelog } from "@content/content.config.ts";
+import FormattedDate from '@components/FormattedDate.astro';
+import Multiline from '@components/Multiline.astro';
+
+type IChangelog = z.infer<typeof ZChangelog>;
+interface Props {
+  changelog?: IChangelog;
+  num?: number;
+}
+
+const {changelog = [], num = 5} = Astro.props;
+
+function clSorter(a: IChangelog[0], b: IChangelog[0]) {
+  return b.date.getTime() - a.date.getTime();
+}
+
+---
+
+{
+  changelog.length ? (
+    <ul class="changelogs plain stack">
+      {changelog
+        .sort(clSorter)
+        .slice(0, num)
+        .map(({ date, description }: IChangelog) => (
+          <li class="change-log-entry">
+            <h5>
+              Update: <FormattedDate date={date} />
+            </h5>
+            <Multiline set:text={description} />
+          </li>
+        ))}
+    </ul>
+  ) : undefined
+}
+
+<style>
+  .changelogs {
+    margin-block: var(--block-margin) var(--space-l-xl);
+    padding: 0 1ch;
+    border: 1px solid var(--paper-shade);
+    border-radius: var(--radius-1);
+
+    .change-log-entry {
+      &:not(:first-child) {
+        border-block-start: 1px solid var(--paper-subtle);
+      }
+    }
+  }
+</style>

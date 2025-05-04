@@ -1,0 +1,279 @@
+{
+  "buildDate": "Tue Apr 22 2025 07:16:42 GMT-0700 (Pacific Daylight Time)",
+  "basics": {
+    "name": "Spencer Rhodes",
+    "label": "User Interface Developer",
+    "image": "https://avatars.githubusercontent.com/u/440719?v=4",
+    "email": "",
+    "phone": "",
+    "url": "https://spencerrhodes.dev",
+    "summary": "I'm a front-end web developer with a passion for creating visually stunning and user-friendly applications and websites. My background in art and design also gives me a unique perspective in my work, and my diverse interests in science, technology, and music, always drive me to learn something new. I am a curious and inquisitive person who is dedicated to always improving my skills and abilities.",
+    "profiles": [
+      {
+        "network": "gitconnected",
+        "username": "oobleck",
+        "url": "https://gitconnected.com/oobleck"
+      },
+      {
+        "network": "GitHub",
+        "username": "oobleck",
+        "url": "https://github.com/oobleck"
+      },
+      {
+        "network": "LinkedIn",
+        "url": "https://linkedin.com/in/oobleck",
+        "username": "oobleck"
+      },
+      {
+        "network": "Twitch",
+        "url": "https://codepen.io/oobleck",
+        "username": "oobleck"
+      }
+    ],
+    "headline": "Building compelling user interfaces",
+    "blog": "https://spencerrhodes.dev/blog",
+    "yearsOfExperience": 14,
+    "username": "oobleck",
+    "locationAsString": "Bay Area, CA",
+    "region": "Bay Area, CA",
+    "karma": 25,
+    "id": "3b7c5532-9a8e-46da-bd6f-8374b1881297",
+    "followers": 3,
+    "following": 9,
+    "picture": "https://avatars.githubusercontent.com/u/440719?v=4",
+    "website": "https://spencerrhodes.dev"
+  },
+  "skills": [
+    {
+      "name": "Programming Languages",
+      "level": "Advanced",
+      "keywords": [
+        "Javascript",
+        "Typescript",
+        "Python",
+        "PHP",
+        "Java",
+        "Bash",
+        "CoffeeScript",
+        "css3",
+        "html5"
+      ],
+      "rating": 4,
+      "yearsOfExperience": 16
+    },
+    {
+      "name": "Web Development",
+      "level": "Expert",
+      "keywords": [
+        "Angular",
+        "AngularJS",
+        "Astro",
+        "Sass",
+        "Karma",
+        "Bash",
+        "Linux",
+        "Docker",
+        "Jasmine",
+        "Cypress",
+        "Jest",
+        "NodeJS"
+      ],
+      "rating": 5,
+      "yearsOfExperience": 13
+    },
+    {
+      "name": "Dev Ops",
+      "level": "Beginner",
+      "keywords": [
+        "Jenkins",
+        "Artifactory",
+        "AWS",
+        "Docker",
+        "GitLab"
+      ],
+      "rating": 2,
+      "yearsOfExperience": 3
+    }
+  ],
+  "projects": [],
+  "work": [
+    {
+      "name": "Open Text (Formerly Micro Focus)",
+      "location": "Santa Clara, CA & Remote",
+      "description": "",
+      "position": "Sr. Software Engineer - Fortify UI Lead",
+      "url": "https://www.opentext.com/products/security-cloud",
+      "startDate": "2020-05-01",
+      "endDate": "",
+      "summary": "Tech: Angular, Typescript, Sass, AngularJS, Karma, Jasmine, Cypress, Storybook, Angular Material, Java, Gradle, Git, Jenkins, Artifactory",
+      "highlights": [
+        "Technical UI lead for a team of 5 engineers globally",
+        "Improved app load time by 30% with aggressive lazy loading and leveraging the Ivy AOT compiler",
+        "Introduced higher standards for code quality with pre-commit checks and automated testing",
+        "Introduced style guides for whole UI tech stack",
+        "Upgraded and re-engineered primary feature to Angular 10 with state management & simplified maintainability",
+        "Added tests for legacy code written without tests"
+      ],
+      "isCurrentRole": true,
+      "start": {
+        "year": 2020,
+        "month": 5
+      },
+      "end": {},
+      "company": "Open Text (Formerly Micro Focus)",
+      "website": "https://www.opentext.com/products/security-cloud"
+    },
+    {
+      "name": "Cohesity",
+      "location": "San Jose, CA",
+      "description": "",
+      "position": "Sr. Member of Technical Staff (UI Engineer)",
+      "url": "https://www.cohesity.com",
+      "startDate": "2015-07-01",
+      "endDate": "2020-04-01",
+      "summary": "Tech: JavaScript, TypeScript, Sass, AngularJS, Angular 8, Karma, Jasmine, Jest, Angular Material, YAML, Go",
+      "highlights": [
+        "Created a living style guide showcasing existing UI widgets and style patterns for easy reference by teams across multiple continents to improve consistency of user experience",
+        "Architected mission critical disaster recovery & clone UI workflows for MS SQL & Oracle Databases, Pure storage arrays, NAS appliances, VMware Virtual Machines, and File recovery",
+        "Built UI to restore protection jobs archived on cloud storage services like AWS, Google Nearline, etc.",
+        "Worked closely with UX team to revise and implement the vision while meeting technical needs and limitations",
+        "Unit tested code to ensure quality using Karma, Jasmine, and Jest"
+      ],
+      "isCurrentRole": false,
+      "start": {
+        "year": 2015,
+        "month": 7
+      },
+      "end": {
+        "year": 2020,
+        "month": 4
+      },
+      "company": "Cohesity",
+      "website": "https://www.cohesity.com"
+    },
+    {
+      "name": "Badger Meter",
+      "location": "Los Gatos, CA",
+      "description": "",
+      "position": "Sr. User Interface Engineer",
+      "url": "https://www.badgermeter.com",
+      "startDate": "2014-03-01",
+      "endDate": "2015-07-01",
+      "summary": "Tech: JavaScript, Sass, AngularJS, Backbone, Python, MySQL, AWS",
+      "highlights": [
+        "Architected and implemented a white-labelled and localizad prototype RESTful application for Utility customer-outreach using AngularJS",
+        "Created a UI style guide to unify and streamline reuse of UI components across multi-disciplinary teams",
+        "Introduced coding standards and procedures for building user interfaces on multiple applications",
+        "Implemented Python and MySQL backend + REST services for new featuresTechnology"
+      ],
+      "isCurrentRole": false,
+      "start": {
+        "year": 2014,
+        "month": 3
+      },
+      "end": {
+        "year": 2015,
+        "month": 7
+      },
+      "company": "Badger Meter",
+      "website": "https://www.badgermeter.com"
+    },
+    {
+      "name": "Alliance Data Systems (formerly SolutionSet)",
+      "location": "Palo Alto, CA",
+      "description": "",
+      "position": "Frontend Engineer",
+      "url": "https://web.archive.org/web/20141010102537/http://www.solutionset.com/",
+      "startDate": "2010-03-01",
+      "endDate": "2014-03-01",
+      "summary": "Tech: JavaScript, jQuery, Sass, AngularJS, Backbone, .Net, Ruby",
+      "highlights": [
+        "Lead Frontend Developer on projects for clients like Adobe's EchoSign, Cloudera, and VMware",
+        "Heavy use of JavaScript, jQuery, Sass, and HTML5, including Backbone and AngularJS application development",
+        "Worked extensively with Content Management Systems like Adobe CQ (Adobe AEM), Sitecore, and Crown Peak"
+      ],
+      "isCurrentRole": false,
+      "start": {
+        "year": 2010,
+        "month": 3
+      },
+      "end": {
+        "year": 2014,
+        "month": 3
+      },
+      "company": "Alliance Data Systems (formerly SolutionSet)",
+      "website": "https://web.archive.org/web/20141010102537/http://www.solutionset.com/"
+    }
+  ],
+  "publications": [],
+  "education": [
+    {
+      "institution": "San Francisco State University",
+      "url": "https://design.sfsu.edu",
+      "area": "Industrial Arts - Product Development",
+      "studyType": "BA",
+      "startDate": "2004-02-01",
+      "endDate": "2006-06-01",
+      "score": "",
+      "courses": [],
+      "description": "",
+      "activities": "President - Industrial Designers Society of America-SFSU Chapter (IDSA-SFSU)\nMember - Society of Plastics Engineers (SPE)",
+      "start": {
+        "year": 2004,
+        "month": 2
+      },
+      "end": {
+        "year": 2006,
+        "month": 6
+      },
+      "website": "https://design.sfsu.edu",
+      "gpa": ""
+    }
+  ],
+  "volunteer": [],
+  "awards": [],
+  "languages": [
+    {
+      "language": "English",
+      "fluency": "Native speaker"
+    },
+    {
+      "language": "French",
+      "fluency": "Functional"
+    },
+    {
+      "language": "Spanish",
+      "fluency": "Functional"
+    }
+  ],
+  "interests": [],
+  "references": [
+    {
+      "name": "Maulik Fojdar @ Cohesity",
+      "reference": "It was a privilege to work with Spencer at Cohesity for more than 2 years. He is one of the best Frontend Engineers I have worked with. The level of quality in the features he has developed is exceptional. He would always work on a feature with a future vision which helps in scaling the feature with minimum maintenance. He brings in a lot of best code practices to the team via his code reviews. His feedback is always valuable in enhancing the code and design quality of the product. He is always available for help when the team is in need. He has the capability of taking massive projects and architect them. He is an excellent communicator and always vocal about new ideas for improving the product. He would be a great asset to any team he works for. It was a pleasure working with Spencer and would highly recommend him."
+    },
+    {
+      "name": "Jeff Howard @ SolutionSet & Cohesity",
+      "reference": "I’ve been working side-by-side with Spencer at Cohesity for almost five years, and he is a solid contributor that has a strong propensity to do things the right way. This is apparent in his attention to detail in code reviews, commitment to unit testing, defining and documenting of standards and best practices, and authorship of a flexible JIRA dashboard that countless co-workers use. Over the years, he has helped move the team forward in many ways while juggling feature work and assisting with customer issues. Cohesity wouldn’t be where it is today without his efforts, and I’m grateful that he is a part of our team."
+    },
+    {
+      "name": "Dominic Cheah @ Cohesity",
+      "reference": "Spencer is reliable, dependable, and meticulous. I have had the pleasure of working with Spencer for the past 2 years at Cohesity and every project that he is put on, Spencer completes his projects on time and with great quality.   I have never had to follow up with Spencer to figure out where we stand on our engineering deliverables because he is trustworthy and highly dependable. If there are roadblocks to our deliverables, Spencer would inform me so that we can work together to remove the roadblock. Spencer is an asset to any organization and I am very happy to have such a reliable engineer working with me at Cohesity."
+    },
+    {
+      "name": "Braden Molyneux @ Adobe",
+      "reference": "My experience with Spencer has been nothing less than stellar. His experience and large technical foundation made him an invaluable asset for the many projects on which we worked together. I always felt that my best interests, and the interests of the group and project at large, were a top priority for Spencer. This created a sense of loyalty and trust at a level that is rare when working with consultants/vendors and gave me great confidence in his work. I was frequently impressed with the extensive knowledge of modern, and even cutting edge, front-end solutions he would draw on to create a custom solution for us. Spencer always had an answer. All this always made me feel that my interests as a stakeholder were in exceptionally capable hands."
+    },
+    {
+      "name": "Janelle Gee @ SolutionSet",
+      "reference": "When Spencer first started working at SolutionSet he was assigned to my project. I was quickly impressed with his dedication and willingness to learn new technologies. Throughout our time together I was always excited to have him on the team. I know the work would get done with impeccable quality and with a great attitude, no matter the difficulty of the task. Any team would be lucky to have Spencer join them!"
+    }
+  ],
+  "certificates": [],
+  "meta": {
+    "note": "This is a combined version of the old and new JSON Resume API to provide maximum compatibility. You will notice duplicated values in different fields.",
+    "canonical": "https://raw.githubusercontent.com/jsonresume/resume-schema/master/resume.json",
+    "version": "v1.0.0",
+    "lastModified": "2020-12-29T15:53:00"
+  }
+}

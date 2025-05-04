@@ -1,0 +1,22 @@
+---
+title: Contact me
+navLabel: Contact
+description: Get in touch!
+level: 1
+hero:
+  image: https://cdn.pixabay.com/photo/2020/04/09/11/42/dogs-5021084_1280.jpg
+  position: 50% 50%
+  altText: Two muppets hanging from a slackline
+  creditUrl: https://pixabay.com/photos/dogs-animals-dog-pets-mammals-5021084/
+---
+
+import ContactForm from '@components/ContactForm.astro';
+
+<div class="grid-auto" style="--grid-auto-gutter: var(--space-xl-2xl)">
+  <div>
+    <AboutMe showPhoto={true} compact={true} />
+  </div>
+  <div>
+    <ContactForm />
+  </div>
+</div>

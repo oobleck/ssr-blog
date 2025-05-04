@@ -1,57 +1,37 @@
 ---
-import Pagination from "@philnash/astro-pagination";
-import { getBlogPosts, chronoSort } from "../../utils/get-posts";
-import { getBlogParams } from "../../utils/post-params";
-import Layout from "../../layouts/Layout.astro";
-import FormattedDate from "../../components/FormattedDate.astro";
-import PostList from "../../components/PostList.astro";
-import TagCloud from "../../components/TagCloud.astro"
+import { type CollectionEntry } from 'astro:content';
+import PostCard from '@components/PostCard.astro';
+import Layout from '@layouts/PaginatedBase.astro';
+import { getMergedPosts } from '@utils/merged-posts';
 
-export async function getStaticPaths({ paginate }) {
-  const blogEntries = (await getBlogPosts(false)).sort(chronoSort).map((entry) => ({
-    params: getBlogParams(entry),
-    props: { entry },
-  }));
-
-  return paginate(blogEntries, { pageSize: 6 });
+export async function getStaticPaths({paginate}) {
+	const posts = await getMergedPosts();
+	const pages = posts.map((post: any) => ({
+		params: { slug: post.id },
+		props: post,
+	}));
+	return paginate(pages, {pageSize: 5});
 }
-// All paginated data is passed on the "page" prop
-const { page }: any = Astro.props;
-const isDevMode = false && Astro.url.hostname.includes('localhost');
+type Props = CollectionEntry<'blog'>;
+
+const {page} = Astro.props;
 ---
 
-<!--Display the current page number. Astro.params.page can also be used!-->
-<Layout level="secondary" showSearch={true}>
-  <div class="container">
-    <div class="container--lg">
-      <h1>Blog Posts</h1>
-      {page.lastPage > 1 && <p>Page {page.currentPage} of {page.lastPage}</p>}
-      <PostList {page} cards={true} includeDrafts={isDevMode} />
-      {
-        /* https://github.com/philnash/astro-components/tree/main/packages/astro-pagination#usage */
-      }
-      {
-        page.lastPage > 1 && (
-          <Pagination {page} urlPattern={"/blog/{}"} firstPageUrl="/" />
-        )
-      }
-    </div>
-  </div>
-</Layout>
-
-<style is:global>
-  nav[aria-label="Pagination"] {
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 1rem;
-
-      li {
-      }
+<Layout
+  {page}
+  urlBase="blog"
+  title="Journal"
+  heroBg="https://images.unsplash.com/photo-1461958508236-9a742665a0d5"
+>
+  <ul class="plain stacked">
+    {
+      page.data.map(({ props }) => (
+        <li>
+          <PostCard post={props} brief={true}>
+            {props.data.description}
+          </PostCard>
+        </li>
+      ))
     }
-  }
-</style>
+  </ul>
+</Layout>

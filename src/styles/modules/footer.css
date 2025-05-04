@@ -1,9 +1,0 @@
-#site-footer {
-  padding-block: var(--space-m);
-  margin-block-start: var(--space-l-xl);
-  font-size: var(--step--1);
-
-  p {
-    font-size: inherit;
-  }
-}

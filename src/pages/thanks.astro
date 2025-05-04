@@ -1,8 +1,21 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import ArticlesChrono from '@components/ArticlesChrono.astro';
+import RecentPosts from '@components/RecentPosts.astro';
+import Layout from '@layouts/Base.astro';
+// Credit: https://unsplash.com/photos/a-couple-of-raccoons-standing-next-to-each-other-7TJmvpxtTVo
+const hero = 'https://images.unsplash.com/photo-1688521307715-253b14a1b726?q=80&w=2000&auto=format&fit=crop&ixlib=rb-4.0.3';
 ---
 
-<Layout title="Thanks for reaching out" searchable={false}>
-  <h1>Thanks for reaching out!</h1>
-  <p>I'll respond as soon as I can.</p>
+<Layout title="Thanks" heroBg={hero} level={2}>
+  <main>
+    <h2>Thanks for reaching out</h2>
+    <p class="lead">I'll get back to you as soon as I can.</p>
+    <p>In the meantime&hellip;</p>
+
+    <h3>Recent posts</h3>
+    <RecentPosts />
+
+    <h3>Journal archive</h3>
+    <ArticlesChrono level="month" />
+  </main>
 </Layout>

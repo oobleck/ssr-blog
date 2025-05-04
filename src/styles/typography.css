@@ -1,0 +1,336 @@
+@import '@fontsource-variable/inter/opsz.css' layer(typography);
+@import '@fontsource-variable/raleway' layer(typography);
+
+@layer typography {
+  :root {
+    /* @link https://utopia.fyi/type/calculator?c=320,16,1.25,1240,18,1.5,5,2,&s=0.75|0.5|0.25,1.5|2|3|4|6,s-l&g=s,l,xl,12 */
+    --step--2: clamp(0.5rem, 0.6887rem + -0.2435vw, 0.64rem);
+    --step--1: clamp(0.75rem, 0.8174rem + -0.087vw, 0.8rem);
+    --step-0: clamp(1rem, 0.9565rem + 0.2174vw, 1.125rem);
+    --step-1: clamp(1.25rem, 1.0978rem + 0.7609vw, 1.6875rem);
+    --step-2: clamp(1.5625rem, 1.2255rem + 1.6848vw, 2.5313rem);
+    --step-3: clamp(1.9531rem, 1.3118rem + 3.2065vw, 3.7969rem);
+    --step-4: clamp(2.4414rem, 1.3096rem + 5.659vw, 5.6953rem);
+    --step-5: clamp(3.0518rem, 1.1418rem + 9.5499vw, 8.543rem);
+
+    --font-size__base: 16px;
+    --font-size__lead: 1.2em;
+    --font-family__content: 'Inter Variable', system-ui, sans-serif;
+    --font-family__headings: 'Raleway Variable', var(--font-family__content);
+    --font-family__monospace:
+      ui-monospace, 'Cascadia Code', 'Source Code Pro', Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+    --line-height__content: 1.618;
+    --line-height__headings: 1.333;
+    --letter-spacing__content: 0;
+    --letter-spacing__headings: 0;
+    --block-margin: 1em;
+    --inline-margin: 0;
+
+    --weight-light: 200;
+    --weight-normal: 300;
+    --weight-semibold: 500;
+    --weight-bold: 600;
+    --weight-black: 800;
+    --weight__content: var(--weight-normal);
+    --weight__headings: var(--weight-bold);
+
+    font-size: var(--font-size__base);
+  }
+
+  :where(body) {
+    font-family: var(--font-family__content);
+    /* font-size: var(--font-size__base); */
+    font-size: 100%;
+    line-height: var(--line-height__content);
+    font-weight: var(--weight__content);
+    color: var(--color__content, unset);
+    background-color: var(--paper, unset);
+    letter-spacing: var(--letter-spacing__content);
+    text-align: left;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    margin: 0;
+    padding: 0;
+  }
+
+  :where(p) {
+    text-wrap: pretty;
+
+    &.lead {
+      /* font-size: var(--step-1); */
+      font-size: var(--font-size__lead);
+      /* font-size: 1.333em; */
+      /* font-weight: var(--weight-semibold); */
+      /* line-height: var(--line-height__headings); */
+    }
+  }
+
+  :where(p, blockquote, ul, ol, dl, figure, table, details) {
+    font-size: var(--step-0);
+    line-height: var(--line-height__content);
+    margin: var(--block-margin, 0.7em) 0;
+
+    &:is(figure) {
+      margin-block-start: 0;
+    }
+  }
+
+  :where(ul) {
+    &:not(.plain) {
+      margin-inline: 0;
+      padding-inline-start: 2ch;
+
+      li {
+        margin-inline: 0;
+        padding-inline: 0;
+
+        &::marker {
+          content: '\2022\00A0';
+          content: '\2022\00A0\00A0';
+          font-weight: var(--weight-bold);
+          color: var(--brand);
+          /* display: inline-block; */
+          /* padding-inline: 3em; */
+        }
+      }
+    }
+  }
+
+  :is(ul, ol) {
+    padding-inline-start: 2ch;
+  }
+
+  :where(a[href], button.link) {
+    color: var(--color__links);
+    text-decoration: underline;
+    text-underline-offset: 0.2ch;
+    transition: color 0.2s linear;
+
+    &:is(:hover, :active) {
+      color: var(--color__links--hover);
+    }
+
+    &:where([href^='http']:not(.social-share-btn)) {
+      &::after {
+        /* content: '⤴'; */
+        content: '↗';
+        display: inline-block;
+        margin-inline-start: 0.4ch;
+        line-height: 1;
+        font-weight: var(--weight-semibold);
+        font-size: 0.7em;
+        transform: translateY(-0.3ch);
+      }
+    }
+
+    &.segment-link {
+      display: inline-block;
+      font-size: var(--step-1);
+      position: absolute;
+      left: -2.5ch;
+      padding-inline: 0.5ch 33%;
+      /* transform: translateY(33%); */
+      opacity: 0;
+      transition: opacity 0.5s var(--ease-out-4);
+
+      :has(> &) {
+        position: relative;
+
+        &:hover .segment-link {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  :where(nav a) {
+    &.active {
+      font-weight: var(--weight-bold);
+
+      &::before {
+        content: var(--indicator);
+        display: inline-block;
+        margin-inline: 0;
+        color: var(--palette__secondary);
+        transform: translateX(-0.333ch);
+        margin-inline-start: -0.333ch;
+      }
+    }
+  }
+
+  :where(h1, h2, h3, h4, h5, h6) {
+    color: var(--color__headings, inherit);
+    font-family: var(--font-family__headings, var(--font-family__content));
+    font-weight: var(--weight__headings);
+    line-height: var(--line-height__headings);
+    letter-spacing: var(--letter-spacing__headings);
+    margin-block: var(--block-margin);
+    /* text-transform: capitalize; */
+    /* text-transform: capitalize; */
+
+    &.fancy {
+      &::after {
+        content: '';
+        background-color: var(--palette__secondary);
+        height: 0.25rem;
+        line-height: 1;
+        max-width: 10rem;
+        min-width: 2em;
+        width: 30%;
+        display: block;
+        margin-top: 0.5ch;
+      }
+    }
+  }
+
+  :where(h1) {
+    font-size: var(--step-3);
+  }
+
+  :where(h2) {
+    font-size: var(--step-2);
+  }
+
+  :where(h3) {
+    font-size: var(--step-1);
+  }
+
+  :where(h4) {
+    font-size: var(--step-0);
+  }
+
+  :is(h5) {
+    font-size: var(--step-0);
+    font-weight: var(--weight-bold) !important;
+    text-transform: uppercase;
+  }
+
+  :where(h6) {
+    font-size: var(--step--1);
+    font-size: var(--step--0);
+    font-weight: var(--weight-semibold) !important;
+  }
+
+  :where(strong, b) {
+    font-weight: var(--weight-bold);
+  }
+
+  :where(.strike) {
+    /* text-decoration: line-through;
+    text-decoration-color: var(--color__danger); */
+    position: relative;
+    display: inline-block;
+
+    &::after {
+      content: '';
+      background-color: var(--color__danger);
+      height: 0.15ch;
+      line-height: 1;
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: -0.3ch;
+      right: -0.3ch;
+      transform: rotate(-3deg);
+    }
+  }
+
+  :where(kbd, code) {
+    display: inline-block;
+    padding-inline: 0.7ch;
+    background-color: var(--paper-subtle);
+    max-inline-size: 100%;
+    font-size: 0.85em;
+    font-family: var(--font-family__monospace);
+    line-height: 1.3;
+    border-radius: 0.3ch;
+    text-decoration: inherit;
+  }
+
+  :where(pre) {
+    border-radius: 0.3ch;
+  }
+
+  :where(.text-emphasis) {
+    color: var(--palette__secondary);
+  }
+
+  :is(.ink-contrast) {
+    color: white !important;
+    mix-blend-mode: difference;
+    filter: grayscale(1) contrast(10);
+    opacity: 1;
+  }
+
+  :is(.ink-contrast2) {
+    color: transparent;
+    background: inherit;
+    background-clip: text;
+    filter: invert(1) grayscale(1) contrast(9);
+  }
+
+  :is(.callout) {
+    --bg-color: transparent;
+    --fg-color: currentColor;
+    --icon-color: var(--fg-color);
+    --border-color: var(--paper-shade);
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: var(--space-2xs-xs);
+    border: 1px solid var(--border-color);
+    padding: var(--space-2xs-xs);
+    margin-block: var(--block-margin);
+    background-color: var(--bg-color);
+    color: var(--fg-color);
+
+    svg {
+      color: var(--icon-color);
+      transform: scale(1.333);
+      transform-origin: 0 50%;
+    }
+
+    .callout-title {
+      display: flex;
+      align-items: baseline;
+      gap: 1em;
+      font-weight: var(--weight-semibold);
+    }
+
+    :last-child {
+      margin-block-end: 0;
+    }
+
+    &:where(.tip) {
+      --bg-color: var(--color__hint--subtle);
+      /* --fg-color: var(--hint); */
+      /* --border-color: var(--hint--alpha); */
+    }
+
+    &:where(.note, .info) {
+      --bg-color: var(--color__info--subtle);
+      --fg-color: var(--color__info);
+      --border-color: currentColor;
+    }
+
+    &:where(.warning, .bug) {
+      --bg-color: var(--color__warning--subtle);
+      --fg-color: var(--color__warning);
+      --border-color: currentColor;
+    }
+
+    &:where(.error, .danger, .failure) {
+      --bg-color: var(--color__danger--subtle);
+      --fg-color: var(--color__danger);
+      --border-color: currentColor;
+    }
+
+    &:where(.success) {
+      --bg-color: var(--color__success--subtle);
+      --fg-color: var(--color__success);
+      --border-color: currentColor;
+    }
+  }
+}

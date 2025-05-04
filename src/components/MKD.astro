@@ -1,0 +1,15 @@
+---
+import { parseMarkdown } from '@utils/parse-markdown';
+import { careerHighlighter } from '@utils/career-highlighter';
+
+interface Props {
+  emphasize?: boolean;
+  copy?: string;
+}
+
+const {emphasize = false, copy} = Astro.props;
+const parser = emphasize ? careerHighlighter : parseMarkdown;
+const result = await parser(copy ?? Astro.slots.render('default'));
+---
+
+<Fragment set:html={result} />

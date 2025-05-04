@@ -1,0 +1,37 @@
+---
+import Section from "../Section.astro";
+import {parseMarkdown} from "@utils/parse-markdown";
+import {references} from "@data/resume.json";
+import { careerHighlighter } from "@utils/career-highlighter";
+
+interface Props {
+  max: number;
+}
+
+const {max = 3} = Astro.props;
+---
+
+<Section title="Testimonials" className="testimonials-section">
+  {
+    references?.slice(0, max).map(({ name, reference }) => (
+      <blockquote class="resume-testimonial">
+        <p set:html={careerHighlighter(reference, 'gim')} />
+        <cite>{name}</cite>
+      </blockquote>
+    ))
+  }
+
+  {
+    references?.length > max && (
+      <details class="no-print">
+        <summary>See more&hellip;</summary>
+        {references?.slice(max + 1).map(({ name, reference }) => (
+          <blockquote class="resume-testimonial">
+            <p set:html={careerHighlighter(reference, 'gim')} />
+            <cite>{name}</cite>
+          </blockquote>
+        ))}
+      </details>
+    )
+  }
+</Section>

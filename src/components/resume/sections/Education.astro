@@ -1,0 +1,42 @@
+---
+import Multiline from "@components/Multiline.astro";
+import Section from "../Section.astro"
+import { education } from "@data/resume copy.json";
+import DatedEntity from "../DatedEntity.astro";
+---
+
+<Section title="Education">
+  <ul class="plain">
+    {
+      education.map(
+        ({
+          institution,
+          startDate,
+          endDate,
+          area,
+          url,
+          studyType,
+          activities,
+        }) => {
+          return (
+            <li>
+              <DatedEntity
+                type="education"
+                title={`BA: ${area}`}
+                dates={[startDate, endDate]}
+                {url}
+              >
+                <h4 slot="subtitle" class="entity-subtitle p-orginstitution">
+                  {institution}
+                </h4>
+                <Fragment slot="summary">
+                  <Multiline>{activities}</Multiline>
+                </Fragment>
+              </DatedEntity>
+            </li>
+          );
+        },
+      )
+    }
+  </ul>
+</Section>

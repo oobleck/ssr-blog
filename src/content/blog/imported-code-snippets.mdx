@@ -1,0 +1,56 @@
+---
+title: Import code snippets dynamically? Yes please.
+description: How I set up raw file import for use in code block snippets
+pubDate: Feb 09 2025 15:58 PST
+category: Dev
+tags:
+  - AstroJS
+  - How-to
+images:
+  - image: https://images.unsplash.com/photo-1601091710444-f0fe10514ae9
+    creditUrl: https://unsplash.com/photos/red-chili-and-green-vegetable-bdZk2REPQRE
+    altText: Bright red raw beets with soil still on them sitting on some wood planks
+---
+
+import CBComponent from '@components/CodeBlock.astro?raw';
+import Page from './imported-code-snippets.mdx?raw';
+
+## Introduction
+
+<p class="lead">
+  In my previous post, "[[content-organization]]" I wanted to include my actual component
+  and config files and keep them up to date as this website evolves. You can't
+  just import it in mdx files and drop it into a code block. MDX/Astro doesn't
+  interpolate variables inside backtick code blocks.
+</p>
+
+I needed another solution.
+
+While doing some research, I learned that [Vite has the
+`...?raw` import directive](https://vite.dev/guide/assets#importing-asset-as-string)
+which lets you import the raw contents of a file. Cool. Now I need to interpolate that inside a code block with syntax
+highlighting and all that.
+
+Astro provides a [`<Code
+/>` component](https://docs.astro.build/en/guides/syntax-highlighting/#code-) which wraps the passed content within a Shiki block.
+Great, that's pretty straight forward.
+
+Oh, but wait. That output is encoded. So `<` chars are encoded as `&lt;`, etc.
+That's no good. To resolve that issue I pulled in `lodash-es/unescape`. Sure I
+could roll my own decoder, but I don't want to maintain the hash of entities
+to replace.
+
+## The code
+
+Here's the `<CodeBlock />` component I wrote (dynamically included, of course
+😉).
+
+<CodeBlock lang="astro" filename="CodeBlock.astro">{CBComponent}</CodeBlock>
+
+And this very file that uses it. So meta 🤯
+
+<details>
+  <summary>Click to expand</summary>
+
+  <CodeBlock lang="mdx" filename="imported-code-snippets.mdx">{Page}</CodeBlock>
+</details>

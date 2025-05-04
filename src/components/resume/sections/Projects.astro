@@ -1,0 +1,144 @@
+---
+// import GitHub from "@/icons/GitHub.astro"
+import Section from "../Section.astro";
+import Link from "@components/HeaderLink.astro";
+import DatedHeader from "@components/resume/DatedHeader.astro";
+import {parseMarkdown} from "@utils/parse-markdown";
+import { projects } from "@data/resume.json";
+import { careerHighlighter } from "@utils/career-highlighter";
+
+function projectsSort(a, b) {
+  return 0;
+  const aIsActive = a.isActive || !a.endDate;
+  const bIsActive = b.isActive || !b.endDate;
+  if (aIsActive || bIsActive) {
+    return aIsActive && bIsActive ? a.name.localeCompare(b.name) : -1;
+  }
+
+  return new Date(b.endDate).getTime() - new Date(a.endDate).getTime();
+}
+
+// 6 Months in ms
+const projectAgeThreshold = 15778800000; //1.5768E+10;
+---
+
+<Section title="Projects">
+  <ul class="plain">
+    {
+      projects?.filter(({summary, description = summary, highlights = []}) => description || highlights.length).sort(projectsSort).map(
+        async ({ url, summary, description = summary, highlights, name, github, startDate, endDate, isActive = !endDate || !/[\d\-]+/.test(endDate) }) => {
+          const hasLink = !!url;
+          const shouldLink = hasLink && Date.now() - new Date(endDate).getTime() < projectAgeThreshold;
+          // console.log({isActive, endDate});
+          const TLinkEl = shouldLink ? Link : Fragment;
+          const desc = careerHighlighter(description);
+          return (
+            <li>
+              <article>
+                <DatedHeader dates={[startDate, endDate]}>
+                  <h4 class="entity-title">
+                    <TLinkEl href={url}>{name}</TLinkEl>
+                    <!-- {isActive && <sl-icon name="asterisk" />} -->
+                    {github && (
+                      <sl-icon-button
+                        name="git"
+                        class="code-link"
+                        href={github}
+                        title={`View the source code for project "${name}"`}
+                      />
+                    )}
+                  </h4>
+                </DatedHeader>
+
+                {description && <Fragment set:html={desc} />}
+
+                {!!highlights?.length && (<ul class="plain inline project-highlights">
+                  {highlights.map((highlight) => {
+                    return <li>{highlight}</li>;
+                  })}
+                </ul>)}
+              </article>
+            </li>
+          );
+        },
+      )
+    }
+  </ul>
+</Section>
+
+<!-- <style>
+  ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-inline: -16px;
+  }
+
+  article {
+    border-radius: 8px;
+    border: 1px solid #f2f2f2;
+    gap: 16px;
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+    height: 100%;
+  }
+
+  article header {
+    flex: 1;
+  }
+
+  article h3 {
+    margin-bottom: 4px;
+  }
+
+  article a {
+    color: #111;
+  }
+
+  article a:hover {
+    text-decoration: underline;
+  }
+
+  article p {
+    font-size: 0.75rem;
+    line-height: 1.2rem;
+    margin-bottom: 4px;
+  }
+
+  article h3 span {
+    color: rgb(0, 188, 47);
+  }
+
+  footer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    font-size: 0.6rem;
+  }
+
+  footer span {
+    border-radius: 6px;
+    background: #eee;
+    color: #444;
+    font-size: 0.6rem;
+    font-weight: 500;
+    padding: 0.2rem 0.6rem;
+  }
+
+  .github-code-link {
+    margin-left: 5px;
+  }
+
+  @media (width <= 700px) {
+    ul {
+      margin-inline: 0px;
+    }
+
+    article {
+      border: none;
+      box-shadow: 0 1px 1px #f2f2f2;
+      padding: 0 0 16px 0;
+    }
+  }
+</style> -->

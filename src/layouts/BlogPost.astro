@@ -1,0 +1,129 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Comments from '@giscus/vue';
+import BaseLayout from './Base.astro';
+import Hero from '../components/Hero.astro';
+import Multiline from '../components/Multiline.astro';
+import PostMetadata from '../components/PostMetadata.astro';
+import PostCard from '../components/PostCard.astro';
+import { getMergedPosts } from '@utils/merged-posts';
+import { DEV, settings } from '@data/settings';
+import ArticlesRelativeNav from '@components/ArticlesRelativeNav.astro';
+
+type Props = CollectionEntry<'blog'>['data'] & {
+  post: CollectionEntry<'blog'>, drafts?: boolean};
+
+const specificPost = Astro.props.post ?? Astro.props;
+const {drafts = DEV} = Astro.props;
+const {title, description, images = [], noHero = false, changelog = [], draft = false, level = 1} = specificPost?.data ?? specificPost;
+const heroImage = images.find(({featured}) => featured) ?? images[0];
+const result = await (Astro.props.post
+	? Promise.resolve([specificPost])
+	: getMergedPosts(drafts))
+const post: any = result.find((blog: any) => blog.data.title === Astro.props.title);
+const postOrigin = post.data.gh ? 'github' : 'local';
+---
+
+<BaseLayout
+  {title}
+  {description}
+  {level}
+  bodyClass={`blog-post layout__wide source__${postOrigin} ${draft ? 'draft-post' : ''}`}
+>
+  <Hero slot="hero" {title} {level} background={heroImage?.image}>
+    <PostMetadata
+      post={post.data}
+      stacked={false}
+      slot="tagline"
+      showTags={false}
+      showIcons={false}
+    />
+  </Hero>
+  <main>
+    <PostCard {post} brief={false} {noHero}>
+      <slot />
+      <ArticlesRelativeNav type="blog" />
+
+      {
+        settings.bridgyEndpoints.map((url) => (
+          <a hidden="humans" aria-hidden="true" href={url} />
+        ))
+      }
+      {!draft && (
+        <h3>What do you think?</h3>
+
+        <web-mentions domain={settings.site} showTitle={false}></web-mentions>
+
+        <Comments
+          id="post-comments"
+          client:idle
+          repo="oobleck/ssr-blog"
+          repoId="R_kgDOLEM0eg"
+          mapping="specific"
+          data-x-category={settings.giscusCategory.name}
+          categoryId={settings.giscusCategory.id}
+          term={post.data.slug ?? post.id}
+          strict="0"
+          reactionsEnabled="1"
+          emitMetadata="1"
+          inputPosition="bottom"
+          theme="preferred_color_scheme"
+          lang="en"
+          loading="lazy"
+          crossorigin="anonymous"
+        />
+      )}
+      {draft && <p id="post-comments">Comments are disabled in draft posts.</p>}
+    </PostCard>
+  </main>
+  {!draft && (
+    <script>
+      let commentCount = 0;
+      window.addEventListener('message', (event) => {
+        if (event.origin !== 'https://giscus.app') return;
+        if (!event.data?.giscus?.discussion) return;
+
+        const { giscus: data } = event.data;
+        const { totalCommentCount = 0, totalReplyCount = 0 } = data.discussion;
+        const _comments = totalReplyCount + totalCommentCount;
+        if (commentCount !== _comments) {
+          const cmtEls =
+            document.querySelectorAll<HTMLDivElement>('.comments-count');
+          commentCount = _comments;
+          cmtEls.forEach(
+            (el) =>
+              (el.innerText = `${commentCount} Comment${commentCount === 1 ? '' : 's'}`),
+          );
+        }
+      });
+    </script>
+
+    <script slot="trailer" src="/scripts/web-mention.js" is:inline></script>
+  )}
+</BaseLayout>
+
+<style is:global>
+  #hero {
+    .draft-post & :where(.page-title) {
+      /* font-weight: var(--weight-bold); */
+      color: var(--color__danger);
+
+      &::after {
+        content: ' (Draft)';
+        font-weight: var(--weight-bold);
+        font-style: italic;
+      }
+    }
+
+    .post-metadata {
+      max-width: calc(0.5 * var(--content-max-width));
+      margin-top: var(--space-s-m);
+      text-align: center;
+    }
+  }
+
+  #post-comments {
+    display: block;
+    margin-top: var(--space-l-xl);
+  }
+</style>

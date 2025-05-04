@@ -1,0 +1,68 @@
+---
+import type { string } from 'astro:schema';
+
+interface Props {
+  date: Date | string;
+  class?: string;
+  [k: string]: string;
+}
+
+const { date, class: className, ...otherProps } = Astro.props;
+const _date = new Date(date);
+const day = _date.getDate().toString().padStart(2, '0');
+const month = _date.toLocaleDateString('en-US', { month: 'short' });
+const year = _date.getFullYear().toString();
+---
+
+<div class:list={['fancy-date', className]} {...otherProps}>
+  <span class="day box">
+    <span
+      class="letter"
+      set:html={day.split('').join('</span><span class="letter">')}
+    />
+  </span>
+  <span class="date box">
+    <span
+      class="letter"
+      set:html={[...month.split(''), ' ', ...year.split('')].join(
+        '</span><span class="letter">',
+      )}
+    />
+  </span>
+</div>
+
+<style>
+  .fancy-date {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 1em;
+    font-size: calc(var(--step--1) * 1.15);
+    font-weight: var(--weight-bold);
+    line-height: 1;
+    text-align: justify;
+    text-justify: inter-character;
+    text-transform: uppercase;
+  }
+
+  .day.box {
+    font-size: var(--step-3);
+    font-weight: calc(var(--weight-bold) + 100);
+    width: 103%;
+  }
+
+  .box {
+    width: 100%;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    /* outline: 1px dotted; */
+
+    .letter {
+      min-width: 0.2ch;
+      letter-spacing: 0;
+    }
+  }
+</style>

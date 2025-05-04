@@ -1,0 +1,262 @@
+---
+title: 'Markdown Style Guide'
+description: 'Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.'
+draft: true
+level: 0
+pubDate: 'Feb 2, 2025'
+category: Dev
+tags:
+  - markdown
+  - guides
+galleryType: carousel
+images:
+  - image: https://images.unsplash.com/photo-1581544291234-31340be4b1b8
+    creditUrl: https://unsplash.com/photos/red-blue-yellow-and-white-letter-m-IhWYiwSxm8g
+    altText: Colorful tiles with letters on them.
+  - image: https://deploy-preview-638--hbs-docs.netlify.app/images/markdown.png
+    altText: Screenshot of Visual Studio Code with a Markdown page open and a preview pane
+    creditUrl: https://deploy-preview-638--hbs-docs.netlify.app/en/posts/markdown-syntax/
+  - image: https://cdn.pixabay.com/photo/2014/02/19/20/39/winter-270160_1280.jpg
+    creditUrl: https://pixabay.com/photos/winter-snow-forest-winter-magic-270160/
+    altText: Sunny winter forest
+  - image: https://cdn.pixabay.com/photo/2019/11/02/20/18/fog-4597348_1280.jpg
+    altText: Foggy winter forest
+    creditUrl: https://pixabay.com/photos/fog-mountains-mood-grenchenberg-4597348/
+    featured: true
+  - image: https://cdn.pixabay.com/photo/2014/02/19/20/39/winter-270160_1280.jpg
+    creditUrl: https://pixabay.com/photos/winter-snow-forest-winter-magic-270160/
+    altText: Sunny winter forest
+  - image: https://cdn.pixabay.com/photo/2019/11/02/20/18/fog-4597348_1280.jpg
+    altText: Foggy winter forest
+    creditUrl: https://pixabay.com/photos/fog-mountains-mood-grenchenberg-4597348/
+---
+
+import Palettes, {tokens} from "./components/palettes.astro";
+
+<p class="lead">
+  Here is a sample of some basic Markdown syntax that can be used when writing Markdown content in Astro.
+</p>
+
+## Headings
+
+The following HTML `<h1>`—`<h6>` elements represent six levels of section headings. `<h1>` is the highest section level while `<h6>` is the lowest.
+
+# H1 Heading 1
+
+## H2 Heading 2
+
+### H3 Heading 3
+
+#### H4 Heading 4
+
+##### H5 Heading 5
+
+###### H6 Heading 6
+
+## Paragraph
+
+Xerum, quo qui aut unt expliquam qui dolut labo. Aque venitatiusda cum, voluptionse latur sitiae dolessi aut parist aut dollo enim qui voluptate ma dolestendit peritin re plis aut quas inctum laceat est volestemque commosa as cus endigna tectur, offic to cor sequas etum rerum idem sintibus eiur? Quianimin porecus evelectur, cum que nis nust voloribus ratem aut omnimi, sitatur? Quiatem. Nam, omnis sum am facea corem alique molestrunt et eos evelece arcillit ut aut eos eos nus, sin conecerem erum fuga. Ri oditatquam, ad quibus unda veliamenimin cusam et facea ipsamus es exerum sitate dolores editium rerore eost, temped molorro ratiae volorro te reribus dolorer sperchicium faceata tiustia prat.
+
+Itatur? Quiatae cullecum rem ent aut odis in re eossequodi nonsequ idebis ne sapicia is sinveli squiatum, core et que aut hariosam ex eat.
+
+## Images
+
+### Syntax
+
+```markdown
+![Alt text](./full/or/relative/path/of/image)
+```
+
+### Output
+
+![blog placeholder](/blog-placeholder-about.jpg)
+
+## Blockquotes
+
+The blockquote element represents content that is quoted from another source, optionally with a citation which must be within a `footer` or `cite` element, and optionally with in-line changes such as annotations and abbreviations.
+
+### Blockquote without attribution
+
+#### Syntax
+
+```markdown
+> Tiam, ad mint andaepu dandae nostion secatur sequo quae.
+> **Note** that you can use _Markdown syntax_ within a blockquote.
+```
+
+#### Output
+
+> Tiam, ad mint andaepu dandae nostion secatur sequo quae.
+> **Note** that you can use _Markdown syntax_ within a blockquote.
+
+### Blockquote with attribution
+
+#### Syntax
+
+```markdown
+> Don't communicate by sharing memory, share memory by communicating.<br />
+> — <cite>Rob Pike[^1]</cite>
+```
+
+#### Output
+
+> Don't communicate by sharing memory, share memory by communicating.<br />
+> — <cite>Rob Pike[^1]</cite>
+
+[^1]: The above quote is excerpted from Rob Pike's [talk](https://www.youtube.com/watch?v=PAAkCSZUG1c) during Gopherfest, November 18, 2015.
+
+## Tables
+
+### Syntax
+
+```markdown
+| Column 1  | Column 2 | Column 3 |
+| --------- | -------- | -------- |
+| content   | **bold** | `code`   |
+| _italics_ | **bold** | `code`   |
+| _italics_ | **bold** | content  |
+```
+
+### Output
+
+| Column 1  | Column 2 | Column 3 |
+| --------- | -------- | -------- |
+| content   | **bold** | `code`   |
+| _italics_ | **bold** | `code`   |
+| _italics_ | **bold** | content  |
+
+## Code Blocks
+
+### Syntax
+
+we can use 3 backticks ``` in new line and write snippet and close with 3 backticks on new line and to highlight language specific syntax, write one word of language name after first 3 backticks, for eg. html, javascript, css, markdown, typescript, txt, bash
+
+````markdown
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Example HTML5 Document</title>
+  </head>
+  <body>
+    <p>Test</p>
+  </body>
+</html>
+```
+````
+
+### Output
+
+```html
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Example HTML5 Document</title>
+  </head>
+  <body>
+    <p>Test</p>
+  </body>
+</html>
+```
+
+## List Types
+
+### Ordered List
+
+#### Syntax
+
+```markdown
+1. First item
+2. Second item
+3. Third item
+```
+
+#### Output
+
+1. First item
+2. Second item
+3. Third item
+
+### Unordered List
+
+#### Syntax
+
+```markdown
+- List item
+- Another item
+- And another item
+```
+
+#### Output
+
+- List item
+- Another item
+- And another item
+
+### Nested list
+
+#### Syntax
+
+```markdown
+- Fruit
+  - Apple
+  - Orange
+  - Banana
+- Dairy
+  - Milk
+  - Cheese
+```
+
+#### Output
+
+- Fruit
+  - Apple
+  - Orange
+  - Banana
+- Dairy
+  - Milk
+  - Cheese
+
+## Other Elements — abbr, sub, sup, kbd, mark
+
+### Syntax
+
+```markdown
+<abbr title="Graphics Interchange Format">GIF</abbr> is a bitmap image format.
+
+H<sub>2</sub>O
+
+X<sup>n</sup> + Y<sup>n</sup> = Z<sup>n</sup>
+
+Press <kbd>CTRL</kbd> + <kbd>ALT</kbd> + <kbd>Delete</kbd> to end the session.
+
+Most <mark>salamanders</mark> are nocturnal, and hunt for insects, worms, and other small creatures.
+```
+
+### Output
+
+<abbr title="Graphics Interchange Format">GIF</abbr> is a bitmap image format.
+
+H<sub>2</sub>O
+
+X<sup>n</sup> + Y<sup>n</sup> = Z<sup>n</sup>
+
+Press <kbd>CTRL</kbd> + <kbd>ALT</kbd> + <kbd>Delete</kbd> to end the session.
+
+Most <mark>salamanders</mark> are nocturnal, and hunt for insects, worms, and other small creatures.
+
+## Colors
+
+### Status colors
+<p style="font-weight: var(--weight-semibold); display: flex; gap: 0.5ch; flex-direction: column">
+  <div class="ink-hint paper-hint border-hint">Hint color</div>
+  <div class="ink-info paper-info border-info">Info color</div>
+  <div class="ink-success paper-success border-success">Success color</div>
+  <div class="ink-warning paper-warning border-warning">Warning color</div>
+  <div class="ink-danger paper-danger border-danger">Danger color</div>
+</p>
+
+### Site palette
+<Palettes></Palettes>

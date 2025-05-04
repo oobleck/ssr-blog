@@ -1,0 +1,49 @@
+---
+import {execSync} from 'child_process';
+import Link from './HeaderLink.astro';
+
+interface Props {
+  group?: 'prod' | 'dev';
+  depth?: number;
+  format?: 'json' | 'list';
+}
+
+const {group: type = 'prod', depth = 0, format = 'json'} = Astro.props;
+const depsKey = type === 'prod' ? 'dependencies' : 'devDependencies';
+const deps = Object.values(JSON.parse(execSync(`pnpm list --long --depth ${depth} --${format} --${type}`).toString()));
+---
+
+<table class="sticky-header">
+  <thead>
+    <tr>
+      <th>Module</th>
+      <th>Version</th>
+      <th>Description</th>
+      <th>License</th>
+    </tr>
+  </thead>
+  <tbody>
+    {
+      Object.values(deps[0][depsKey]).map((dep) => {
+        const { name, email, url } = dep.author ?? {};
+        const hasAuthorInfo = Boolean(email ?? url);
+        return (
+          <tr>
+            <td>
+              <Link href={dep.homepage}>{dep.from}</Link>
+            </td>
+            <td>{dep.version}</td>
+            <td set:html={dep.description || '&ndash;'} />
+            <td>
+              <Link href={`https://spdx.org/licenses/${dep.license}.html`}>
+                {dep.license}
+              </Link>
+            </td>
+          </tr>
+        );
+      })
+    }
+  </tbody>
+</table>
+
+<!-- <small><pre>{JSON.stringify(deps[0].dependencies, null, 2)}</pre></small> -->

@@ -1,0 +1,22 @@
+---
+import DatesRange from './DatesRange.astro';
+import {datesDelta} from "@utils/dates-delta";
+
+interface Props {
+  dates: (Date | string | number)[];
+}
+
+const { dates } = Astro.props;
+const delta = datesDelta(...dates);
+---
+
+<header class="dated-header">
+  <hgroup>
+    <slot />
+  </hgroup>
+  {!!dates?.[0] && (<hgroup>
+    <sl-tooltip content={delta}>
+      <DatesRange start={dates[0]} end={dates[1]} />
+    </sl-tooltip>
+  </hgroup>)}
+</header>

@@ -1,73 +1,14 @@
 ---
-import {getBlogPosts} from "../utils/get-posts";
-import {eachTag, postTagsList} from "../utils/tags.reducer";
+import { getTags } from '@utils/get-tags';
+import Tags from './Tags.astro';
+import {getTags} from '@utils/get-tags';
 
-const tagsHash = await postTagsList(false);
-const weightRange = [...new Set(Object.values(tagsHash))].sort();
-const {showValue, showLabel} = Astro.props;
-const Label = "h5";
-
-function tagWeight(count: number): string {
-  const avg = weightRange.reduce((agg, score) => agg + score, 0) / weightRange.length;
-
-  switch (true) {
-    case count < avg:
-      return 'sm';
-    case count > avg:
-      return 'lg';
-    default:
-      return 'md';
-  }
+interface Props {
+  type?: 'works' | 'blog';
 }
+
+const { type = 'blog' } = Astro.props;
+const tags = await getTags(type);
 ---
 
-{showLabel && (<Label set:html="Tags" />)}
-<ul class="tag-cloud" role="navigation" aria-label="Blog post tags cloud" data-show-value={showValue}>
-  {eachTag(tagsHash, (tag, count) => (
-    <li class={`tag p-category weight-${tagWeight(count)}`} data-count={count} data-weight={tagWeight(count)}>
-      <a href={`/tags/${tag}`}} tabindex="0">#{tag}</a>
-    </li>
-  ))}
-</ul>
-
-<style>
-  .tag-cloud {
-    list-style: none;
-    margin: 0 auto;
-    padding: 0;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0 1ch;
-    align-items: center;
-    justify-content: center;
-    max-width: calc(var(--grid-max-width) / 2);
-  }
-
-  .tag.p-category {
-    --scale: 1;
-
-    margin: 0;
-    padding: 0;
-    font-size: calc(var(--scale) * 0.25rem + 0.5rem);
-    line-height: 1.25em;
-
-    [data-show-value] &::after {
-      display: inline-block;
-      content: "(" attr(data-count) ")";
-      font-size: 1rem;
-      color: var(--ink-subtle);
-    }
-
-    &[data-weight="sm"] {
-      --scale: 2;
-    }
-
-    &[data-weight="md"] {
-      --scale: 4;
-    }
-
-    &[data-weight="lg"] {
-      --scale: 6;
-    }
-  }
-</style>
+<Tags tags={Object.keys(tags) ?? []} {type} layout="inline" />

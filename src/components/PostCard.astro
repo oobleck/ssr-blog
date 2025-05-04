@@ -1,0 +1,258 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import AboutMe from './AboutMe.astro';
+import Changelog from './Changelog.astro';
+import Lnk from './HeaderLink.astro';
+import Highlight from './Highlight.astro';
+import ImageGallery from './ImageGallery.astro';
+import Multiline from './Multiline.astro';
+import PostMetadata from './PostMetadata.astro';
+import RecentPosts from './RecentPosts.astro';
+import Share from './Share.astro';
+import TagCloud from './TagCloud.astro';
+import ImageCarousel from './ImageCarousel.astro';
+import Categories from '@components/Categories.astro';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  brief?: boolean;
+  noHero?: boolean;
+}
+
+const {post, brief = false, noHero = false} = Astro.props;
+const {images = [], galleryType: layout = 'stack'} = post.data;
+const postHref = `/blog/${post.id}`;
+const shouldShowCarousel = !brief && layout === 'carousel';
+---
+
+<div class:list={['post-card', { brief }]}>
+  <aside class="article-meta">
+    <PostMetadata
+      post={post.data}
+      id={post.id}
+      data-stacked={brief}
+      showTitle={!brief}
+      showComments={!brief}
+      showPermalink={true}
+    />
+  </aside>
+  <article data-Xanimate="slide-up">
+    {
+      !noHero && shouldShowCarousel && (
+        <ImageCarousel {images} linkTo={brief ? postHref : undefined} />
+      )
+    }
+    {
+      !noHero && !shouldShowCarousel && (
+        <ImageGallery
+          {images}
+          heroOnly={brief}
+          layout={layout}
+          linkTo={brief ? postHref : undefined}
+          constrain={brief}
+        />
+      )
+    }
+    {
+      brief ? (
+        <h3 class="post-title">
+          <Lnk href={postHref} set:html={post.data.title} />
+        </h3>
+        <Multiline>
+          <slot />
+        </Multiline>
+        <p>
+          <Lnk href={postHref} class="read-more">
+            Read more
+          </Lnk>
+        </p>
+      ) : (
+        <Changelog changelog={post.data.changelog} num={3} />
+
+        <Multiline lead={true}>{post.data.description?.replace(/([\.\?!]*)$/, (unused, match) => match || '.')}</Multiline>
+        <slot />
+      )
+    }
+  </article>
+  {
+    !brief && (
+      <aside>
+        <div class="sidebar-widget">
+          <h4>
+            <Highlight nth={1}>Share this Article</Highlight>
+          </h4>
+          <Share post={post} useDrawer={true} />
+        </div>
+
+        <div class="sidebar-widget">
+          <h4>
+            <Highlight>Recent Posts</Highlight>
+          </h4>
+          <RecentPosts numPosts={5} readMore={true} layout="list" />
+        </div>
+
+        <div class="sidebar-widget">
+          <h4>
+            <Highlight nth={1}>Journal Tags</Highlight>
+          </h4>
+          <TagCloud type="blog" />
+        </div>
+
+        <div class="sidebar-widget">
+          <h4>
+            <Highlight nth={1}>Journal Categories</Highlight>
+          </h4>
+          <Categories layout="list" />
+        </div>
+
+        <div class="sidebar-widget">
+          <h4>
+            <Highlight nth={1}>About the Author</Highlight>
+          </h4>
+          <AboutMe brief={true} compact={true} />
+        </div>
+      </aside>
+    )
+  }
+</div>
+
+<script>
+  const className = 'scrolled';
+  const options = {
+    root: document.body,
+    rootMargin: '0px 0px -93% 0px',
+    threshold: 0,
+  };
+  const targetEl = document.querySelectorAll('.article-meta');
+
+  function handler(entries: IntersectionObserverEntry[]) {
+    const { isIntersecting, target } = entries[0];
+    target.classList.toggle(className, !isIntersecting);
+  }
+
+  const scrollObsv = new IntersectionObserver(handler, options);
+
+  targetEl?.forEach((tgt) => scrollObsv.observe(tgt));
+</script>
+
+<style is:global>
+  .post-card {
+    .article-meta {
+      position: sticky;
+      top: calc(var(--nav-height) + var(--space-xs-s));
+      z-index: unset;
+
+      .post-title {
+        max-height: 0;
+        overflow-y: clip;
+        transition: max-height 0.7s var(--ease-out-3);
+      }
+
+      &.scrolled {
+        .post-title {
+          max-height: 10em;
+        }
+      }
+    }
+
+    h3.post-title {
+      margin-block-start: 0;
+    }
+
+    article {
+      p {
+        &:first-of-type {
+          margin-top: 0;
+        }
+      }
+    }
+
+    :where(.hero-image, .gallery-wrapper, sl-carousel) {
+      margin-bottom: var(--space-l-xl);
+    }
+
+    .sidebar-widget {
+      :is(p, li) {
+        font-size: var(--step--1);
+      }
+    }
+
+    .gallery-wrapper {
+      margin: 0;
+    }
+  }
+</style>
+
+<style>
+  .post-card {
+    --sidebar-width: calc(0.175 * var(--content-max-width));
+    --sidebar-width: 18%;
+
+    margin: var(--space-s-m) 0;
+  }
+
+  .hero-image {
+    img {
+      display: block;
+      margin: 0 auto;
+    }
+  }
+  .title {
+    margin-bottom: 1em;
+    padding: 1em 0;
+    text-align: center;
+    line-height: 1;
+  }
+  .title h1 {
+    margin: 0 0 0.5em 0;
+  }
+
+  .date {
+    margin-bottom: 0.5em;
+  }
+
+  .last-updated-on {
+    font-style: italic;
+  }
+
+  .read-more {
+    text-transform: uppercase;
+    font-size: var(--step--1);
+    font-weight: var(--weight-semibold);
+  }
+
+  div:has(article) {
+    /* margin-block: var(--space-xl-2xl); */
+
+    aside:first-of-type {
+      display: none;
+    }
+
+    @media screen and (min-width: 30rem) {
+      display: flex;
+      align-items: start;
+      justify-content: flex-start;
+      gap: var(--grid-gutter);
+
+      :is(aside, aside:first-of-type) {
+        display: block;
+        width: var(--sidebar-width);
+        min-width: var(--sidebar-width);
+      }
+    }
+  }
+
+  .sidebar-widget {
+    --__gap: var(--space-s-m);
+
+    &:not(:first-child) {
+      border-top: 1px solid var(--paper-shade);
+      padding-top: var(--__gap);
+      margin-top: var(--__gap);
+    }
+
+    > :first-child {
+      margin-top: 0;
+    }
+  }
+</style>

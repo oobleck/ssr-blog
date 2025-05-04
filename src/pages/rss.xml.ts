@@ -1,20 +1,18 @@
-import { settings } from "@/data/settings";
-import { getBlogPosts } from "@/utils/get-posts";
-import rss from "@astrojs/rss";
+import rss from '@astrojs/rss';
+import { getMergedPosts } from '@utils/merged-posts';
+import type { APIRoute } from 'astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
-const postImportResult = import.meta.glob("/blog/*.md*", { eager: true });
-const blog = await getBlogPosts(false);
-const posts = Object.values(postImportResult);
-
-export const GET = (ctx: Record<string, unknown>) =>
-    rss({
-        title: settings.title,
-        description: settings.description,
-        site: import.meta.env.SITE,
-        stylesheet: '/rss.xsl',
-        items: blog.map(({slug, data}) => ({
-            link: `/blog/${slug}`,
-            title: data.title,
-            pubDate: data.date,
-        })),
-    });
+export const GET: APIRoute = async (context) => {
+  const { request } = context;
+  const posts = await getMergedPosts();
+  return rss({
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    site: context.site,
+    items: posts.map((post) => ({
+      ...post.data,
+      link: `/blog/${post.id}/`,
+    })),
+  });
+}

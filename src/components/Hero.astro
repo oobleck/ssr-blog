@@ -1,0 +1,183 @@
+---
+import { getImage } from "astro:assets";
+import {imageUrl} from '@utils/image-url';
+import {type Props as Pps} from '../layouts/Base.astro';
+import Highlight from './Highlight.astro';
+
+interface Props extends Pps {
+  background?: Pps['heroBg'] | any;
+}
+
+const {
+  title,
+  tagline,
+  description = tagline,
+  background,
+  level = 1,
+  heroPosition,
+} = Astro.props;
+const thisLevel = Math.min(level, 2);
+const Tagline = level > 1 ? 'h4' : 'h2';
+const cover = background && await getImage({src: background, width: 2000, height: 2000});
+const heroStyles = {
+  '--hero-bg': cover && `url('${cover.src}')`,
+  backgroundPosition: heroPosition,
+};
+---
+
+<header
+  id="hero"
+  class:list={[
+    'wrapper scale-background',
+    `level-${thisLevel}`,
+    { hasHero: !!cover },
+  ]}
+  style={heroStyles}
+>
+  {Astro.slots.has('hero') && <slot name="hero" />}
+  <div class:list={['hero-content']} data-animate="slide-up">
+    {title ? <h1 class="page-title" set:html={title} /> : <slot name="title" />}
+    {
+      description ? (
+        <Tagline class="page-subtitle" set:html={description} />
+      ) : (
+        <slot name="tagline" />
+      )
+    }
+  </div>
+  {
+    level === 0 && (
+      <sl-tooltip content="Scroll down to the next section">
+        <sl-icon-button
+          name="chevron-double-down"
+          class="scroll-down"
+          href="#main-content"
+          aria-label="Click to scroll to the next section"
+        />
+      </sl-tooltip>
+    )
+  }
+</header>
+
+<style>
+  :is(.page-title, .page-subtitle) {
+    font-family: var(--font-family__headings);
+    font-weight: var(--weight-black);
+    margin-block: 0.25ch;
+    text-shadow: 0 0 1px hsl(from black h s l / 75%);
+  }
+
+  :is(.page-title) {
+    .emphasis {
+      color: var(--palette__secondary);
+    }
+  }
+
+  :is(.page-subtitle) {
+    font-weight: var(--weight-normal);
+  }
+
+  .scroll-down {
+    --icon-size: var(--step-1);
+
+    color: inherit;
+    opacity: 0.65;
+    position: absolute;
+    z-index: var(--layer-1);
+    margin: var(--space-s);
+    bottom: 0;
+    left: 50%;
+    cursor: pointer;
+    transform: translateX(-100%);
+    transition: bottom 0.3s var(--ease-elastic-in-out-3);
+
+    &:hover {
+      bottom: 0.5em;
+    }
+  }
+
+  #hero {
+    --__menu-offset: calc(-1 * var(--nav-height));
+
+    position: relative;
+    z-index: -1;
+    background-color: var(--palette__brand);
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    background-size: cover;
+    padding-top: 3.3em;
+    color: var(--color__content--contrast);
+    margin-top: var(--__menu-offset);
+    height: var(--hero-height, auto);
+
+    &::after {
+      content: '';
+      /* background-color: hsl(from black h s l / 70%); */
+      background-color: transparent;
+      background-image: var(--vignette);
+      backdrop-filter: saturate(0.4) blur(2px);
+      /* backdrop-filter: saturate(0.4); */
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    &.hasHero {
+      background-image: var(--hero-bg);
+      transform: scale3d(1, 1, 1);
+    }
+
+    &.level-0 {
+      /* --hero-height: calc(100vh - (var(--__menu-offset) * 0.25)); */
+      /* --hero-height: 100vh; */
+    }
+
+    @media screen and (min-width: 30rem) {
+      &.level-0 {
+        --hero-height: 100vh;
+        min-height: 30rem;
+        max-height: 55rem;
+      }
+
+      &.level-1 {
+        --hero-height: 80vh;
+        max-height: 25rem;
+      }
+
+      /* Any level over 1 (secondary) is the same as no level. */
+    }
+
+    :where(h1, h2, h3, h4, a) {
+      color: unset;
+    }
+
+    h1 {
+      font-size: var(--step-3);
+      line-height: 1;
+      text-align: center;
+      text-transform: uppercase;
+      max-inline-size: 45rem;
+      margin-top: 0;
+    }
+  }
+
+  .hero-content {
+    min-height: 15rem;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+</style>
+
+<style is:global>
+  #hero {
+    a {
+      color: inherit;
+    }
+  }
+</style>

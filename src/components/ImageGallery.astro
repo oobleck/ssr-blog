@@ -1,0 +1,306 @@
+---
+import { type ZImage } from 'content.config';
+import Link from './HeaderLink.astro';
+import Figure from './Figure.astro';
+import Picture from "@components/Pic.astro";
+import { LG_CONFIG_BASE } from '@data/settings';
+
+import LightGallery from 'lightgallery/vue';
+
+/* Couldn't get plugins to work yet
+import lgThumbnail from 'lightgallery/plugins/thumbnail';
+import lgZoom from 'lightgallery/plugins/zoom';
+
+const plugins = [
+  lgThumbnail,
+  lgZoom,
+];
+console.log(plugins)
+import 'lightgallery/css/lg-thumbnail.css';
+import 'lightgallery/css/lg-zoom.css';
+*/
+import 'lightgallery/css/lightgallery.css';
+import { getImage } from 'astro:assets';
+
+interface Props {
+  images: ZImage[];
+  layout?: 'grid' | 'masonry' | 'stack';
+  heroOnly?: boolean;
+  linkTo?: string;
+  constrain?: boolean;
+}
+
+function featSort(a: ZImage, b: ZImage): number {
+  return a.featured ? -1 : 0;
+}
+
+const {layout = 'masonry', images = [], heroOnly = false, linkTo, constrain = false} = Astro.props;
+let lgConfig = {
+  ...LG_CONFIG_BASE,
+  selector: !heroOnly ? '.image-figure' : '.X',
+  // plugins,
+};
+---
+
+<div class="gallery-wrapper">
+  <LightGallery class="inner-wrapper" client:load settings={lgConfig}>
+    <div
+      id="light-gallery"
+      class:list={[`image-gallery layout__${layout}`]}
+      data-image-count={images.length}
+    >
+      {
+        images
+          .sort(featSort)
+          .slice(0, heroOnly ? 1 : 100)
+          .map(async (img, ii) => {
+            const { description, image, altText, creditUrl, creditLabel } = img;
+            const hasCaption = Boolean(description || creditUrl || altText);
+            const Lnk = heroOnly ? Link : Fragment;
+            const imageSrc = image?.src ?? image; // && (await getImage({ src: image }));
+            // !imageSrc && console.log({ image, altText });
+            return (
+              <Figure
+                class="gallery-item"
+                id={`gallery-item-${ii}`}
+                data-src={imageSrc}
+                data-sub-html={
+                  hasCaption ? `#gallery-item-${ii} .caption` : altText
+                }
+                {description}
+                {creditUrl}
+                alt={altText}
+                layout={heroOnly ? 'plain' : 'fancy'}
+              >
+                <Lnk href={linkTo}>
+                  <Picture alt={altText} src={image} width={800} />
+                </Lnk>
+              </Figure>
+            );
+          })
+      }
+    </div>
+  </LightGallery>
+</div>
+
+<style>
+  :root {
+    /* https://www.shutterstock.com/blog/common-aspect-ratios-photo-image-sizes */
+    --aspect-ratio: calc(3 / 2);
+  }
+
+  .attribution {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    margin: 0.5rem;
+    opacity: 0.66;
+    transition: all 0.5s var(--ease-out-4);
+
+    &:hover {
+      opacity: 1;
+    }
+
+    sl-icon-button {
+      &::part(base) {
+        color: inherit;
+      }
+    }
+  }
+
+  .hero-image {
+    img {
+      aspect-ratio: var(--aspect-ratio);
+    }
+  }
+
+  .gallery-wrapper {
+    &:has(.layout__masonry) .image-gallery {
+      columns: 1;
+      column-gap: var(--gutter);
+
+      @container main (width >= 30rem) {
+        columns: 2;
+      }
+
+      @container main (width >= 45rem) {
+        columns: 3;
+      }
+
+      /*
+    @container main (width >= 40rem) {
+      columns: 4;
+    }
+    */
+    }
+  }
+
+  .inner-wrapper {
+    display: block;
+  }
+
+  .image-gallery {
+    input[type='radio'] {
+      display: none;
+    }
+
+    img {
+      cursor: pointer;
+      aspect-ratio: 4/3;
+    }
+
+    .gallery-item {
+      position: relative;
+
+      .post-link {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+      }
+
+      .caption {
+        display: block;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: hsl(0 0 0 / 50%);
+        color: white;
+        padding: 0.5rem;
+        opacity: 0;
+        overflow: hidden;
+        transition: opacity 0.5s var(--ease-out-4);
+        backdrop-filter: blur(1em);
+        font-size: var(--step--1);
+        display: grid;
+        place-content: center;
+        text-align: center;
+        cursor: pointer;
+
+        * {
+          font-size: inherit;
+          color: inherit;
+        }
+
+        &::after {
+          content: '+';
+          font-weight: var(--weight-bold);
+          font-size: var(--step-0);
+        }
+      }
+
+      &:hover .caption {
+        opacity: 1;
+      }
+    }
+
+    &.layout__grid {
+      /* Inspired by https://codepen.io/pysia1151/pen/MWwLoLd?editors=1100 */
+      display: grid;
+      gap: 3px;
+      grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+      grid-column-start: 1;
+      grid-row-start: 1;
+      grid-row-end: 3;
+      align-content: start;
+      max-width: 100%;
+      margin: 0 auto;
+
+      &:where([data-image-count='0'], [data-image-count='1']) {
+        /* :is(input, label) {
+        display: none !important;
+      } */
+      }
+
+      label {
+        --__padding: 0.1ch;
+
+        position: relative;
+        display: block;
+        padding-bottom: 60%;
+        margin: var(--__padding);
+        cursor: pointer;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: 50% 50%;
+
+        &::before {
+          --__offset: 0;
+          /* border: 1px solid hsl(from gray h s l / 55%); */
+          /* background-color: var(--pallete__primary); */
+          content: '';
+          position: absolute;
+          left: var(--__offset);
+          right: var(--__offset);
+          bottom: var(--__offset);
+          top: var(--__offset);
+        }
+      }
+
+      .gallery-item {
+        /* aspect-ratio: var(--aspect-ratio); */
+        display: none;
+        grid-column-start: 1;
+        grid-column-end: 5;
+        grid-row-start: 1;
+        grid-row-end: 2;
+        width: 100%;
+        /* transition: all 150ms var(--ease-out-3); */
+      }
+
+      input[name='select']:checked {
+        + label {
+          + .gallery-item {
+            display: block;
+          }
+        }
+      }
+    }
+
+    &.layout__masonry {
+      --gutter: var(--space-2xs);
+
+      > :not(img, .gallery-item) {
+        display: none;
+      }
+
+      .gallery-item {
+        border-radius: var(--radius-2);
+
+        * {
+          border-radius: inherit;
+        }
+
+        &:not(:last-child) {
+          margin-bottom: var(--gutter);
+        }
+      }
+
+      img {
+        display: inline-block;
+        vertical-align: top;
+        filter: drop-shadow(0px 2px 2px rgba(0, 0, 0, 0.3));
+        transition: filter 0.3s var(--ease-out-3);
+        object-fit: cover;
+        aspect-ratio: auto;
+        overflow: hidden;
+
+        &:hover {
+          filter: drop-shadow(0px 5px 5px rgba(0, 0, 0, 0.3));
+        }
+      }
+    }
+
+    &.layout__stack {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+
+      :is(input, label) {
+        display: none;
+      }
+    }
+  }
+</style>

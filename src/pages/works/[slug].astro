@@ -1,0 +1,23 @@
+---
+import { type CollectionEntry } from 'astro:content';
+import { render } from 'astro:content';
+import Works from '@layouts/Works.astro';
+import { fetchCollection } from '@utils/get-collection';
+import { getMergedPosts, type MergedPost } from '@utils/merged-posts';
+
+export async function getStaticPaths() {
+	const posts = await getMergedPosts(void 0, 'works');
+	return posts.map((post) => ({
+		params: { slug: post.id },
+		props: post,
+	}));
+}
+type Props = MergedPost;
+
+const post: any = Astro.props;
+const { Content } = await render(post);
+---
+
+<Works {...post.data}>
+  <Content />
+</Works>

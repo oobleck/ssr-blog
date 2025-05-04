@@ -1,0 +1,21 @@
+---
+import Resume from "@components/Resume.svelte";
+import Layout from "@layouts/Base.astro";
+
+const seo = {
+  title: 'CV',
+  description: 'My resume'
+};
+---
+
+<Layout
+  {...Astro.props}
+  {seo}
+  className="h-resume"
+  breadcrumbs={false}
+  unsplashId="l-Qc9gcTTUI"
+  level="seondary"
+  showSearch={false}
+>
+  <Resume client:visible />
+</Layout>

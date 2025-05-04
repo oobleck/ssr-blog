@@ -1,0 +1,88 @@
+---
+import { type CollectionEntry } from 'astro:content';
+import Layout from '@layouts/PaginatedBase.astro';
+import {fetchCollection} from '@utils/get-collection';
+import {getMergedPosts, type MergedPost} from '@utils/merged-posts';
+import Meta from '@components/WorksMeta.astro';
+import Link from '@components/HeaderLink.astro';
+import Gallery from '@components/ImageGallery.astro';
+
+export async function getStaticPaths({paginate}) {
+	const posts = await getMergedPosts(void 0, 'works');
+	const pages = posts.map((post: any) => ({
+		params: { slug: post.id },
+		props: post,
+	}));
+	// return pages;
+	return paginate(pages, {pageSize: 5});
+}
+type Props = MergedPost;
+
+const {page} = Astro.props;
+---
+
+<Layout
+  {page}
+  type="works"
+  title="Works"
+  heroBg="https://unsplash.com/photos/TywjkDHf0Ps/download"
+>
+  <ul class="plain stacked works-listing">
+    {
+      page.data.map(({ props: project }) => {
+        const { id, data } = project;
+        const placeholderTheme = data.title.replace(/\s+/g, '+');
+        // data.images = data.images?.length
+        //   ? data.images
+        //   : [
+        //       {
+        //         image: {
+        //           src: `https://imageplaceholder.net/800x600/555555/ffffff?font=Lato&text=${data.title}&theme=${placeholderTheme}`,
+        //         },
+        //         altText: `Placeholder image for "${data.title}"`,
+        //         creditUrl: 'https://imageplaceholder.net/',
+        //       },
+        //     ];
+        const workLink = `/works/${id}`;
+        return (
+          <li>
+            <aside class="works-meta">
+              <Meta project={project} simple={true} />
+            </aside>
+            <div class="works-summary">
+              {data.images?.length ? (
+                <Gallery
+                  images={data.images}
+                  heroOnly={true}
+                  layout="stack"
+                  linkTo={workLink}
+                />
+              ) : undefined}
+              <h3>
+                <Link set:html={data.title} href={workLink} />
+              </h3>
+              {project.description && (
+                <p set:html={data.description.slice(0, 300)} />
+              )}
+              <Link class="read-more" href={workLink}>
+                Read more
+              </Link>
+            </div>
+          </li>
+        );
+      })
+    }
+  </ul>
+</Layout>
+
+<style>
+  .works-listing {
+    gap: var(--space-xl-2xl);
+
+    > li {
+      display: flex;
+      align-items: start;
+      gap: var(--grid-gutter);
+    }
+  }
+</style>

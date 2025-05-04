@@ -1,0 +1,142 @@
+---
+import Section from "../Section.astro";
+import { work } from "@data/resume.json";
+import {careerHighlighter} from "@utils/career-highlighter";
+import {datesDelta} from "@utils/dates-delta";
+import DatedEntity from "../DatedEntity.astro";
+
+interface Props {
+  maxYears?: number;
+}
+
+const {maxYears = 10} = Astro.props;
+
+async function formatSummary(summary: string): string {
+  if (!summary) {
+    return '';
+  }
+
+  let formattedSummary = summary
+    .replace(/^(Technology|Stack)([^\w\s])/gm, '**$1**$2');
+
+  return careerHighlighter(formattedSummary, 'im');
+}
+
+const now = new Date();
+let split = work.findIndex(({ endDate }) => {
+  return (
+    endDate && now.getFullYear() - new Date(endDate).getFullYear() > maxYears
+  );
+});
+split = split < 0 ? work.length : split;
+const dates = work?.reduce((acc, {startDate}) => {
+  const thisStartDate = new Date(startDate);
+  if (thisStartDate.getTime() < acc.start.getTime()) {
+    acc.start = thisStartDate;
+  }
+  return acc;
+}, {start: new Date(), end: new Date()});
+const timeSpan = `<small>(${datesDelta(...Object.values(dates), ['years'])}+)</small>`;
+---
+
+<Section title={`Work Experience`}>
+  <ul class="plain experience-list">
+    {
+      work
+        .slice(0, split)
+        .map(
+          async ({
+            name,
+            startDate,
+            endDate,
+            position,
+            summary,
+            highlights,
+            url,
+            location,
+          }) => {
+            const formattedSummary = await formatSummary(summary);
+            return (
+              <li>
+                <DatedEntity
+                  title={name}
+                  dates={[startDate, endDate]}
+                  url={url}
+                >
+                  <Fragment slot="subtitle">
+                    <h4
+                      class="entity-subtitle p-job-title"
+                      set:html={position}
+                    />
+                    <h6 class="entity-summary p-locality">{location}</h6>
+                  </Fragment>
+                  <Fragment slot="description">
+                    {!!highlights.length && (
+                      <ul class="highlights">
+                        {highlights.map((name) => (
+                          <li class="custom-space">{name}</li>
+                        ))}
+                      </ul>
+                    )}
+                  </Fragment>
+
+                  <Fragment slot="summary" set:html={formattedSummary} />
+                </DatedEntity>
+              </li>
+            );
+          },
+        )
+    }
+  </ul>
+
+  {
+    split < work?.length && (
+      <details class="no-print">
+        <summary>See more&hellip;</summary>
+        <ul class="plain experience-list">
+          {work
+            .slice(split)
+            .map(
+              async ({
+                name,
+                startDate,
+                endDate,
+                position,
+                summary,
+                highlights,
+                url,
+              }) => {
+                const formattedSummary = await formatSummary(summary);
+                return (
+                  <li>
+                    <DatedEntity
+                      title={name}
+                      dates={[startDate, endDate]}
+                      url={url}
+                    >
+                      <h4
+                        slot="subtitle"
+                        class="entity-subtitle p-job-title"
+                        set:html={position}
+                      />
+                      <Fragment slot="description">
+                        {!!highlights.length && (
+                          <ul class="highlights">
+                            {highlights.map((name) => (
+                              <li class="custom-space">{name}</li>
+                            ))}
+                          </ul>
+                        )}
+                      </Fragment>
+
+                      <Fragment slot="summary" set:html={formattedSummary} />
+                    </DatedEntity>
+                  </li>
+                );
+              },
+            )}
+        </ul>
+      </details>
+    )
+  }
+</Section>

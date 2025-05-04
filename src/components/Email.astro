@@ -1,0 +1,37 @@
+---
+import { settings } from '@data/settings';
+import HeaderLink from './HeaderLink.astro';
+import { maskedEmail } from '@utils/mask-email';
+import type { String } from 'lightningcss';
+import Search from 'astro-pagefind/components/Search';
+
+interface Props {
+  address?: string;
+  displayAddress?: string;
+  linked?: boolean;
+  extra?: string;
+}
+
+const {
+  address = settings.email,
+  linked = true,
+  class: className,
+  extra = '',
+  displayAddress,
+  ...attribs
+} = Astro.props;
+const El = linked ? HeaderLink : 'span';
+// console.log({address, displayAddress});
+---
+
+<El
+  class:list={[className ?? '', 'email-address']}
+  href={`mailto:${[address, extra].join('?')}`}
+  data-obfuscation={0}
+  set:html={displayAddress ?? maskedEmail(address)}
+  {...attribs}
+/><style>
+  .email-address {
+    font-weight: calc(var(--weight-normal) + 100);
+  }
+</style>

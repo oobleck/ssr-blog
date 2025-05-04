@@ -1,0 +1,74 @@
+---
+import Layout from '@layouts/PaginatedBase.astro';
+import PostCard from '@components/PostCard.astro';
+import Categories from '@components/Categories.astro';
+import MiniArticle from '@components/MiniArticle.astro';
+import { getMergedPosts, type MergedPost } from '@utils/merged-posts';
+import type { Page } from 'astro';
+import { getPostsByCategory, slugifyCategory } from '@utils/categories';
+import { getFeaturedImage } from '@utils/get-featured-image';
+
+interface Props {
+  page: Page<MergedPost>,
+}
+
+export async function getStaticPaths({paginate}) {
+  const postsByCategory = await getPostsByCategory();
+  return Object.entries(postsByCategory).flatMap(([category, posts]) => paginate(posts, {pageSize: 5, params: {category: slugifyCategory(category)}}));
+}
+
+const { page } = Astro.props;
+const { category } = Astro.params;
+const numPosts = page.data.length.toLocaleString();
+const hero = getFeaturedImage(page.data[0]?.data.images);
+const displayCategory = category.replace(/-/g, ' ').toUpperCase();
+---
+
+<Layout
+  {page}
+  title={`Posts from the "${displayCategory}" category`}
+  urlBase={`blog/cat/${category}`}
+  level={2}
+  heroBg={hero}
+>
+  <main>
+    <ul class="plain stacked">
+      {
+        page.data.map((post: any) => (
+          <li>
+            <!-- <PostCard post={post} brief={true} /> -->
+            <MiniArticle article={post} showMetadata={true} showExcerpt={true} />
+          </li>
+        ))
+      }
+    </ul>
+    <aside>
+      <div class="sidebar-widget categories">
+        <h4>Categories</h4>
+        <Categories />
+      </div>
+    </aside>
+  </main>
+</Layout>
+
+<style>
+  main {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    grid-gap: var(--grid-gutter);
+  }
+
+  aside {
+    position: relative;
+    display: block;
+  }
+
+  .sidebar-widget.categories {
+    position: sticky;
+    top: var(--sticky-scroll-margin);
+  }
+
+  ul.stacked {
+    gap: var(--space-l-xl);
+  }
+</style>

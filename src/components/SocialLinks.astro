@@ -1,0 +1,79 @@
+---
+import { Icon } from "astro-icon/components"
+import HeaderLink from "./HeaderLink.astro";
+import { social } from "@data/settings";
+import { maskedEmail, maskEmail } from "@utils/mask-email";
+
+interface Props {
+  primary?: boolean;
+  simple?: boolean;
+}
+
+const {primary = false, simple = false} = Astro.props;
+---
+
+<ul class="social-links plain inline">
+  {
+    social
+      .filter(({ primary: prim }) => (primary ? prim : true))
+      .map(({ url, icon, name }) => {
+        const IconEl = icon?.includes(':') ? Icon : 'sl-icon';
+        const displayName = name?.includes('@') ? maskEmail(name) : name;
+        return (
+          <li>
+            <sl-tooltip content={displayName}>
+              <HeaderLink
+                href={url}
+                class="social-link"
+                rel="me"
+                title={displayName}
+              >
+                {icon && !simple ? (
+                  <IconEl
+                    class="social-icon"
+                    name={icon.toLowerCase()}
+                    role="presentation"
+                  />
+                ) : (
+                  maskedEmail(name)
+                )}
+              </HeaderLink>
+            </sl-tooltip>
+          </li>
+        );
+      })
+  }
+</ul>
+
+<style>
+  .social-links {
+    list-style-type: none;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    gap: var(--social-links-gap, var(--space-xs-s));
+    align-items: center;
+    margin-block: var(--block-margin);
+  }
+
+  a {
+    display: grid;
+    place-items: center;
+    place-content: center;
+
+    &::before,
+    &::after {
+      content: none;
+    }
+  }
+
+  :where(svg[data-icon], sl-icon) {
+    --icon-size: var(--social-icon-size, 1.333rem);
+
+    transition: transform 0.4s var(--ease-out-4);
+
+    &:hover {
+      transform: scale(1.3);
+    }
+  }
+</style>

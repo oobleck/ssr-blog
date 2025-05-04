@@ -1,0 +1,83 @@
+---
+import {getMergedPosts} from '@utils/merged-posts';
+import Link from '@components/HeaderLink.astro';
+import { getPostsByCategory, slugifyCategory, unslugifyCategory, DEFAULT_CATEGORY } from '@utils/categories';
+import {BLOG_POST_CATEGORIES} from '../content.config';
+
+interface Props {
+  layout?: 'fancy' | 'list';
+  category?: keyof typeof BLOG_POST_CATEGORIES;
+}
+
+const { layout = 'list', category } = Astro.props;
+const isFancy = layout === 'fancy';
+const categories = await getPostsByCategory();
+---
+
+<ul
+  class:list={[
+    `categories-list layout__${layout}`,
+    { 'inline plain': isFancy },
+  ]}
+>
+  {
+    Object.entries(categories)
+      .filter(([cat]) => !category || cat === category)
+      .map(([category, posts]) => (
+        <li>
+          {!isFancy && (
+            <Link href={`/blog/cat/${slugifyCategory(category)}/1`}>
+              {unslugifyCategory(category)} ({posts.length.toLocaleString()})
+            </Link>
+          )}
+          {isFancy && (
+            <>
+              <div class="icon-wrapper">
+                <div class="label">{posts.length.toLocaleString()}</div>
+                <sl-icon-button
+                  name="folder2-open"
+                  label={category}
+                  href={`/blog/cat/${slugifyCategory(category)}/1`}
+                />
+              </div>
+              <h5 class="category-title">{category}</h5>
+            </>
+          )}
+        </li>
+      ))
+  }
+</ul>
+
+<style>
+  sl-icon-button {
+    font-size: var(--step-3);
+  }
+
+  .layout__fancy {
+    text-align: center;
+
+    .category-title {
+      margin-block: 0;
+    }
+
+    .icon-wrapper {
+      display: grid;
+      text-align: center;
+      place-items: center;
+      place-content: center;
+      grid-template-rows: 1fr;
+      grid-template-columns: 1fr;
+
+      > * {
+        grid-area: 1 / 1 / 2 / 2;
+      }
+
+      .label {
+        position: relative;
+        top: 13%;
+        font-weight: var(--weight-black);
+        font-size: inherit;
+      }
+    }
+  }
+</style>

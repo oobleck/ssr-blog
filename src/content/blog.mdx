@@ -1,0 +1,38 @@
+---
+title: Journal
+description: The things I think about
+navLabel: Blog
+navIndex: 1
+level: 2
+hero:
+  image: https://images.unsplash.com/photo-1461958508236-9a742665a0d5
+  creditUrl: https://unsplash.com/photos/closeup-photo-of-cutout-decors-GkinCd2enIY
+  # image: https://cdn.pixabay.com/photo/2015/04/03/18/56/font-705667_1280.jpg
+  # creditUrl: https://pixabay.com/photos/writing-lead-set-letterpress-705667/
+  # image: https://cdn.pixabay.com/photo/2015/05/11/14/44/pencils-762555_1280.jpg
+  # creditUrl: https://pixabay.com/photos/pencils-notebooks-stack-762555/
+---
+
+import PostCard from '@components/PostCard.astro';
+import { getMergedPosts } from '@utils/merged-posts.ts';
+
+export const posts = await getMergedPosts();
+export const listStyles = {
+  display: 'flex',
+  listStyleType: 'none',
+  flexDirection: 'column',
+  margin: 0,
+  padding: 0,
+};
+
+<section>
+  <ul class="post-summaries plain" style={listStyles}>
+    {posts?.map((post) => (
+      <li>
+        <PostCard post={post} brief={true}>
+          <Fragment set:html={post.data.description} />
+        </PostCard>
+      </li>
+    ))}
+  </ul>
+</section>

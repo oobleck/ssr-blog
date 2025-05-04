@@ -1,12 +1,13 @@
 export interface IPuppy {
   name: string;
-  species: 'feline' | 'canine';
-  born: string;
+  species: "feline" | "canine";
+  born: string | Date;
+  deceased?: string | Date;
   breed: string;
   weight: number;
   chipId?: number | string;
   chipUrl?: string;
-  gender: 'male' | 'female';
+  gender: "male" | "female";
   images?: string[];
   nicknames?: string[];
   favorites?: {
@@ -14,14 +15,26 @@ export interface IPuppy {
   };
 }
 
+export const petSorter = (a: IPuppy, b: IPuppy) => {
+  const dateA = new Date(a.deceased || a.born);
+  const dateB = new Date(b.deceased || b.born);
+
+  if (b.deceased) {
+    return -1;
+  }
+
+  return Math.abs(dateB.getTime() - dateA.getTime());
+};
+
 export const puppies: IPuppy[] = [
   {
-    species: 'feline',
+    species: "feline",
     name: "Jackson Wyatt",
-    born: "2009-01-20",
+    born: "1/20/2009",
+    deceased: "10/2/2024",
     breed: "American short-hair",
     weight: 10,
-    gender: 'male',
+    gender: "male",
     images: [],
     nicknames: ["Bubby", "Jax", "Punk"],
     favorites: {
@@ -29,7 +42,7 @@ export const puppies: IPuppy[] = [
     },
   },
   {
-    species: 'feline',
+    species: "feline",
     name: "Eleanor Avery",
     born: "2014",
     breed: "American short-hair",
@@ -42,12 +55,27 @@ export const puppies: IPuppy[] = [
     },
   },
   {
-    species: 'canine',
+    species: "canine",
+    name: "Sadie Mae",
+    born: "10/27/2009",
+    deceased: "10/26/2021",
+    weight: 80,
+    gender: "female",
+    breed: "Chocolate Labrador Retriever",
+    images: [],
+    nicknames: ["Mae", "Mazie Cakes", "Brown Bear", "Pony"],
+    chipId: 1,
+    favorites: {
+      activity: "Eating and Sleeping",
+    },
+  },
+  {
+    species: "canine",
     name: "Luna Wren",
-    born: "2021-07-06",
+    born: "7/5/2021",
     breed: "Goldendoodle",
-    weight: 72,
-    gender: 'female',
+    weight: 65,
+    gender: "female",
     chipId: -1,
     images: [
       "images/luna-wren1.jpg",
@@ -55,20 +83,20 @@ export const puppies: IPuppy[] = [
       "images/luna-wren3.jpg",
       "images/luna-day1.jpg",
     ],
-    nicknames: ['Wrennie', "Renny Rockets", 'Beans', 'Lunatic'],
+    nicknames: ["Wrennie", "Renny Rockets", "Beans", "Lunatic"],
     favorites: {
       activity: "Playing fetch",
     },
   },
   {
-    species: 'canine',
+    species: "canine",
     name: "Millie Maxwell",
-    born: "2021-09-28",
+    born: "9/27/2021",
     breed: "Chocolate Labrador Retriever",
-    weight: 80,
+    weight: 72,
     chipId: -1,
-    gender: 'female',
-    nicknames: ['Mildred', 'Moose', 'Millie goat'],
+    gender: "female",
+    nicknames: ["Mildred", "Moose", "Moosolini"],
     images: [
       "images/millie-maxwell3.jpg",
       "images/millie-maxwell2.jpg",
@@ -80,14 +108,14 @@ export const puppies: IPuppy[] = [
     },
   },
   {
-    species: 'canine',
+    species: "canine",
     name: "Sawyer Branch",
-    born: "2022-03-11",
+    born: "3/10/2022",
     breed: "Goldendoodle",
-    weight: 70,
+    weight: 74,
     chipId: -1,
-    gender: 'male',
-    nicknames: ['So-so', "Brodie Wampus", 'Beefcake', 'Homie'],
+    gender: "male",
+    nicknames: ["So-so", "Brodie Wampus", "Beefcake", "Homie"],
     images: [
       "images/sawyer-branch1.jpg",
       "images/sawyer-branch2.jpg",
@@ -99,14 +127,14 @@ export const puppies: IPuppy[] = [
     },
   },
   {
-    species: 'canine',
+    species: "canine",
     name: "Ada Everest",
-    born: "2023-06-23",
+    born: "6/22/2023",
     breed: "Chocolate Labrador Retriever",
-    weight: 60,
-    chipId: 0,
-    gender: 'female',
-    nicknames: ['Pipps', 'Pippy', 'Sh*thead'],
+    weight: 80,
+    chipId: 1,
+    gender: "female",
+    nicknames: ["Pipps", "Pippy", "Sh*thead"],
     images: [
       "images/ada-everest1.jpg",
       "images/ada-everest3.jpg",
@@ -114,7 +142,35 @@ export const puppies: IPuppy[] = [
       "images/ada-day1.jpg",
     ],
     favorites: {
-      activity: "Eating, biting chins, and TURBO mode!",
+      activity: "Trying to kill her sister Millie, biting chins, and TURBO mode!",
     },
-  }
+  },
+  {
+    species: "feline",
+    name: "Finneas Archwell",
+    born: "7/11/2024",
+    breed: "Flame Point Siamese",
+    weight: 5.5,
+    chipId: 1,
+    gender: "male",
+    nicknames: ["Finn", "Finny", "Finneas Longus", "Finny Logins"],
+    images: [],
+    favorites: {
+      activity: "Scrapping with Fernie and thundering down the hall",
+    },
+  },
+  {
+    species: "feline",
+    name: "Fernie Maddox",
+    born: "7/11/2024",
+    breed: "Lilac Point Siamese",
+    weight: 4.6,
+    chipId: 1,
+    gender: "female",
+    nicknames: ["Fernius", "Fernie Little"],
+    images: [],
+    favorites: {
+      activity: "Scrapping with Finn and thundering down the hall",
+    },
+  },
 ];

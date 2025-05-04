@@ -1,38 +1,19 @@
 ---
-import { Icon } from 'astro-icon/components';
-
 interface Props {
-  date: Date;
-  format?: 'short' | 'long';
-  reklative?: boolean;
+	date: Date;
+	format?: object;
 }
 
-const { format = 'long', relative = true } = Astro.props;
-let { date } = Astro.props;
-const day = format === 'short' ? void 0 : 'numeric';
-date = new Date(date);
+const { date, format = {} } = Astro.props;
 ---
 
-<span class="datetime">
-  {relative && <sl-relative-time date={date.toISOString()} {format}></sl-relative-time> }
-  {!relative && ( <time class="dt-published published dt-updated updated" datetime={date.toISOString()}>
-    {
-      date.toLocaleDateString('en-us', {
-        year: 'numeric',
-        month: 'short',
-        day,
-      })
-    }
-  </time> ) }
-  {/* <Icon name="mdi:calendar" aria-hidden="true" /> */}
-</span>
-
-<style>
-  .datetime {
-    display: inline-flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 1ch;
-    text-transform: capitalize;
+<time datetime={date.toISOString()}>
+  {
+    date.toLocaleDateString('en-us', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      ...format,
+    })
   }
-</style>
+</time>

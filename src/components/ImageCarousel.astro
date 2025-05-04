@@ -1,0 +1,115 @@
+---
+import LightGallery from 'lightgallery/vue';
+import { LG_CONFIG_BASE } from '@data/settings';
+import Figure from './Figure.astro';
+import Picture from "@components/Pic.astro";
+import { type ZImage } from 'content.config';
+import { getImage } from 'astro:assets';
+
+interface Props {
+  images: ZImage[];
+  orientation?: 'horizontal' | 'vertical';
+  linkTo?: string;
+}
+
+const {images = [], orientation = 'horizontal', linkTo} = Astro.props;
+const styles = `
+  --slide-gap: 0.1px;
+  --aspect-ratio: 3/2;
+`;
+const El = images?.length > 1 ? 'sl-carousel' : 'div';
+const lgConfig = {
+  ...LG_CONFIG_BASE,
+  selector: '.carousel-item',
+};
+
+function featuredImageSort(a: ZImage, b: ZImage) {
+  return a.featured ? -1 : 0;
+}
+---
+
+<LightGallery class="image-gallery" client:load settings={lgConfig}>
+  <El class={`carousel-gallery`} navigation loop {orientation} style={styles}>
+    {
+      images?.sort(featuredImageSort).map(async (img, index) => {
+        const { image, altText, creditUrl, description } = img;
+        const imageSrc = image?.src ?? image; // && (await getImage({ src: image }));
+        const ItemEl = images?.length > 1 ? 'sl-carousel-item' : Fragment;
+        const LinkEl = linkTo ? 'a' : Fragment;
+        const hasCaption = Boolean(creditUrl || description);
+        return (
+          <ItemEl
+            class="carousel-item"
+            data-src={imageSrc}
+            data-sub-html={description ?? altText}
+            data-Xsub-html=".caption"
+          >
+            <Figure
+              {description}
+              {creditUrl}
+              alt={altText}
+              class:list={[{ 'plural-imgs': images.length > 0 }]}
+            >
+              <LinkEl href={linkTo}>
+                <Picture src={image} alt={altText ?? description} width={800} />
+              </LinkEl>
+            </Figure>
+          </ItemEl>
+        );
+      })
+    }
+  </El>
+</LightGallery>
+
+<style>
+  .image-gallery {
+    --__offset: var(--space-xs);
+  }
+
+  :not(sl-carousel).carousel-gallery {
+    img {
+      aspect-ratio: var(--aspect-ratio);
+    }
+  }
+
+  sl-carousel.carousel-gallery {
+    &::part(navigation-button) {
+      position: absolute;
+      right: var(--__offset);
+      top: var(--__offset);
+      z-index: var(--layer-1);
+      border-radius: var(--radius-1);
+      background-color: oklch(0 0 0 / 90%);
+      color: var(--gray-0);
+    }
+
+    &::part(navigation-button--previous) {
+      transform: translateX(calc(-100% - var(--__offset) * 0.666));
+    }
+
+    &::part(base) {
+      --sl-spacing-medium: 0;
+      /* --scroll-hint: calc(0.5 * var(--__offset)); */
+    }
+  }
+
+  .caption {
+    width: 100%;
+
+    sl-icon-button {
+      position: absolute;
+      right: var(--__offset);
+      bottom: var(--__offset);
+      z-index: var(--layer-1);
+      color: var(--gray-0);
+      mix-blend-mode: exclusion;
+      opacity: 0.5;
+      transition: all 0.7s var(--ease-out-4);
+
+      &:hover {
+        opacity: 1;
+        transform: scale(1.618);
+      }
+    }
+  }
+</style>

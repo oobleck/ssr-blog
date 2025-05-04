@@ -1,0 +1,81 @@
+@layer component {
+  /* :root {} */
+
+  :where(table, .table, [role='table']) {
+    --__header-border-overhang: -0.5ch;
+    --__header-border-width: 2px;
+
+    display: table;
+    position: relative;
+    width: 100%;
+    max-width: 100%;
+    margin: var(--block-margin, 0.5em) var(--inline-margin, 0);
+    border-collapse: collapse;
+    font-size: var(--step-0);
+    container: data-table / size;
+
+    :where(tr, .tr, [role='row']) {
+      display: table-row;
+    }
+
+    :where(th, td, .th, .td, [role='cell'], [role='columnheader']) {
+      display: table-cell;
+      padding: var(--space-2xs) var(--space-2xs);
+      transition: background-color 0.4s var(--ease-out-4);
+    }
+
+    :where(th, .th) {
+      display: table-cell;
+      font-weight: var(--weight-semibold);
+    }
+
+    :where(thead th) {
+      border-block-end: var(--__header-border-width) solid var(--ink-subtle);
+    }
+
+    :where(thead, tbody, tfoot, .thead, .tbody, .tfoot) {
+      display: table-row-group;
+    }
+
+    :where(tbody, .tbody) {
+      :where(th, td, .th, .td, [role='cell']) {
+        border-block-start: 1px solid var(--color__border--table);
+      }
+
+      :where(tr, .tr, [role='row']):hover {
+        :where(th, td, .th, .td) {
+          background-color: var(--color__surface--panel);
+        }
+      }
+    }
+
+    &.sticky-header :where(thead, .thead)> :where(tr, .tr)>* {
+      position: sticky;
+      top: var(--sticky-scroll-margin);
+      z-index: var(--layer-2);
+      background-color: var(--color__surface--table);
+
+      &::after {
+        --__border-height: 2px;
+
+        /* This exists because the border on the main element disappears when positioned sticky. */
+        content: '';
+        position: absolute;
+        bottom: calc(-0.5 * var(--__header-border-width));
+        left: var(--__header-border-overhang);
+        right: var(--__header-border-overhang);
+        /* border-block-end: var(--__border-height) solid var(--color__border--table); */
+        border-block-end: var(--__header-border-width) solid var(--ink-subtle);
+      }
+
+      @container data-table (min-height: 50vh) {
+        --sticky-header__start-bg: var(--brand);
+        --sticky-header__end-bg: var(--brand);
+
+        outline: 2px dotted magenta;
+        /* scroll-margin-top: var(--sticky-scroll-margin); */
+        animation: sticky-header var(--ease-out-3) forwards;
+      }
+    }
+  }
+}

@@ -1,0 +1,64 @@
+---
+import { getCollection } from 'astro:content';
+import HeaderLink from './HeaderLink.astro';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  inline?: boolean;
+  full?: boolean;
+  slashes?: boolean;
+}
+
+const {inline = true, full = false, slashes = false} = Astro.props;
+const sortPages = (a: CollectionEntry<'page'>, b: CollectionEntry<'page'>): number => {
+  const compareA = a.data.navIndex ?? a.data.navLabel ?? a.data.title ?? a.id;
+  const compareB = b.data.navIndex ?? b.data.navLabel ?? b.data.title ?? b.id;
+
+  if (slashes && (b.data.title.startsWith('/') || a.data.title.startsWith('/'))) {
+    return a.data.title.localeCompare(b.data.title);
+  }
+
+  return compareA - compareB;
+
+  // return compareA.localeCompare(compareB);
+}
+
+const pagesFilter = (page: CollectionEntry<'page'>) => {
+  if (slashes) {
+    return /^\//.test(page.data.title);
+  }
+
+  if (full) {
+    return true;
+  }
+
+  return !!page.data.navLabel;
+};
+
+const links = (await getCollection('page'))
+  .filter(pagesFilter).sort(sortPages);
+---
+
+<nav class:list={['internal-links', { inline }]}>
+  {
+    links.map(({ id, data: { navLabel, title } }) => (
+      <HeaderLink href={`/${id}`}>{navLabel || title || id}</HeaderLink>
+    ))
+  }
+</nav>
+
+<style>
+  .internal-links {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+
+    &.inline {
+      flex-direction: row;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 1em;
+    }
+  }
+</style>

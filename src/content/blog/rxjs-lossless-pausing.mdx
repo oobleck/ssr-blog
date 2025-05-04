@@ -1,0 +1,79 @@
+---
+draft: true
+title: Lossless pausing of RxJS streams
+description: Also known as back-pressure, learn how to pause a stream based on a condition, and resume it without losing the values while paused.
+pubDate: March 30, 2025 9:00 am PST
+# level: 0
+category: Dev
+tags:
+  - RxJS
+  - Observables
+  - KB
+images:
+  - image: https://images.unsplash.com/photo-1581677641984-cf14ca58c5ee
+    creditUrl: https://unsplash.com/photos/black-traffic-light-turned-on-during-night-time-iJ-uantQb9I
+    altText: A traffic light turned on during the night
+---
+
+## Introduction
+
+Recently at work I faced an issue in which we needed to prevent user input in a search filter input from triggering additional REST requests in a search-as-you-type scenario. Initially I disabled the form while a request is in-flight, but this had the side-effect of stealing the User's focus which is a jarring UX.
+
+We decided we wanted to keep the User's input focus, and let them continue typing, even if they type slower than the debounce time. To do this, I decided to implement an RxJS operator to handle the back-pressure and buffer the User input while a request is active, and then send another request then the previous request completes. it's not perfect, but I think it's a reasonably elegant compromise between a good UX and managing performance impact since the request is expensive on the backend.
+
+## Core concepts
+
+In this article we're going to look at RxJS's [`bufferToggle`](https://rxjs.dev/api/operators/bufferToggle) and [`windowToggle`](https://rxjs.dev/api/operators/windowToggle). Both operators are useful for controlling the flow of an Observable and managing the back-pressure.
+
+[`bufferToggle`](https://rxjs.dev/api/operators/bufferToggle) buffers values from an Observable until a condition is met, at which point it emits the buffered values as an array.
+
+[`windowToggle`](https://rxjs.dev/api/operators/windowToggle) creates a new Observable for each value emitted by the source Observable, and emits values from the new Observable until a condition is met, at which point it emits the values from the new Observable as an array.
+
+## The code
+
+```ts title="rxjs-traffic-light.ts"
+/**
+ * Pauses Observable traffic when the `roadBlock` observable emits true,
+ * and resumes traffic when it emits false; and emits the most recent
+ * emission from the source upon resuming.
+ *
+ * @param roadBlock - An observable that emits true or false to control
+ *                    the traffic light.
+ */
+export function stopTrafficWhen<T>(roadBlock: Observable<boolean>): MonoTypeOperatorFunction<T> {
+  const trafficLight = new Subject<boolean>();
+  const redLight = trafficLight.pipe(filter((c) => !v));
+  const greenLight = trafficLight.pipe(filter((c) => !!v));
+
+  // Trigger the trafficLight when the roadBlock emits true or false. This
+  // handles all kinds of sbujects and streams.
+  roadBlock.pipe(
+    distinctUntilChanged(),
+    tap((v) => trafficLight.next(v)),
+  ).subscribe();
+
+  // You may want to add a distinctUntilChanged() or a
+  // deepDistinctUntilChanged() after this operator to prevent duplicate
+  // emissions.
+  return (source: Observable<T>) => {
+    return merge(
+      source.pipe(bufferToggle(greenLight, () => redLight)),
+      source.pipe(windowToggle(redLight, () => greenLight)),
+    );
+  };
+}
+```
+
+## Going further
+
+### Taking just the last source emission from the buffer
+
+You can use the operator [`mergeMap`](https://rxjs.dev/api/operators/mergeMap) to take just the last source emission from the buffer. My implementation at work adds this within `stopTrafficWhen`, but you can also add it in the pipeline after `stopTrafficWhen`.
+
+### Debouncing
+
+Now, when taking User input to search real-time (not requiring a button click), you should probably always debounce the input. This will prevent requests from firing on each keystroke, and instead wait for the User to stop typing for a short period of time (the debounce time) before sending the request. This is often somewhere between 400ms and 750ms.
+
+You can use this operator here in conjunction with RxJS's [`debounceTime`](https://rxjs.dev/api/operators/debounceTime) operator. Place it before or after `stopTrafficWhen` in the pipeline to use both. I like to debounce before stopping traffic.
+
+Ok. I really just wanted to put "debounce before stopping traffic" out in the world! 😜

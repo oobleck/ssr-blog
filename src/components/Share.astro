@@ -1,12 +1,331 @@
 ---
-import {settings} from "../data/settings";
+import { type MergedPost } from "../utils/merged-posts";
+import Icon from "@components/Icon.astro";
+import Link from "./HeaderLink.astro";
+import {
+  FacebookShareButton,
+  HackerNewsShareButton,
+  LinkedInShareButton,
+  MediumShareButton,
+  RedditShareButton,
+  TwitterShareButton,
+  WhatsAppShareButton,
+  SocialShare
+} from "astro-social-share";
+import {settings} from '@data/settings';
+import '@shoelace-style/shoelace/dist/components/tooltip/tooltip.js';
 
-interface Props {
-  text: string;
+interface ISocialShareConfig {
+  label: string;
+  icon: string;
+  color?: string;
+  primary?: boolean;
+  dataProps?: (post: MergedPost) => Record<string, string | number>;
 }
 
-const {text} = Astro.props;
-const shareUrl = `https://shareopenly.org/share/?url=${settings.site}${Astro.url.pathname}&text=${encodeURIComponent(text)}`;
+const BUTTONS = [
+  LinkedInShareButton,
+  MediumShareButton,
+  HackerNewsShareButton,
+  TwitterShareButton,
+  FacebookShareButton,
+];
+
+let postUrl: URL = Astro.url;
+postUrl = `${settings.site}${postUrl.pathname}`;
+
+const SSocials = new Map<any, ISocialShareConfig>([
+  ['threads', {
+    // icon: 'simple-icons:threads',
+    icon: 'threads-fill',
+    label: 'Threads',
+  }],
+  ['diaspora', {
+    // icon: 'simple-icons:diaspora',
+    icon: 'asterisk',
+    label: 'Diaspora',
+  }],
+  ['email', {
+    // icon: 'ri:mail-send-line',
+    icon: 'envelope-at-fill',
+    label: 'Email',
+    color: 'var(--palette__secondary)',
+    primary: true,
+    dataProps: (post) => ({subject: `Check out this post: ${post?.data.title}`}),
+  }],
+  ['flipboard', {
+    icon: 'simple-icons:flipboard',
+    label: 'Flipboard',
+    color: '#e00a0a',
+    primary: true,
+  }],
+  ['reddit', {
+    label: 'Reddit',
+    // icon: 'simple-icons:reddit',
+    icon: 'reddit',
+    color: '#FF4500',
+  }],
+  ['linkedIn', {
+    label: 'LinkedIn',
+    // icon: 'mdi:linkedin',
+    icon: 'linkedin',
+    color: '#0072b1',
+    primary: true,
+  }],
+  ['pinterest', {
+    label: 'Pinterest',
+    // icon: 'mdi:pinterest',
+    icon: 'pinterest',
+    color: '#E60023',
+    primary: true,
+  }],
+  ['facebook-messenger', {
+    label: 'Facebook Messenger',
+    // icon: 'mdi:facebook-messenger',
+    icon: 'messenger',
+    color: '#1877F2',
+  }],
+  ['microsoft-teams', {
+    // icon: 'mdi:microsoft-teams',
+    icon: 'microsoft-teams',
+    label: 'Microsoft Teams',
+    color: '#464EB8',
+  }],
+  ['whatsapp', {
+    // icon: 'mdi:whatsapp',
+    icon: 'whatsapp',
+    label: 'WhatsApp',
+    color: '#25D366',
+  }],
+  ['tumblr', {
+    icon: 'mdi:tumblr',
+    label: 'Tumblr',
+    color: '#35465C',
+    dataProps: (post) => ({tags: post?.data.tags?.join(','), caption: post?.data.description ?? post?.data.title}),
+  }],
+  ['pocket', {
+    icon: 'mdi:pocket',
+    label: 'Pocket',
+    color: '#ef4056',
+  }],
+  ['instapaper', {
+    icon: 'mdi:instapaper',
+    label: 'Instapaper',
+    color: '#428bca',
+  }],
+  ['facebook', {
+    label: 'Facebook',
+    // icon: 'mdi:facebook',
+    icon: 'facebook',
+    // color: '#1877F2',
+  }],
+  ['twitter', {
+    // icon: 'ri:twitter-fill',
+    icon: 'twitter',
+    label: 'Twitter 😉',
+    // color: '#1DA1F2',
+    primary: true,
+  }],
+  ['x', {
+    // icon: 'ri:twitter-x-fill',
+    icon: 'twitter-x',
+    label: 'X',
+    // color: '#1DA1F2',
+  }],
+]);
+
+interface Props {
+  post: MergedPost;
+  primaryOnly?: boolean;
+  useDrawer?: boolean;
+  includeFediverse?: boolean;
+  plain?: boolean;
+  showLabel?: boolean;
+}
+
+const { post, primaryOnly = false, useDrawer = false, includeFediverse = false, plain = true, showLabel = false } = Astro.props;
+const WrapperEl = useDrawer ? 'sl-drawer' : Fragment;
 ---
 
-<a href={shareUrl} rel="share-url" target="_blank">Share <sl-icon name="share"></sl-icon></a>
+<WrapperEl label="Share this page" class="share-drawer">
+  <!--
+  <form class="Xfsb-prompt fedi-share">
+    <div class="fsb-input-group mb-3">
+      <span class="fsb-input-group-text">https://</span>
+      <input
+        required
+        type="text"
+        name="fediverse-domain"
+        placeholder="mastodon.social"
+        class="fsb-input fsb-domain"
+        aria-label="Server domain"
+      />
+      <button
+        class="fsb-button"
+        type="submit"
+        aria-label="Share to your Fediverse server"
+      >
+        <Icon name="mdi:mastodon" aria-hidden="true" />
+        <span class="label" aria-hidden="true">Share</span>
+      </button>
+    </div>
+    <label
+      >Share this page from your <a href="https://jointhefediverse.net/"
+        >fediverse</a
+      > server</label
+    >
+    <p class="fsb-support-note fsb-d-none">
+      This server does not support sharing. Please visit <a
+        class="fsb-support-note-link"
+        target="_blank"
+        href=""></a>.
+    </p>
+  </form>
+  <link
+    rel="stylesheet"
+    href="https://fediverse-share-button.stefanbohacek.dev/fediverse-share-button/styles.min.css"
+    layer="third-party"
+  />
+  <script
+    src="https://fediverse-share-button.stefanbohacek.dev/fediverse-share-button/script.min.js"
+    defer
+    class="fsb-script"></script>
+  -->
+
+  <script src="sharer.js/sharer.js"></script>
+  <ul class:list={['social-share-buttons plain inline', {'plain-share': plain}]}>
+    {showLabel && <li>Share:</li>}
+    {
+      Array.from(SSocials)
+        .filter(([slug, config]) => !primaryOnly || config.primary)
+        .map(([slug, config]) => {
+          const dataProps = !config.dataProps
+            ? {}
+            : Object.entries(config.dataProps(post)).reduce(
+                (agg, [key, value]) => ({ ...agg, [`data-${key}`]: value }),
+                {},
+              );
+          return (
+            <li
+              style={`--share-brand-color: ${config.color ?? 'var(--paper-subtle)'};`}
+            >
+              <sl-tooltip content={`Share with ${config.label}`}>
+                <Link
+                  class="share-link"
+                  data-link={postUrl}
+                  data-blank
+                  data-sharer={slug}
+                  data-url={postUrl}
+                  data-title={post?.data.title}
+                  data-description={post?.data.description ?? post?.data.title}
+                  {...dataProps}
+                >
+                  <Icon name={config.icon} aria-hidden="true" />
+                  <span class="sr-only">Share with {config.label}</span>
+                </>
+              </sl-tooltip>
+            </li>
+          );
+        })
+    }
+  </ul>
+</WrapperEl>
+
+{useDrawer && (
+  <sl-button class="share-button" variant="primary">
+    <Icon name="mdi:share" aria-hidden="true" slot="prefix" />
+    Share this!
+  </sl-button>
+  <script client:idle>
+    const drawer = document.querySelector('.share-drawer');
+    const shareButton = document.querySelector('.share-button');
+    const shareLinks = drawer?.querySelectorAll('.share-link, .fsb-button');
+    shareLinks.forEach((link) => {
+      link.addEventListener('click', () => {
+        drawer.hide();
+      });
+    });
+    shareButton.addEventListener('click', () => {
+      drawer.show();
+    });
+  </script>
+)}
+<style>
+  .social-share-buttons {
+    --chip-width: 3rem;
+
+    flex-wrap: wrap;
+
+    &:not(.plain-share) {
+      li {
+        background-color: var(--share-brand-color);
+        border-radius: var(--radius-2);
+        border: 1px solid var(--paper-subtle);
+        transition: transform 0.2s var(--ease-out-4);
+
+        &:hover {
+          transform: scale(1.3);
+          z-index: var(--layer-1);
+        }
+
+        a {
+          width: var(--chip-width);
+          height: var(--chip-width);
+          line-height: var(--chip-width);
+          aspect-ratio: 1;
+          color: var(--share-brand-color);
+          mix-blend-mode: luminosity;
+          opacity: 0.95;
+          filter: invert(1) grayscale(1) brightness(1.3) contrast(9000);
+        }
+      }
+    }
+
+    li {
+      display: block;
+
+      a {
+        display: block;
+        text-align: center;
+        cursor: pointer;
+      }
+    }
+  }
+</style>
+
+<style is:global>
+  :where(.astro-social-share, .social-share-buttons) {
+    margin-block: 0;
+
+    a {
+      &::after {
+        content: none;
+      }
+    }
+
+    :where(svg, sl-icon) {
+      font-size: 1.618rem;
+      height: 1.333rem;
+    }
+  }
+
+  :is(.fsb-prompt, .fedi-share) {
+    font-size: var(--step--1);
+    margin-top: 1em;
+    container: fedi-share / inline-size;
+
+    .fsb-button {
+      min-width: 3em;
+
+      .label {
+        display: none;
+      }
+
+      @container fedi-share (width >= 20rem) {
+        .label {
+          display: inline-block;
+        }
+      }
+    }
+  }
+</style>

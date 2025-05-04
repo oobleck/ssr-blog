@@ -1,0 +1,111 @@
+---
+import Link from '@components/HeaderLink.astro';
+import type { Page } from 'astro';
+import { Pagination } from 'astro-headless-ui';
+// https://github.com/BryceRussell/astro-headless-ui/wiki/Pagination
+
+interface Props {
+  page: Page;
+  showInterim?: boolean;
+  slug?: string;
+  numButtonsToShow?: number;
+  showLabel?: boolean;
+}
+
+const { page, showInterim = true, slug, numButtonsToShow = 5, showLabel = true } = Astro.props;
+const pageButtons = new Array(Math.ceil(page.total / page.size)).fill(0);
+const buttonsToShow = pageButtons.length > numButtonsToShow
+  ? pageButtons.slice(page.currentPage - 1, numButtonsToShow)
+  : pageButtons;
+const slotIcons = {
+  'first': 'chevron-bar-left',
+  // 'before': 'chevron-left',
+  // 'after': 'chevron-right',
+  'last': 'chevron-bar-right',
+  'disabled': 'three-dots',
+};
+const slotTooltips = {
+  first: 'Go to first page',
+  last: 'Go to last page',
+  disabled: void 0,
+};
+---
+
+<nav class="pagination-buttons">
+  {showLabel && <span class="screen-only">Jump to page:</span>}
+  <Pagination
+    url={`/${slug}`}
+    total={page.lastPage}
+    current={page.currentPage}
+    index={true}
+  >
+    {
+      (pg) => {
+        const isCurrent =
+          pg.number === page.currentPage || pg.slot === 'active';
+        const isDisabled = pg.slot === 'disabled';
+        const El = slotIcons[pg.slot] ? 'sl-icon-button' : 'a';
+        const TtipEl = isDisabled ? 'span' : 'sl-tooltip';
+        const variant = isDisabled ? 'default' : 'default';
+        return (
+          <TtipEl content={!isDisabled ? `Jump to page ${pg.number}` : void 0}>
+            <El
+              href={isDisabled ? undefined : pg.href}
+              name={slotIcons[pg.slot]}
+              label={slotTooltips[pg.slot] ?? `Go to page ${pg.number}`}
+              class:list={[
+                `slot__${pg.slot}`,
+                { disabled: !pg.href || isCurrent || isDisabled },
+              ]}
+              data-inert={isCurrent || isDisabled}
+              disabled={isDisabled}
+              variant={isCurrent ? 'primary' : variant}
+              size="large"
+            >
+              {slotIcons[pg.slot] ? (
+                <sl-icon name={slotIcons[pg.slot]} />
+              ) : (
+                <span>{pg.number}</span>
+              )}
+            </El>
+          </TtipEl>
+        );
+      }
+    }
+  </Pagination>
+</nav>
+
+<style is:global>
+  .pagination-buttons {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5ch;
+
+    a[class*='slot__'] {
+      /* outline: 1px dotted; */
+      /* height: 3em; */
+      min-width: 2em;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+
+      &:hover {
+        text-decoration: underline;
+      }
+
+      &.slot__active {
+        font-weight: var(--weight-bold);
+        text-decoration: underline;
+      }
+
+      &.slot__disabled {
+        opacity: 0.5;
+        min-width: 1.618em;
+      }
+    }
+  }
+</style>

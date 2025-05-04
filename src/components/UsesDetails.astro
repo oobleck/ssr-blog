@@ -1,0 +1,48 @@
+---
+import { type IUsesProps, itemSort, PLATFORM_ICONS } from '@data/uses.ts';
+import NavLink from './HeaderLink.astro';
+import { Icon } from 'astro-icon/components';
+
+interface Props extends IUsesProps {}
+
+const {items, category, description} = Astro.props;
+---
+
+<details id={`category-${category}`} open={true}>
+  <summary>
+    <strong class="category">
+      {/default/i.test(category) && (<span>/</span>)}{category}
+    </strong>
+  </summary>
+  {description && <p set:html={description} />}
+  <ul>
+  {items
+    .sort(itemSort)
+    .map(({name, url, description, oss, tags = [], platforms = []}) => {
+      return (
+        <li class="item">
+          <p class="name">
+            {oss && (<Icon name="ri:open-source-line" title="Open Source" role="presentation" />)}
+            {!url && <em set:text={name}></em>}
+            {url && <NavLink href={url} set:text={name} />}
+            {description && (<>-</> <span set:html={description} />)}
+          </p>
+          <!-- <TagsList class="metadata" tags={platforms} label="Where I use it" links={false} /> -->
+          <!-- <TagsList class="metadata" {tags} links={false} /> -->
+          {platforms?.length > 0 && (
+            <ul class="inline metadata">
+              <li>Where I use it:</li>
+              {platforms?.map((plt) => PLATFORM_ICONS[plt] && (<li><Icon name={PLATFORM_ICONS[plt]} title={plt} /></li>))}
+            </ul>
+          )}
+          {tags.length > 0 && (
+            <ul class="inline metadata">
+              <li>Tags:</li>
+              <li>{tags.join(', ')}</li>
+            </ul>
+          )}
+        </li>
+      );
+    })}
+  </ul>
+</details>

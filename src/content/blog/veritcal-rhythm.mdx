@@ -1,19 +1,24 @@
 ---
 title: 'Pure CSS Vertical Rhythm'
 description: 'Attempting a configurable veritcal rhythm in pure CSS'
-date: "2024-02-03"
+pubDate: "2024-02-03T18:03:00.000Z"
 # layout: ../../layouts/Post.astro
 unsplashId: 'bJhT_8nbUA0'
 draft: true
 tags:
-  - css
+  - CSS
   - vertical-rhythm
-  - typography
+  - Typography
 ---
 
-For this website, I wanted to work with a vertical rhythm. There are plenty of services, like [Gridlover](https://gridlover.net/) and [Typescale](https://typescale.com/) to automatically generate a vertical rhythm system, and that's all well and good. But I wanted a challenge.
+For this website, I wanted to work with a vertical rhythm. There are plenty of services, like
+[Gridlover](https://gridlover.net/) and [Typescale](https://typescale.com/) to automatically
+generate a vertical rhythm system, and that's all well and good. But I wanted a challenge.
 
-It's pretty straight forward to build or generate a vertical rhythm system using a pre-processor like [SCSS](#scss) or [Stylus](#stylus). But how about with vanilla CSS? CSS has come a really long way in the last 10 years with a raft of functionality like variables (CSS Custom Properties), measurement functions, etc.
+It's pretty straight forward to build or generate a vertical rhythm system using a pre-processor
+like [SCSS](#scss) or [Stylus](#stylus). But how about with vanilla CSS? CSS has come a really long
+way in the last 10 years with a raft of functionality like variables (CSS Custom Properties),
+measurement functions, etc.
 
 The vertical rhythm on this site is a work in progress, so here's how I've done it so far.
 
@@ -71,7 +76,9 @@ body {
 
 ### Visualizing the system
 
-Before I forget, we need a way to visualize this system, so I created a utility to render the configurable vertical rhythm. Just add this `[debug-vr]` attribute to your body element (or any element, really).
+Before I forget, we need a way to visualize this system, so I created a utility to render the
+configurable vertical rhythm. Just add this `[debug-vr]` attribute to your body element (or any
+element, really).
 
 ```css
 [debug-vr] {

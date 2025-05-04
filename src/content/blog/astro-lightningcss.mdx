@@ -1,55 +1,65 @@
 ---
-title: 'Using Lightning CSS with Astro'
-description: 'How I configured Astro to use Lightning CSS instead of PostCSS to process CSS'
-heroDescription: 'A golden bolt of lightning breaks over a small island on a lake'
-date: "2024-02-18"
+title: Using Lightning CSS with Astro
+description: How I configured Astro to use Lightning CSS instead of PostCSS to process CSS
+pubDate: 2024-02-18T18:03:00.000Z
 # layout: ../../layouts/Post.astro
 # unsplashId: 'E-Zuyev2XWo'
 # hero: https://images.unsplash.com/photo-1500674425229-f692875b0ab7
-hero: https://images.unsplash.com/photo-1585074245728-eedb0cc44a66?q=80&w=900
+images:
+  - image: https://images.unsplash.com/photo-1585074245728-eedb0cc44a66
+    altText: A golden bolt of lightning breaks over a small island on a lake
+category: Dev
 tags:
-  - webdev
-  - astro
-  - lightning-css
-  - vite
-  - css
+  - Astro
+  - Lightning-css
+  - Vite
+  - CSS
 ---
 
-import Codepen from "../../components/CodePen.astro";
+<p class="lead">
+  I love [Astro](https://astro.build)! It is such a joy to work with for static
+  sites. It takes me back to the early days of web development with a lot more
+  power. Astro uses [Vite](https://vitejs.dev) under the hood for bundling,
+  transforming, minifying, etc. all the CSS, JS, Typescript, etc, which in turn
+  uses [PostCSS](https://postcss.org/).
+</p>
 
-<p class="lead">I love [Astro](https://astro.build)! It is such a joy to work with for static sites. It takes me back to the early days of web development with a lot more power. Astro uses [Vite](https://vitejs.dev) under the hood for bundling, transforming, minifying, etc. all the CSS, JS, Typescript, etc, which in turn uses [PostCSS](https://postcss.org/).</p>
+PostCSS is pretty rad too! It allows us to use next-gen CSS syntax and features now. One of my
+favorite features of PostCSS, while now supported natively by all major browsers, was [nesting
+selectors](https://caniuse.com/css-nesting) like you could with Sass or Less for many years.
 
-PostCSS is pretty rad too! It allows us to use next-gen CSS syntax and features now. One of my favorite features of PostCSS, while now supported natively by all major browsers, was [nesting selectors](https://caniuse.com/css-nesting) like you could with Sass or Less for many years.
+[Lightning CSS](https://lightningcss.dev/), a relative newcomer, does this too. About 100x faster.
+All thanks to Rust and a more robust CSS parser. The same Rust-based [cssparser used in Mozilla
+Firefox](https://github.com/servo/rust-cssparser).
 
-[Lightning CSS](https://lightningcss.dev/), a relative newcomer, does this too. About 100x faster. All thanks to Rust and a more robust CSS parser. The same Rust-based [cssparser used in Mozilla Firefox](https://github.com/servo/rust-cssparser).
+So while I love PostCSS for what it did for vanilla CSS, who doesn't want builds to be faster? To
+that end, here's how I got Lightning CSS working in my Astro site.
 
-So while I love PostCSS for what it did for vanilla CSS, who doesn't want builds to be faster? To that end, here's how I got Lightning CSS working in my Astro site.
-
-{/* https://main.vitejs.dev/guide/features.html#lightning-css */}
-Because Lightning CSS is an optional configuration, its a `peerDependency` of Vite. That means you'll need to install it explicitly.
+{/* https://main.vitejs.dev/guide/features.html#lightning-css */} Because Lightning CSS is an
+optional configuration, its a `peerDependency` of Vite. That means you'll need to install it
+explicitly.
 
 ```
 $ pnpm add -D lightningcss@latest browserslist@latest
 ```
 
-Then [configure Vite](https://lightningcss.dev/docs.html#with-vite) to use Lightning CSS instead of PostCSS.
+Then [configure Vite](https://lightningcss.dev/docs.html#with-vite) to use Lightning CSS instead of
+PostCSS.
 
 ```ts
 // astro.config.ts
 // Imports...
-import {browserslistToTargets} from 'lightningcss';
-import browserslist from "browserslist";
+import { browserslistToTargets } from 'lightningcss';
+import browserslist from 'browserslist';
 
 export default defineConfig({
   // Astro config ...
   vite: {
-    build: {
-      cssMinify: 'lightningcss',
-    },
+    build: { cssMinify: 'lightningcss' },
     css: {
       transformer: 'lightningcss',
       lightningcss: {
-        targets: browserslistToTargets(browserslist("defaults")),
+        targets: browserslistToTargets(browserslist('defaults')),
         cssModules: true,
         drafts: {
           // Enable custom media queries
@@ -61,8 +71,14 @@ export default defineConfig({
 });
 ```
 
-The `targets: browserslistToTargets(browserslist("defaults"))` bit is key to telling Lightning to transpile CSS Custom media queries for browsers that don't support it. You can tell it whatever versions you want to support, or declare them [according to browserslist](https://github.com/browserslist/browserslist?tab=readme-ov-file#config-file).
+The `targets: browserslistToTargets(browserslist("defaults"))` bit is key to telling Lightning to
+transpile CSS Custom media queries for browsers that don't support it. You can tell it whatever
+versions you want to support, or declare them [according to
+browserslist](https://github.com/browserslist/browserslist?tab=readme-ov-file#config-file).
 
-A quick note: If you're using [@open-props](https://open-props.style) and you want to use custom media queries in your component files, you'll need to `@import "open-props/media"` in the `<style>` tag in each component using them. That's because custom media queries like `--md-n-above` require processing and those vars are unknown within components unless @imported.
+A quick note: If you're using [@open-props](https://open-props.style) and you want to use custom
+media queries in your component files, you'll need to `@import "open-props/media"` in the `<style>`
+tag in each component using them. That's because custom media queries like `--md-n-above` require
+processing and those vars are unknown within components unless @imported.
 
 And there ya go. You're off to the races!

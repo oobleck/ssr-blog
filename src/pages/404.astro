@@ -1,6 +1,16 @@
 ---
-import { settings } from "@/data/settings";
-import ErrorCodePage from "../components/ErrorCodePage.astro";
+import BaseLayout from "@layouts/Base.astro";
+
+// Credit: https://unsplash.com/photos/a-large-wooden-sign-sitting-in-the-middle-of-a-desert-z-Hu8pnt23s
+// const hero = 'https://images.unsplash.com/photo-1627067578954-ea912ac72ede?w=2000&h=2000&fit=crop';
+
+// Credit: https://unsplash.com/photos/brown-concrete-bridge-over-river-during-daytime-_xvUuVBH3Fk
+const hero = 'https://images.unsplash.com/photo-1631197344782-e66f0c665ba9'
 ---
 
-<ErrorCodePage code={404} title="Page not found"></ErrorCodePage>
+<BaseLayout
+  level={0}
+  title="404"
+  description="Oops! We couldn't find that page..."
+  heroBg={hero}
+/>
